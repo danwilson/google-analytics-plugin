@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="com.danielcwilson.plugins.googleanalytics"
+    version="0.1.0">
+	<engines>
+	    <engine name="cordova" version=">=3.0.0" />
+	</engines>
+	<name>Google Universal Analytics Plugin</name>
+	<description>Cordova (PhoneGap) Plugin to connect to the native Google's Universal Analytics SDK 3.0</description>
+	<author>Daniel C. Wilson</author>
+	<license>MIT License</license>
+	<js-module src="analytics.js" name="UniversalAnalytics">
+		<clobbers target="analytics" />
+	</js-module>
+
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="UniversalAnalytics">
+		    	<param name="ios-package" value="UniversalAnalyticsPlugin" />
+		 	</feature>
+		</config-file>
+
+		<header-file src="UniversalAnalyticsPlugin.h" />
+		<source-file src="UniversalAnalyticsPlugin.m" />
+		<framework src="SystemConfiguration.framework" />
+		<framework src="CoreData.framework" />
+		<framework src="AdSupport.framework" />
+		<framework src="libz.dylib" />
+	</platform>
+</plugin>
