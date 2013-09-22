@@ -20,13 +20,13 @@
 - (void) trackEvent: (CDVInvokedUrlCommand*)command
 {
 	NSString* category = [command.arguments objectAtIndex:0];
-	NSString* action = [command.arguments objectAtIndex:0];
-	NSString* label = [command.arguments objectAtIndex:0];
+	NSString* action = [command.arguments objectAtIndex:1];
+	NSString* label = [command.arguments objectAtIndex:2];
 
 	id tracker = [[GAI sharedInstance] defaultTracker];
 
 	[tracker send:[[GAIDictionaryBuilder 
-		createEventWithCtegory: category //required
+		createEventWithCategory: category //required
 		action: action //required
 		label: label
 		value: nil] build]];
@@ -40,3 +40,5 @@
 	[tracker set:kGAIScreenName value:pageUri];
 	[tracker send:[[GAIDictionaryBuilder createAppView] build]];
 }
+
+@end
