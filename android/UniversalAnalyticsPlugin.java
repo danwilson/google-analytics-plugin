@@ -1,6 +1,8 @@
 package com.danielcwilson.plugins.analytics;
 
+import com.google.analytics.tracking.android.Fields;
 import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
 
 import org.apache.cordova.CordovaPlugin;
@@ -42,7 +44,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     private void startTracker(String id, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
-            GoogleAnalytics.getInstance(this).getTracker(id);
+            GoogleAnalytics.getInstance(this.cordova.getActivity()).getTracker(id);
             callbackContext.success("tracker started");
         } else {
             callbackContext.error("tracker id is not valid");
@@ -50,10 +52,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void trackView(String screenname, CallbackContext callbackContext) {
-        Tracker tracker = GoogleAnalytics.getInstance(this).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
         if (null != screenname && screenname.length() > 0) {
             tracker.set(Fields.SCREEN_NAME, screenname);
-            tracker.(MapBuilder
+            tracker.send(MapBuilder
               .createAppView()
               .build()
             );
@@ -64,16 +66,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void trackEvent(String category, String action, String label, int value, CallbackContext callbackContext) {
-        Tracker tracker = GoogleAnalytics.getInstance(this).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
         
         if (null != category && category.length() > 0) {
             tracker.send(MapBuilder
-                .createEvent(category, action, label, value);
+                .createEvent(category, action, label, (long) value)
                 .build()
             );
-            callbackContext.success(message);
+            callbackContext.success("Track Event: " + category);
         } else {
-            callbackContext.error("Expected one non-empty string argument.");
+            callbackContext.error("Expected non-empty string arguments.");
         }
     }
 }
