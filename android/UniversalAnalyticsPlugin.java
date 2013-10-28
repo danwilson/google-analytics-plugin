@@ -34,7 +34,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                     args.getString(0), 
                     length > 1 ? args.getString(1) : "", 
                     length > 2 ? args.getString(2) : "", 
-                    length > 3 ? args.getInt(3) : 0, 
+                    length > 3 ? args.getLong(3) : 0, 
                     callbackContext);
             }
             return true;
@@ -65,12 +65,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void trackEvent(String category, String action, String label, int value, CallbackContext callbackContext) {
+    private void trackEvent(String category, String action, String label, long value, CallbackContext callbackContext) {
         Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
         
         if (null != category && category.length() > 0) {
             tracker.send(MapBuilder
-                .createEvent(category, action, label, (long) value)
+                .createEvent(category, action, label, value)
                 .build()
             );
             callbackContext.success("Track Event: " + category);

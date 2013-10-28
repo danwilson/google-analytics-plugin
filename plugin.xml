@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="com.danielcwilson.plugins.googleanalytics"
-    version="0.1.2">
+    version="0.2.0">
 	<engines>
 	    <engine name="cordova" version=">=3.0.0" />
 	</engines>
 	<name>Google Universal Analytics Plugin</name>
-	<description>Cordova (PhoneGap) Plugin to connect to the native Google's Universal Analytics SDK 3.0</description>
+	<description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS/Andorid)</description>
 	<author>Daniel C. Wilson</author>
 	<license>MIT License</license>
 	<js-module src="www/analytics.js" name="UniversalAnalytics">
