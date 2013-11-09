@@ -8,13 +8,9 @@
 
 @implementation UniversalAnalyticsPlugin
 
-- (id)init
+- (void)pluginInitialize
 {
-    self = [super init];
-    if (self) {
-	_trackerStarted = false;
-    }
-    return self;
+    _trackerStarted = false;
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
