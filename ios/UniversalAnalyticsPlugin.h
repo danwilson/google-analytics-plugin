@@ -6,7 +6,7 @@
 #import "GAI.h"
 
 @interface UniversalAnalyticsPlugin : CDVPlugin {
-
+    bool _trackerStarted;
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command;

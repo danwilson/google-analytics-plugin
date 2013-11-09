@@ -8,37 +8,72 @@
 
 @implementation UniversalAnalyticsPlugin
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+	_trackerStarted = false;
+    }
+    return self;
+}
+
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
 {
-	NSString* accountId = [command.arguments objectAtIndex:0];
+    CDVPluginResult* pluginResult = nil;
+    NSString* accountId = [command.arguments objectAtIndex:0];
 
-	[GAI sharedInstance].dispatchInterval = 10;
+    [GAI sharedInstance].dispatchInterval = 10;
 
-	[[GAI sharedInstance] trackerWithTrackingId:accountId];
+    [[GAI sharedInstance] trackerWithTrackingId:accountId];
+
+    _trackerStarted = true;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) trackEvent: (CDVInvokedUrlCommand*)command
 {
-	NSString* category = [command.arguments objectAtIndex:0];
-	NSString* action = [command.arguments objectAtIndex:1];
-	NSString* label = [command.arguments objectAtIndex:2];
+    CDVPluginResult* pluginResult = nil;
+    
+    if ( ! _trackerStarted) {
+	 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+	 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	 return;
+    }
 
-	id tracker = [[GAI sharedInstance] defaultTracker];
+    NSString* category = [command.arguments objectAtIndex:0];
+    NSString* action = [command.arguments objectAtIndex:1];
+    NSString* label = [command.arguments objectAtIndex:2];
 
-	[tracker send:[[GAIDictionaryBuilder 
+    id tracker = [[GAI sharedInstance] defaultTracker];
+
+    [tracker send:[[GAIDictionaryBuilder 
 		createEventWithCategory: category //required
-		action: action //required
-		label: label
-		value: nil] build]];
+				 action: action //required
+				  label: label
+				  value: nil] build]];
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) trackView: (CDVInvokedUrlCommand*)command
 {
-	NSString* pageUri = [command.arguments objectAtIndex:0];
+    CDVPluginResult* pluginResult = nil;
+    
+    if ( ! _trackerStarted) {
+	 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+	 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	 return;
+    }
 
-	id tracker = [[GAI sharedInstance] defaultTracker];
-	[tracker set:kGAIScreenName value:pageUri];
-	[tracker send:[[GAIDictionaryBuilder createAppView] build]];
+    NSString* pageUri = [command.arguments objectAtIndex:0];
+
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:pageUri];
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 @end
