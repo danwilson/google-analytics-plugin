@@ -26,7 +26,7 @@
     _trackerStarted = true;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    NSLog(@"successfully started GAI tracker");
+    /* NSLog(@"successfully started GAI tracker"); */
 }
 
 - (void)addCustomDimensionsToTracker: (id<GAITracker>)tracker
@@ -35,7 +35,7 @@
 	for (NSString *key in _customDimensions) {
 	    NSString *value = [_customDimensions objectForKey:key];
 
-	    NSLog(@"Setting tracker dimension slot %@: <%@>", key, value);
+	    /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
 	    [tracker set:[GAIFields customDimensionForIndex:[key intValue]]
 		   value:value];
 	}
@@ -48,7 +48,7 @@
     NSString* key = [command.arguments objectAtIndex:0];
     NSString* value = [command.arguments objectAtIndex:1];
 
-    if (_customDimensions) {
+    if ( ! _customDimensions) {
 	_customDimensions = [[NSMutableDictionary alloc] init];
     }
 
