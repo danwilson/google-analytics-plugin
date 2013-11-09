@@ -12,17 +12,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String START_TRACKER = "startTrackerWithId";
+    public static final String ADD_DIMENSION = "addCustomDimension";
     public static final String TRACK_VIEW = "trackView";
     public static final String TRACK_EVENT = "trackEvent";
     public Boolean trackerStarted = false;
+    public HashMap<String, String> customDimensions = new HashMap<String, String>();
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (START_TRACKER.equals(action)) {
             String id = args.getString(0);
             this.startTracker(id, callbackContext);
+            return true;
+        } else if (ADD_DIMENSION.equals(action)) {
+            String key = args.getString(0);
+            String value = args.getString(1);
+            this.addCustomDimension(key, value, callbackContext);
             return true;
         } else if (TRACK_VIEW.equals(action)) {
             String screen = args.getString(0);
@@ -53,6 +63,21 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
+    private void addCustomDimension(String key, String value, CallbackContext callbackContext) {
+        if (null != key && key.length() > 0 && null != value && value.length() > 0) {
+	    customDimensions.put(key, value);
+        } else {
+            callbackContext.error("Expected non-empty string arguments.");
+        }
+    }
+    
+    private void addCustomDimensionsToTracker(Tracker tracker) {
+    	for (Entry<String, String> entry : customDimensions.entrySet()) {
+    	    System.out.println("Setting tracker dimension slot " + entry.getKey() + ": <" + entry.getValue()+">");
+    	    tracker.set(Fields.customDimension(Integer.parseInt(entry.getKey())), entry.getValue());
+    	}
+    }
+
     private void trackView(String screenname, CallbackContext callbackContext) {
 	if (! trackerStarted ) {
             callbackContext.error("Tracker not started");
@@ -60,6 +85,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 	}
 
         Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        addCustomDimensionsToTracker(tracker);
+        
         if (null != screenname && screenname.length() > 0) {
             tracker.set(Fields.SCREEN_NAME, screenname);
             tracker.send(MapBuilder
@@ -80,7 +107,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
 
         Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
-        
+        addCustomDimensionsToTracker(tracker);
+
         if (null != category && category.length() > 0) {
             tracker.send(MapBuilder
                 .createEvent(category, action, label, value)
@@ -92,3 +120,4 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 }
+
