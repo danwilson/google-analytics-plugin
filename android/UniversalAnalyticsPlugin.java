@@ -2,6 +2,7 @@ package com.danielcwilson.plugins.analytics;
 
 import com.google.analytics.tracking.android.Fields;
 import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Logger.LogLevel;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
 
@@ -57,7 +58,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         if (null != id && id.length() > 0) {
             GoogleAnalytics.getInstance(this.cordova.getActivity()).getTracker(id);
             callbackContext.success("tracker started");
-	    trackerStarted = true;
+            trackerStarted = true;
+         // Set the log level to verbose.
+         // GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger()
+         //       .setLogLevel(LogLevel.VERBOSE);
         } else {
             callbackContext.error("tracker id is not valid");
         }
@@ -73,8 +77,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     
     private void addCustomDimensionsToTracker(Tracker tracker) {
     	for (Entry<String, String> entry : customDimensions.entrySet()) {
-    	    System.out.println("Setting tracker dimension slot " + entry.getKey() + ": <" + entry.getValue()+">");
-    	    tracker.set(Fields.customDimension(Integer.parseInt(entry.getKey())), entry.getValue());
+    		String key = entry.getKey();
+    		String value = entry.getValue();
+    	    //System.out.println("Setting tracker dimension slot " + key + ": <" + value+">");
+    	    tracker.set(Fields.customDimension(Integer.parseInt(key)), value);
     	}
     }
 
