@@ -1,6 +1,7 @@
 package com.danielcwilson.plugins.analytics;
 
 import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Logger.LogLevel;
 import com.google.analytics.tracking.android.MapBuilder;
@@ -54,14 +55,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         return false;
     }
 
-    private void startTracker(String id, CallbackContext callbackContext) {
+    @SuppressWarnings("deprecation")
+	private void startTracker(String id, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
             GoogleAnalytics.getInstance(this.cordova.getActivity()).getTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
+            GAServiceManager.getInstance().setLocalDispatchPeriod(30); //deprecated but whatcha gonna do? set dispatch period to 30 sec
          // Set the log level to verbose.
-         // GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger()
-         //       .setLogLevel(LogLevel.VERBOSE);
+          /*GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger()
+                .setLogLevel(LogLevel.VERBOSE);*/
         } else {
             callbackContext.error("tracker id is not valid");
         }
@@ -69,7 +72,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     private void addCustomDimension(String key, String value, CallbackContext callbackContext) {
         if (null != key && key.length() > 0 && null != value && value.length() > 0) {
-	    customDimensions.put(key, value);
+        	customDimensions.put(key, value);
         } else {
             callbackContext.error("Expected non-empty string arguments.");
         }
