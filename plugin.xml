@@ -6,7 +6,7 @@
 	    <engine name="cordova" version=">=3.0.0" />
 	</engines>
 	<name>Google Universal Analytics Plugin</name>
-	<description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS/Andorid)</description>
+	<description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS/Android)</description>
 	<author>Daniel C. Wilson</author>
 	<license>MIT License</license>
 	<js-module src="www/analytics.js" name="UniversalAnalytics">
