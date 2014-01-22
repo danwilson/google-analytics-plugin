@@ -2,23 +2,32 @@ define(function(require) {
 
   var Disposable = require('lavaca/util/Disposable');
   var Config = require('lavaca/util/Config');
-  var Promise = require('lavaca/util/Promise');
   var Device = require('lavaca/env/Device');
-  var $ = require('$');
+  var ga = require('google-analytics');
 
   var AnalyticsService = Disposable.extend(function AnalyticsService() {
     Disposable.call(this);
     this.appId = Config.get('google_analytics_id');
+    this.webId = Config.get('google_analytics_web_id');
+    this.isWeb = this.webId.length;
+
+    if (!Device.isCordova() && this.isWeb) {
+      ga('create', this.webId);
+    }
+
     document.addEventListener('deviceready', this.init.bind(this), false);
   }, {
     ready: false,
     queue: [],
+    isWeb: false,
+    //isApp: false, //TODO need to research when Device.isCordova() is valid in Lavaca load flow
     init: function() {
       this.ready = true;
 
       if (Device.isCordova()) {
         analytics.startTrackerWithId(this.appId);
         this.processQueue();
+        this.isWeb = false;
       }
     },
     trackView: function(screen) {
@@ -31,6 +40,10 @@ define(function(require) {
             params: [screen]
           });
         }
+      } else if (this.isWeb) {
+        ga('send', 'pageview', {
+          'title': screen
+        });
       }
     },
     trackEvent: function(category, action, label) {
@@ -43,12 +56,21 @@ define(function(require) {
             params: [category, action || '', label || '']
           });
         }
+      } else if (this.isWeb) {
+        ga('send', {
+          'hitType': 'event',
+          'eventCategory': category,
+          'eventAction': action || '',
+          'eventLabel': label || '',
+          //'eventValue': 0
+        });
       }
     },
     processQueue: function() {
       if (this.queue) {
+        var emptyFunction = function() {};
         for (var i = 0; i < this.queue.length; ++i) {
-          cordova.exec(function() {}, function() {}, 
+          cordova.exec(emptyFunction, emptyFunction,
             'UniversalAnalytics', this.queue[i].action, this.queue[i].params);
         }
       }
@@ -56,5 +78,4 @@ define(function(require) {
   });
 
   return new AnalyticsService();
-
 });
