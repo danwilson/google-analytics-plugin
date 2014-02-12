@@ -26,7 +26,7 @@ To track a Screen (PageView):
 * `analytics.trackView('Screen Title')`
 
 To track an Event:
-* `analytics.trackEvent('Category', 'Action', 'Label')` Label is optional
+* `analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:
