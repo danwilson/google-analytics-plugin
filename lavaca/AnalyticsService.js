@@ -22,9 +22,8 @@ define(function(require) {
     isWeb: false,
     //isApp: false, //TODO need to research when Device.isCordova() is valid in Lavaca load flow
     init: function() {
-      this.ready = true;
-
-      if (Device.isCordova()) {
+      if (Device.isCordova() && analytics) {
+        this.ready = true;
         analytics.startTrackerWithId(this.appId);
         this.processQueue();
         this.isWeb = false;
@@ -46,23 +45,26 @@ define(function(require) {
         });
       }
     },
-    trackEvent: function(category, action, label) {
+    trackEvent: function(category, action, label, value) {
+      action = action || '';
+      label = label || '';
+      value = value || 0;
       if (Device.isCordova()) {
         if (this.ready) {
-          analytics.trackEvent(category, action || '', label || '');
+          analytics.trackEvent(category, action, label, value);
         } else {
           this.queue.push({
             action: 'trackEvent',
-            params: [category, action || '', label || '']
+            params: [category, action, label, value]
           });
         }
       } else if (this.isWeb) {
         ga('send', {
           'hitType': 'event',
           'eventCategory': category,
-          'eventAction': action || '',
-          'eventLabel': label || '',
-          //'eventValue': 0
+          'eventAction': action,
+          'eventLabel': label,
+          'eventValue': value
         });
       }
     },

@@ -71,6 +71,7 @@
     NSString* category = [command.arguments objectAtIndex:0];
     NSString* action = [command.arguments objectAtIndex:1];
     NSString* label = [command.arguments objectAtIndex:2];
+    NSNumber* value = [command.arguments objectAtIndex:3];
 
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
@@ -80,7 +81,7 @@
 		createEventWithCategory: category //required
 				 action: action //required
 				  label: label
-				  value: nil] build]];
+				  value: value] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
