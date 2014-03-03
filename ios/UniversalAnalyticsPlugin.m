@@ -68,10 +68,22 @@
 	return;
     }
 
-    NSString* category = [command.arguments objectAtIndex:0];
-    NSString* action = [command.arguments objectAtIndex:1];
-    NSString* label = [command.arguments objectAtIndex:2];
-    NSNumber* value = [command.arguments objectAtIndex:3];
+    NSString *category = nil;
+    NSString *action = nil;
+    NSString *label = nil;
+    NSNumber *value = nil;
+    
+    if ([command.arguments count] > 0)
+        category = [command.arguments objectAtIndex:0];
+    
+    if ([command.arguments count] > 1)
+        action = [command.arguments objectAtIndex:1];
+    
+    if ([command.arguments count] > 2)
+        label = [command.arguments objectAtIndex:2];
+    
+    if ([command.arguments count] > 3)
+        value = [command.arguments objectAtIndex:3];
 
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
