@@ -6,9 +6,6 @@ Cordova (PhoneGap) 3.0+ Plugin to connect to Google's native Universal Analytics
 Prerequisites:
 * A Cordova 3.0+ project for iOS and/or Android
 * A Mobile App property through the Google Analytics Admin Console
-* Download the Google Analytics SDK 3.0 for [iOS](https://developers.google.com/analytics/devguides/collection/ios/) and/or [Android](https://developers.google.com/analytics/devguides/collection/android/)
-* For iOS, add the downloaded Google Analytics SDK header files and libraries according to the [Getting Started](https://developers.google.com/analytics/devguides/collection/ios/v3) documentation
-* For Android, add `libGoogleAnalyticsServices.jar` to your Cordova Android project's `/libs` directory and build path
 
 #Installing
 
@@ -16,6 +13,8 @@ This plugin follows the Cordova 3.0 plugin spec, so it can be installed through 
 ```bash
 cordova plugin add https://github.com/danwilson/google-analytics-plugin.git
 ```
+The plugin.xml file will add the Google Analytics SDK files for Android and/or iOS.  Follow [Google's steps](#sdk-files) if you need to update these later.  Also make sure to review the Google Analytics [terms](http://www.google.com/analytics/terms/us.html) and [SDK Policy](https://developers.google.com/analytics/devguides/collection/protocol/policy)
+
 If you are not using the CLI, follow the steps in the section [Installing Without the CLI](#nocli)
 
 #JavaScript Usage
@@ -40,6 +39,11 @@ Copy the files manually into your project and add the following to your config.x
   <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
 </feature>
 ```
+<a name="sdk-files"></a>
+You also will need to manually add the Google Analytics SDK files:
+* Download the Google Analytics SDK 3.0 for [iOS](https://developers.google.com/analytics/devguides/collection/ios/) and/or [Android](https://developers.google.com/analytics/devguides/collection/android/)
+* For iOS, add the downloaded Google Analytics SDK header files and libraries according to the [Getting Started](https://developers.google.com/analytics/devguides/collection/ios/v3) documentation
+* For Android, add `libGoogleAnalyticsServices.jar` to your Cordova Android project's `/libs` directory and build path
 
 #Integrating with Lavaca
 The `lavaca` directory includes a component that can be added to a <a href="http://getlavaca.com">Lavaca</a> project.  It offers a way to use the web `analytics.js` when the app is running in the browser and not packaged as Cordova.
