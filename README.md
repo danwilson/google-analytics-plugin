@@ -52,7 +52,7 @@ The `lavaca` directory includes a component that can be added to a <a href="http
 * In your config files (`local.json`, `staging.json`, `production.js`) create properties called `google_analytics_id` (for the Mobile App UA property) and `google_analytics_web_id` (for the Web UA property) and set the appropriate IDs or leave blank as needed.
 * In any file you want to track screen views or events, require AnalyticsService and use the methods provided.
 
-```
+```javascript
 var analyticsService = require('app/data/AnalyticsService');
 
 analyticsService.trackView('Home');
