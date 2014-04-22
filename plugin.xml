@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="com.danielcwilson.plugins.googleanalytics"
-    version="0.4.0">
-	<engines>
-	    <engine name="cordova" version=">=3.0.0" />
-	</engines>
-	<name>Google Universal Analytics Plugin</name>
-	<description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS/Android)</description>
-	<author>Daniel C. Wilson</author>
-	<license>MIT License</license>
-	<js-module src="www/analytics.js" name="UniversalAnalytics">
-		<clobbers target="analytics" />
-	</js-module>
+    version="0.4.1">
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+  </engines>
+  <name>Google Universal Analytics Plugin</name>
+  <description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS/Android)</description>
+  <author>Daniel C. Wilson</author>
+  <license>MIT License</license>
+  <js-module src="www/analytics.js" name="UniversalAnalytics">
+    <clobbers target="analytics" />
+  </js-module>
 
-	<platform name="ios">
-		<config-file target="config.xml" parent="/*">
-			<feature name="UniversalAnalytics">
-		    	<param name="ios-package" value="UniversalAnalyticsPlugin" />
-		 	</feature>
-		</config-file>
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="UniversalAnalytics">
+        <param name="ios-package" value="UniversalAnalyticsPlugin" />
+      </feature>
+    </config-file>
 
-		<header-file src="ios/UniversalAnalyticsPlugin.h" />
-		<source-file src="ios/UniversalAnalyticsPlugin.m" />
+    <header-file src="ios/UniversalAnalyticsPlugin.h" />
+    <source-file src="ios/UniversalAnalyticsPlugin.m" />
 
-		<source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
+    <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
     <header-file src="ios/GAIDictionaryBuilder.h" />
     <header-file src="ios/GAIFields.h" />
     <header-file src="ios/GAILogger.h" />
@@ -31,24 +31,24 @@
     <header-file src="ios/GAI.h" />
     <header-file src="ios/GAITracker.h" />
 
-		<framework src="SystemConfiguration.framework" />
-		<framework src="CoreData.framework" />
-		<framework src="AdSupport.framework" />
-		<framework src="libz.dylib" />
-		<framework src="libsqlite3.0.dylib" />
-	</platform>
+    <framework src="SystemConfiguration.framework" />
+    <framework src="CoreData.framework" />
+    <framework src="AdSupport.framework" />
+    <framework src="libz.dylib" />
+    <framework src="libsqlite3.0.dylib" />
+  </platform>
 
-	<platform name="android">
-		<config-file target="res/xml/config.xml" parent="/*">
-			<feature name="UniversalAnalytics">
-		    	<param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
-		 	</feature>
-		</config-file>
-    <config-file target="AndroidManifest.xml" parent="/*">
-        <uses-permission android:name="android.permission.INTERNET" />
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="UniversalAnalytics">
+        <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
+      </feature>
     </config-file>
-		<source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
-		<source-file src="android/libGoogleAnalyticsServices.jar" target-dir="libs" />
-	</platform>
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    </config-file>
+    <source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
+    <source-file src="android/libGoogleAnalyticsServices.jar" target-dir="libs" />
+  </platform>
 </plugin>
