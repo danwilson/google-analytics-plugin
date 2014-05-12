@@ -11,6 +11,7 @@
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command;
+- (void) setUserId: (CDVInvokedUrlCommand*)command;
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command;
 - (void) trackEvent: (CDVInvokedUrlCommand*)command;
 - (void) trackView: (CDVInvokedUrlCommand*)command;

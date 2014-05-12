@@ -108,6 +108,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
+    private void setUserId(String userId, CallbackContext callbackContext) {
+      if (! trackerStarted ) {
+          callbackContext.error("Tracker not started");
+          return;
+      }
+
+      Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+      callbackContext.success("Set user id" + userId);
+    }
+
     private void trackEvent(String category, String action, String label, long value, CallbackContext callbackContext) {
 	if (! trackerStarted ) {
 	    callbackContext.error("Tracker not started");
