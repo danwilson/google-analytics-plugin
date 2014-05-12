@@ -27,6 +27,12 @@ To track a Screen (PageView):
 To track an Event:
 * `analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
+To set a UserId:
+* `analytics.setUserId('my-user-id')`
+
+To enable verbose logging:
+* `analytics.debugMode()`
+
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:
 ```xml

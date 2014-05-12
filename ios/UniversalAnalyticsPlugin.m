@@ -10,6 +10,7 @@
 
 - (void)pluginInitialize
 {
+    _debugMode = false;
     _trackerStarted = false;
     _customDimensions = nil;
 }
@@ -42,6 +43,12 @@
     }
 }
 
+- (void) debugMode: (CDVInvokedUrlCommand*) command
+{
+  _debugMode = true;
+  [[GAI sharedInstance].logger setLogLevel:kGAILogLevelVerbose];
+}
+
 - (void) setUserId: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* pluginResult = nil;
@@ -53,6 +60,7 @@
     return;
   }
 
+  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
   [tracker set:@"&uid" value: userId];
 
   pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
