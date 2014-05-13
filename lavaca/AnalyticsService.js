@@ -48,6 +48,9 @@ define(function(require) {
     setUserId: function() {
       throw 'setUserId is not implemented for Lavaca';
     },
+    debugMode: function() {
+      throw 'debugMode is not implemented for Lavaca';
+    },
     trackEvent: function(category, action, label, value) {
       action = action || '';
       label = label || '';
