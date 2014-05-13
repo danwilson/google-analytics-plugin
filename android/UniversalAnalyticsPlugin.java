@@ -22,6 +22,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String ADD_DIMENSION = "addCustomDimension";
     public static final String TRACK_VIEW = "trackView";
     public static final String TRACK_EVENT = "trackEvent";
+    public static final String SET_USER_ID = "setUserId";
+    public static final String DEBUG_MODE = "debugMode";
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
     public HashMap<String, String> customDimensions = new HashMap<String, String>();
@@ -41,6 +43,11 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             String screen = args.getString(0);
             this.trackView(screen, callbackContext);
             return true;
+        } else if (SET_USER_ID.equals(action)) {
+            String userId = args.getString(0);
+            this.setUserId(userId, callbackContext);
+        } else if (DEBUG_MODE.equals(action)) {
+            this.debugMode(callbackContext);
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
             if (length > 0) {
@@ -57,8 +64,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
   private void debugMode(CallbackContext callbackContext) {
-    this.debugModeEnabled = true;
     GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
+
+    this.debugModeEnabled = true;
+    callbackContext.success("debugMode enabled");
   }
 
   private void setUserId(String userId, CallbackContext callbackContext) {
@@ -68,6 +77,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+    tracker.set("&uid", userId);
     callbackContext.success("Set user id" + userId);
   }
 
@@ -120,7 +130,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             callbackContext.error("Expected one non-empty string argument.");
         }
     }
-
 
     private void trackEvent(String category, String action, String label, long value, CallbackContext callbackContext) {
 	if (! trackerStarted ) {
