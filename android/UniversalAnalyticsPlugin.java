@@ -22,7 +22,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String ADD_DIMENSION = "addCustomDimension";
     public static final String TRACK_VIEW = "trackView";
     public static final String TRACK_EVENT = "trackEvent";
+    public static final String SET_USER_ID = "setUserId";
+    public static final String DEBUG_MODE = "debugMode";
     public Boolean trackerStarted = false;
+    public Boolean debugModeEnabled = false;
     public HashMap<String, String> customDimensions = new HashMap<String, String>();
 
     @Override
@@ -40,6 +43,11 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             String screen = args.getString(0);
             this.trackView(screen, callbackContext);
             return true;
+        } else if (SET_USER_ID.equals(action)) {
+            String userId = args.getString(0);
+            this.setUserId(userId, callbackContext);
+        } else if (DEBUG_MODE.equals(action)) {
+            this.debugMode(callbackContext);
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
             if (length > 0) {
@@ -55,16 +63,31 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
+  private void debugMode(CallbackContext callbackContext) {
+    GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
+
+    this.debugModeEnabled = true;
+    callbackContext.success("debugMode enabled");
+  }
+
+  private void setUserId(String userId, CallbackContext callbackContext) {
+    if (! trackerStarted ) {
+        callbackContext.error("Tracker not started");
+        return;
+    }
+
+    Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+    tracker.set("&uid", userId);
+    callbackContext.success("Set user id" + userId);
+  }
+
+  @SuppressWarnings("deprecation")
 	private void startTracker(String id, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
             GoogleAnalytics.getInstance(this.cordova.getActivity()).getTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
             GAServiceManager.getInstance().setLocalDispatchPeriod(30); //deprecated but whatcha gonna do? set dispatch period to 30 sec
-         // Set the log level to verbose.
-          /*GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger()
-                .setLogLevel(LogLevel.VERBOSE);*/
         } else {
             callbackContext.error("tracker id is not valid");
         }
@@ -95,7 +118,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
         addCustomDimensionsToTracker(tracker);
-        
+
         if (null != screenname && screenname.length() > 0) {
             tracker.set(Fields.SCREEN_NAME, screenname);
             tracker.send(MapBuilder

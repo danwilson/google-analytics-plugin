@@ -10,6 +10,7 @@
 
 - (void)pluginInitialize
 {
+    _debugMode = false;
     _trackerStarted = false;
     _customDimensions = nil;
 }
@@ -40,6 +41,30 @@
 		   value:value];
 	}
     }
+}
+
+- (void) debugMode: (CDVInvokedUrlCommand*) command
+{
+  _debugMode = true;
+  [[GAI sharedInstance].logger setLogLevel:kGAILogLevelVerbose];
+}
+
+- (void) setUserId: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* pluginResult = nil;
+  NSString* userId = [command.arguments objectAtIndex:0];
+
+  if ( ! _trackerStarted) {
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+
+  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+  [tracker set:@"&uid" value: userId];
+
+  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command

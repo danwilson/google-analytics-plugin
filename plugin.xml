@@ -33,7 +33,6 @@
 
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
-    <framework src="AdSupport.framework" />
     <framework src="libz.dylib" />
     <framework src="libsqlite3.0.dylib" />
   </platform>
