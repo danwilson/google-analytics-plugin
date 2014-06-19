@@ -17,6 +17,8 @@
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command;
 - (void) trackEvent: (CDVInvokedUrlCommand*)command;
 - (void) trackView: (CDVInvokedUrlCommand*)command;
+- (void) addTransaction: (CDVInvokedUrlCommand*)command;
+- (void) addTransactionItem: (CDVInvokedUrlCommand*)command;
 
 @end
 
