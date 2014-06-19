@@ -32,4 +32,14 @@ UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label
 	cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value]);
 };
 
+/* Google Analytics e-Commerce Tracking */
+/* https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce */
+UniversalAnalyticsPlugin.prototype.addTransaction = function(transactionId, affiliation, revenue, tax, shipping, currencyCode, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addTransaction', [transactionId, affiliation, revenue, tax, shipping, currencyCode]);
+};
+
+UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, name ,sku, category, price, quantity, currencyCode, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addTransactionItem', [transactionId, name ,sku, category, price, quantity, currencyCode]);
+};
+
 module.exports = new UniversalAnalyticsPlugin();
