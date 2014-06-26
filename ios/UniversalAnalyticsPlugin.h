@@ -7,13 +7,18 @@
 
 @interface UniversalAnalyticsPlugin : CDVPlugin {
     bool _trackerStarted;
+    bool _debugMode;
 	NSMutableDictionary *_customDimensions;
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command;
+- (void) setUserId: (CDVInvokedUrlCommand*)command;
+- (void) debugMode: (CDVInvokedUrlCommand*)command;
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command;
 - (void) trackEvent: (CDVInvokedUrlCommand*)command;
 - (void) trackView: (CDVInvokedUrlCommand*)command;
+- (void) addTransaction: (CDVInvokedUrlCommand*)command;
+- (void) addTransactionItem: (CDVInvokedUrlCommand*)command;
 
 @end
 
