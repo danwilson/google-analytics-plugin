@@ -64,11 +64,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                 this.addTransaction(
                     args.getString(0),
                     length > 1 ? args.getString(1) : "",
-                    length > 2 ? args.getString(2) : "",
+                    length > 2 ? args.getDouble(2) : 0,
                     length > 3 ? args.getDouble(3) : 0,
                     length > 4 ? args.getDouble(4) : 0,
-                    length > 5 ? args.getDouble(5) : 0,
-                    length > 6 ? args.getString(6) : null,
+                    length > 5 ? args.getString(5) : null,
                     callbackContext);
             }
             return true;
@@ -80,10 +79,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                     length > 1 ? args.getString(1) : "",
                     length > 2 ? args.getString(2) : "",
                     length > 3 ? args.getString(3) : "",
-                    length > 4 ? args.getString(4) : "",
-                    length > 5 ? args.getDouble(5) : 0,
-                    length > 6 ? args.getLong(6) : 0,
-                    length > 7 ? args.getString(7) : null,
+                    length > 4 ? args.getDouble(4) : 0,
+                    length > 5 ? args.getLong(5) : 0,
+                    length > 6 ? args.getString(6) : null,
                     callbackContext);
             }
             return true;
@@ -198,7 +196,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         if (null != id && id.length() > 0) {
             tracker.send(MapBuilder
-                .createTransactionItem(id, name, sku, category, price, quantity, currencyCode)
+                .createItem(id, name, sku, category, price, quantity, currencyCode)
                 .build()
             );
             callbackContext.success("Add Transaction Item: " + id);
