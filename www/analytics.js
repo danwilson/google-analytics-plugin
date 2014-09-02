@@ -25,11 +25,25 @@ UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label
   if (typeof label === 'undefined' || label === null) {
     label = '';
   }
-	if (typeof value === 'undefined' || value === null) {
-		value = 0;
+  if (typeof value === 'undefined' || value === null) {
+    value = 0;
   }
 
-	cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value]);
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value]);
+};
+
+UniversalAnalyticsPlugin.prototype.trackTiming = function(category, intervalInMilliseconds, name, label, success, error) {
+  if (typeof intervalInMilliseconds === 'undefined' || intervalInMilliseconds === null) {
+    intervalInMilliseconds = 0;
+  }
+  if (typeof name === 'undefined' || name === null) {
+    name = '';
+  }
+  if (typeof label === 'undefined' || label === null) {
+    label = '';
+  }
+
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackTiming', [category, intervalInMilliseconds, name, label]);
 };
 
 /* Google Analytics e-Commerce Tracking */
