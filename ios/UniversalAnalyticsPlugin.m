@@ -156,7 +156,7 @@
     [self addCustomDimensionsToTracker:tracker];
 
     [tracker send:[[GAIDictionaryBuilder 
-		createEventWithCategory: category //required
+		createTimingWithCategory: category //required
 			   interval: intervalInMilliseconds //required
 				   name: name
 				  label: label] build]];
