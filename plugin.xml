@@ -30,6 +30,11 @@
     <header-file src="ios/GAITrackedViewController.h" />
     <header-file src="ios/GAI.h" />
     <header-file src="ios/GAITracker.h" />
+    <header-file src="ios/GAIEcommerceFields.h" />
+    <header-file src="ios/GAIEcommerceProduct.h" />
+    <header-file src="ios/GAIEcommerceProductAction.h" />
+    <header-file src="ios/GAIEcommercePromotion.h" />
+
 
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
