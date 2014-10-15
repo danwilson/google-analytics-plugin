@@ -22,6 +22,11 @@
 @property(nonatomic, readonly) NSString *name;
 
 /*!
+ Allow collection of IDFA and related fields if set to true.  Default is false.
+ */
+@property(nonatomic) BOOL allowIDFACollection;
+
+/*!
  Set a tracking parameter.
 
  @param parameterName The parameter name.
