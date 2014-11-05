@@ -25,11 +25,18 @@ UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label
   if (typeof label === 'undefined' || label === null) {
     label = '';
   }
-	if (typeof value === 'undefined' || value === null) {
-		value = 0;
+  if (typeof value === 'undefined' || value === null) {
+    value = 0;
   }
 
-	cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value]);
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value]);
+};
+
+/**
+ * https://developers.google.com/analytics/devguides/collection/android/v3/exceptions
+ */
+UniversalAnalyticsPlugin.prototype.trackException = function(description, fatal, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackException', [description, fatal]);
 };
 
 /* Google Analytics e-Commerce Tracking */
