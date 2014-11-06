@@ -149,7 +149,7 @@
 
     [tracker send:[[GAIDictionaryBuilder 
 		createExceptionWithDescription: description
-								 fatal: fatal] build]];
+                                     withFatal: fatal] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
