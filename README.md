@@ -27,11 +27,17 @@ To track a Screen (PageView):
 To track an Event:
 * `analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
-To add a transaction (Ecommerce)
+To track an Exception:
+* `analytics.trackException('Description', 'Fatal')` where Fatal is boolean
+
+To add a Transaction (Ecommerce)
 * `analytics.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')` where Revenue, Tax, and Shipping are numeric
 
-To add a transaction item (Ecommerce)
+To add a Transaction Item (Ecommerce)
 * `analytics.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')` where Price and Quantity are numeric
+
+To add a Custom Dimension
+* `analytics.addCustomDimension('Key', 'Value', success, error)`
 
 To set a UserId:
 * `analytics.setUserId('my-user-id')`
