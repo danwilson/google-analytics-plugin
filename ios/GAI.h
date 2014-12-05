@@ -10,6 +10,13 @@
 #import "GAITracker.h"
 #import "GAITrackedViewController.h"
 
+
+typedef NS_ENUM(NSUInteger, GAIDispatchResult) {
+  kGAIDispatchNoData,
+  kGAIDispatchGood,
+  kGAIDispatchError
+};
+
 /*! Google Analytics product string.  */
 extern NSString *const kGAIProduct;
 
@@ -157,10 +164,24 @@ typedef enum {
 /*!
  Dispatches any pending tracking information.
 
- It would be wise to call this when application is exiting to initiate the
- submission of any unsubmitted tracking information. Note that this does not
- have any effect on dispatchInterval, and can be used in conjuntion with
- periodic dispatch. */
+ Note that this does not have any effect on dispatchInterval, and can be used in
+ conjunction with periodic dispatch. */
 - (void)dispatch;
 
+/*!
+ Dispatches the next tracking beacon in the queue, calling completionHandler when
+ the tracking beacon has either been sent (returning kGAIDispatchGood) or an error has resulted
+ (returning kGAIDispatchError).  If there is no network connection or there is no data to send,
+ kGAIDispatchNoData is returned.
+
+ Calling this method with a nil completionHandler is the same as calling the dispatch
+ above.
+
+ This method can be used for background data fetching in iOS 7.0 or later.
+
+ It would be wise to call this when application is exiting to initiate the
+ submission of any unsubmitted tracking information. Note that this does not
+ have any effect on dispatchInterval, and can be used in conjunction with
+ periodic dispatch. */
+- (void)dispatchWithCompletionHandler:(void (^)(GAIDispatchResult))completionHandler;
 @end
