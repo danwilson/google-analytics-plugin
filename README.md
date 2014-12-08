@@ -28,7 +28,10 @@ To track an Event:
 * `analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
 To track an Exception:
-* `analytics.trackException('Description', 'Fatal')` where Fatal is boolean
+* `analytics.trackException('Description', Fatal)` where Fatal is boolean
+
+To track User Timing (App Speed):
+* `analytics.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label')` where IntervalInMilliseconds is numeric
 
 To add a Transaction (Ecommerce)
 * `analytics.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')` where Revenue, Tax, and Shipping are numeric
