@@ -22,6 +22,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String TRACK_VIEW = "trackView";
     public static final String TRACK_EVENT = "trackEvent";
     public static final String TRACK_EXCEPTION = "trackException";
+    public static final String TRACK_TIMING = "trackTiming";
     public static final String ADD_DIMENSION = "addCustomDimension";
     public static final String ADD_TRANSACTION = "addTransaction";
     public static final String ADD_TRANSACTION_ITEM = "addTransactionItem";
@@ -58,6 +59,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             String description = args.getString(0);
             Boolean fatal = args.getBoolean(1);
             this.trackException(description, fatal, callbackContext);
+            return true;
+        } else if (TRACK_TIMING.equals(action)) {
+            int length = args.length();
+            if (length > 0) {
+                this.trackTiming(args.getString(0), length > 1 ? args.getLong(1) : 0, length > 2 ? args.getString(2) : "", length > 3 ? args.getString(3) : "", callbackContext);
+            }
             return true;
         } else if (ADD_DIMENSION.equals(action)) {
             String key = args.getString(0);
@@ -190,6 +197,23 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
+    private void trackTiming(String category, long intervalInMilliseconds, String name, String label, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        addCustomDimensionsToTracker(tracker);
+
+        if (null != category && category.length() > 0) {
+            tracker.send(MapBuilder.createTiming(category, intervalInMilliseconds, name, label).build());
+            callbackContext.success("Track Timing: " + category);
+        } else {
+            callbackContext.error("Expected non-empty string arguments.");
+        }
+    }
+
     private void addTransaction(String id, String affiliation, double revenue, double tax, double shipping, String currencyCode, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
@@ -249,4 +273,3 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("Set user id" + userId);
     }
 }
-
