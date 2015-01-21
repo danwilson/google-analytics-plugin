@@ -1,18 +1,15 @@
 package com.danielcwilson.plugins.analytics;
 
-import com.google.analytics.tracking.android.Fields;
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Logger.LogLevel;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger.LogLevel;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -34,10 +31,13 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public Boolean debugModeEnabled = false;
     public HashMap<String, String> customDimensions = new HashMap<String, String>();
 
+    public String trackerId = "";
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (START_TRACKER.equals(action)) {
             String id = args.getString(0);
+            this.trackerId = id;
             this.startTracker(id, callbackContext);
             return true;
         } else if (TRACK_VIEW.equals(action)) {
@@ -107,13 +107,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         return false;
     }
 
-    @SuppressWarnings("deprecation")
     private void startTracker(String id, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
-            GoogleAnalytics.getInstance(this.cordova.getActivity()).getTracker(id);
+            GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
-            GAServiceManager.getInstance().setLocalDispatchPeriod(30); //deprecated but whatcha gonna do? set dispatch period to 30 sec
+            GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
         } else {
             callbackContext.error("tracker id is not valid");
         }
@@ -133,7 +132,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             String key = entry.getKey();
             String value = entry.getValue();
             //System.out.println("Setting tracker dimension slot " + key + ": <" + value+">");
-            tracker.set(Fields.customDimension(Integer.parseInt(key)), value);
+            tracker.send(new HitBuilders
+                    .AppViewBuilder()
+                    .setCustomDimension((Integer.parseInt(key)), value).build());
         }
     }
 
@@ -143,13 +144,13 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != screenname && screenname.length() > 0) {
-            tracker.set(Fields.SCREEN_NAME, screenname);
-            tracker.send(MapBuilder
-                    .createAppView()
+            tracker.setScreenName(screenname);
+            tracker.send(new HitBuilders
+                    .AppViewBuilder()
                     .build()
                     );
             callbackContext.success("Track Screen: " + screenname);
@@ -164,12 +165,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != category && category.length() > 0) {
-            tracker.send(MapBuilder
-                    .createEvent(category, action, label, value)
+            tracker.send(new HitBuilders
+                    .EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .setLabel(label)
+                    .setValue(value)
                     .build()
                     );
             callbackContext.success("Track Event: " + category);
@@ -184,12 +189,14 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != description && description.length() > 0) {
-            tracker.send(MapBuilder
-                    .createException(description, fatal)
+            tracker.send(new HitBuilders
+                    .ExceptionBuilder()
+                    .setDescription(description)
+                    .setFatal(fatal)
                     .build()
                     );
             callbackContext.success("Track Exception: " + description);
@@ -204,11 +211,18 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != category && category.length() > 0) {
-            tracker.send(MapBuilder.createTiming(category, intervalInMilliseconds, name, label).build());
+            tracker.send(new HitBuilders
+                    .TimingBuilder()
+                    .setCategory(category)
+                    .setValue(intervalInMilliseconds)
+                    .setVariable(name)
+                    .setLabel(label)
+                    .build()
+                    );
             callbackContext.success("Track Timing: " + category);
         } else {
             callbackContext.error("Expected non-empty string arguments.");
@@ -221,14 +235,19 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != id && id.length() > 0) {
-            tracker.send(MapBuilder
-                    .createTransaction(id, affiliation, revenue, tax, shipping, currencyCode)
+            tracker.send(new HitBuilders
+                    .TransactionBuilder()
+                    .setTransactionId(id)
+                    .setAffiliation(affiliation)
+                    .setRevenue(revenue).setTax(tax)
+                    .setShipping(shipping)
+                    .setCurrencyCode(currencyCode)
                     .build()
-                    );
+                    ); //Deprecated
             callbackContext.success("Add Transaction: " + id);
         } else {
             callbackContext.error("Expected non-empty ID.");
@@ -241,14 +260,22 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != id && id.length() > 0) {
-            tracker.send(MapBuilder
-                    .createItem(id, name, sku, category, price, quantity, currencyCode)
+
+            tracker.send(new HitBuilders
+                    .ItemBuilder()
+                    .setTransactionId(id)
+                    .setName(name)
+                    .setSku(sku)
+                    .setCategory(category)
+                    .setPrice(price)
+                    .setQuantity(quantity)
+                    .setCurrencyCode(currencyCode)
                     .build()
-                    );
+                    ); //Deprecated
             callbackContext.success("Add Transaction Item: " + id);
         } else {
             callbackContext.error("Expected non-empty ID.");
@@ -269,7 +296,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         tracker.set("&uid", userId);
         callbackContext.success("Set user id" + userId);
     }
