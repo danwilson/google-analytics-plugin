@@ -31,13 +31,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public Boolean debugModeEnabled = false;
     public HashMap<String, String> customDimensions = new HashMap<String, String>();
 
-    public String trackerId = "";
+    public Tracker tracker;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (START_TRACKER.equals(action)) {
             String id = args.getString(0);
-            this.trackerId = id;
             this.startTracker(id, callbackContext);
             return true;
         } else if (TRACK_VIEW.equals(action)) {
@@ -109,7 +108,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     private void startTracker(String id, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
-            GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
+            tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
             GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
@@ -144,7 +143,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != screenname && screenname.length() > 0) {
@@ -165,7 +163,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != category && category.length() > 0) {
@@ -189,7 +186,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != description && description.length() > 0) {
@@ -211,7 +207,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != category && category.length() > 0) {
@@ -235,7 +230,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != id && id.length() > 0) {
@@ -260,7 +254,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         addCustomDimensionsToTracker(tracker);
 
         if (null != id && id.length() > 0) {
@@ -282,7 +275,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-
     private void debugMode(CallbackContext callbackContext) {
         GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
 
@@ -296,7 +288,6 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(this.trackerId);
         tracker.set("&uid", userId);
         callbackContext.success("Set user id" + userId);
     }
