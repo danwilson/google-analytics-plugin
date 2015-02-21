@@ -122,6 +122,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     private void addCustomDimension(String key, String value, CallbackContext callbackContext) {
         if (null != key && key.length() > 0 && null != value && value.length() > 0) {
             customDimensions.put(key, value);
+            callbackContext.success("custom dimension started");
         } else {
             callbackContext.error("Expected non-empty string arguments.");
         }
