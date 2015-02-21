@@ -19,34 +19,34 @@ If you are not using the CLI, follow the steps in the section [Installing Withou
 
 #JavaScript Usage
 In your 'deviceready' handler, set up your Analytics tracker:
-* `analytics.startTrackerWithId('UA-XXXX-YY')` where UA-XXXX-YY is your Google Analytics Mobile App property
+* `window.analytics.startTrackerWithId('UA-XXXX-YY')` where UA-XXXX-YY is your Google Analytics Mobile App property
 
 To track a Screen (PageView):
-* `analytics.trackView('Screen Title')`
+* `window.analytics.trackView('Screen Title')`
 
 To track an Event:
-* `analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
+* `window.analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
 To track an Exception:
-* `analytics.trackException('Description', Fatal)` where Fatal is boolean
+* `window.analytics.trackException('Description', Fatal)` where Fatal is boolean
 
 To track User Timing (App Speed):
-* `analytics.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label')` where IntervalInMilliseconds is numeric
+* `window.analytics.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label')` where IntervalInMilliseconds is numeric
 
 To add a Transaction (Ecommerce)
-* `analytics.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')` where Revenue, Tax, and Shipping are numeric
+* `window.analytics.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')` where Revenue, Tax, and Shipping are numeric
 
 To add a Transaction Item (Ecommerce)
-* `analytics.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')` where Price and Quantity are numeric
+* `window.analytics.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')` where Price and Quantity are numeric
 
 To add a Custom Dimension
-* `analytics.addCustomDimension('Key', 'Value', success, error)`
+* `window.analytics.addCustomDimension('Key', 'Value', success, error)`
 
 To set a UserId:
-* `analytics.setUserId('my-user-id')`
+* `window.analytics.setUserId('my-user-id')`
 
 To enable verbose logging:
-* `analytics.debugMode()`
+* `window.analytics.debugMode()`
 
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:

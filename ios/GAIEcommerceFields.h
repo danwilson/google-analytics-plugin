@@ -52,6 +52,7 @@ extern NSString *const kGAIProductListSource;
 
 // Enhanced Ecommerce Impressions fields
 extern NSString *const kGAIImpressionName;
+extern NSString *const kGAIImpressionListSource;
 extern NSString *const kGAIImpressionProduct;
 extern NSString *const kGAIImpressionProductId;
 extern NSString *const kGAIImpressionProductName;
