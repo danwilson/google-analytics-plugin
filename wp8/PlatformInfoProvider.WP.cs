@@ -1,4 +1,6 @@
-﻿using GoogleAnalytics.Core;
+﻿// PlatformInfoProvider.WP.cs
+
+using GoogleAnalytics.Core;
 using System;
 using System.IO.IsolatedStorage;
 using System.Threading.Tasks;

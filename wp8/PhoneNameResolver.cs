@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * Copyright (c) 2013 by Alan Mendelevich
  * 
  * Licensed under MIT license.
@@ -10,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace UniversalAnalyticsPlugin
 {
-    internal static class PhoneNameResolver
+    public static class PhoneNameResolver
     {
         public static CanonicalPhoneName Resolve(string manufacturer, string model)
         {
@@ -22,6 +23,7 @@ namespace UniversalAnalyticsPlugin
             switch (manufacturerNormalized)
             {
                 case "NOKIA":
+                case "MICROSOFT":
                     return ResolveNokia(manufacturer, model);
                 case "HTC":
                     return ResolveHtc(manufacturer, model);
@@ -40,11 +42,8 @@ namespace UniversalAnalyticsPlugin
                         CanonicalModel = model,
                         IsResolved = false
                     };
-
             }
         }
-
-
 
         private static CanonicalPhoneName ResolveHuawei(string manufacturer, string model)
         {
@@ -58,7 +57,6 @@ namespace UniversalAnalyticsPlugin
                 CanonicalModel = model,
                 IsResolved = false
             };
-
 
             var lookupValue = modelNormalized;
 
@@ -88,8 +86,6 @@ namespace UniversalAnalyticsPlugin
             return result;
         }
 
-
-
         private static CanonicalPhoneName ResolveLg(string manufacturer, string model)
         {
             var modelNormalized = model.Trim().ToUpper();
@@ -102,7 +98,6 @@ namespace UniversalAnalyticsPlugin
                 CanonicalModel = model,
                 IsResolved = false
             };
-
 
             var lookupValue = modelNormalized;
 
@@ -140,7 +135,6 @@ namespace UniversalAnalyticsPlugin
                 IsResolved = false
             };
 
-
             var lookupValue = modelNormalized;
 
             if (lookupValue.StartsWith("GT-S7530"))
@@ -177,7 +171,6 @@ namespace UniversalAnalyticsPlugin
                 IsResolved = false
             };
 
-
             var lookupValue = modelNormalized;
 
             if (lookupValue.StartsWith("A620"))
@@ -192,7 +185,7 @@ namespace UniversalAnalyticsPlugin
 
             if (lookupValue.StartsWith("C620"))
             {
-                lookupValue = "C625";
+                lookupValue = "C620";
             }
 
             if (htcLookupTable.ContainsKey(lookupValue))
@@ -222,12 +215,18 @@ namespace UniversalAnalyticsPlugin
             var lookupValue = modelNormalized;
             if (modelNormalized.StartsWith("RM-"))
             {
-                lookupValue = modelNormalized.Substring(0, 6);
+                var rms = Regex.Match(modelNormalized, "(RM-)([0-9]+)");
+                lookupValue = rms.Value;
             }
 
             if (nokiaLookupTable.ContainsKey(lookupValue))
             {
                 var modelMetadata = nokiaLookupTable[lookupValue];
+
+                if (!string.IsNullOrEmpty(modelMetadata.CanonicalManufacturer))
+                {
+                    result.CanonicalManufacturer = modelMetadata.CanonicalManufacturer;
+                }
                 result.CanonicalModel = modelMetadata.CanonicalModel;
                 result.Comments = modelMetadata.Comments;
                 result.IsResolved = true;
@@ -246,7 +245,6 @@ namespace UniversalAnalyticsPlugin
             // Huawei Ascend W2
             { "HUAWEI W2", new CanonicalPhoneName() { CanonicalModel = "Ascend W2" } },
         };
-
 
         private static Dictionary<string, CanonicalPhoneName> lgLookupTable = new Dictionary<string, CanonicalPhoneName>()
         {
@@ -300,6 +298,9 @@ namespace UniversalAnalyticsPlugin
             { "SPH-I800", new CanonicalPhoneName() { CanonicalModel = "ATIV S Neo", Comments="Sprint" } },
             { "SGH-I187", new CanonicalPhoneName() { CanonicalModel = "ATIV S Neo", Comments="AT&T" } },
             { "GT-I8675", new CanonicalPhoneName() { CanonicalModel = "ATIV S Neo" } },
+
+            // ATIV SE
+            { "SM-W750V", new CanonicalPhoneName() { CanonicalModel = "ATIV SE", Comments="Verizon" } },
         };
 
         private static Dictionary<string, CanonicalPhoneName> htcLookupTable = new Dictionary<string, CanonicalPhoneName>()
@@ -368,7 +369,9 @@ namespace UniversalAnalyticsPlugin
             { "WINDOWS PHONE 8X BY HTC", new CanonicalPhoneName() { CanonicalModel = "8X" } },
 
             // 8XT
+            { "HTCPO881", new CanonicalPhoneName() { CanonicalModel = "8XT", Comments="Sprint" } },
             { "HTCPO881 SPRINT", new CanonicalPhoneName() { CanonicalModel = "8XT", Comments="Sprint" } },
+            { "HTCPO881 HTC", new CanonicalPhoneName() { CanonicalModel = "8XT", Comments="Sprint" } },
 
             // Titan
             { "ETERNITY", new CanonicalPhoneName() { CanonicalModel = "Titan", Comments = "China" } },
@@ -387,6 +390,10 @@ namespace UniversalAnalyticsPlugin
             { "RADAR 4G", new CanonicalPhoneName() { CanonicalModel = "Radar", Comments = "T-Mobile USA" } },
             { "RADAR C110E", new CanonicalPhoneName() { CanonicalModel = "Radar" } },
             
+            // One M8
+            { "HTC6995LVW", new CanonicalPhoneName() { CanonicalModel = "One (M8)", Comments="Verizon" } },
+            { "0P6B180", new CanonicalPhoneName() { CanonicalModel = "One (M8)", Comments="AT&T" } },
+            { "0P6B140", new CanonicalPhoneName() { CanonicalModel = "One (M8)", Comments="Dual SIM?" } },
         };
 
         private static Dictionary<string, CanonicalPhoneName> nokiaLookupTable = new Dictionary<string, CanonicalPhoneName>()
@@ -467,6 +474,56 @@ namespace UniversalAnalyticsPlugin
             { "RM-996", new CanonicalPhoneName() { CanonicalModel = "Lumia 1320" } },
             // Lumia Icon
             { "RM-927", new CanonicalPhoneName() { CanonicalModel = "Lumia Icon", Comments="Verizon" } },
+            // Lumia 630
+            { "RM-976", new CanonicalPhoneName() { CanonicalModel = "Lumia 630" } },
+            { "RM-977", new CanonicalPhoneName() { CanonicalModel = "Lumia 630" } },
+            { "RM-978", new CanonicalPhoneName() { CanonicalModel = "Lumia 630" } },
+            { "RM-979", new CanonicalPhoneName() { CanonicalModel = "Lumia 630" } },
+            // Lumia 635
+            { "RM-974", new CanonicalPhoneName() { CanonicalModel = "Lumia 635" } },
+            { "RM-975", new CanonicalPhoneName() { CanonicalModel = "Lumia 635" } },
+            { "RM-1078", new CanonicalPhoneName() { CanonicalModel = "Lumia 635", Comments="Sprint" } },
+            // Lumia 526
+            { "RM-997", new CanonicalPhoneName() { CanonicalModel = "Lumia 526", Comments="China Mobile" } },
+            // Lumia 930
+            { "RM-1045", new CanonicalPhoneName() { CanonicalModel = "Lumia 930" } },
+            { "RM-1087", new CanonicalPhoneName() { CanonicalModel = "Lumia 930" } },
+            // Lumia 636
+            { "RM-1027", new CanonicalPhoneName() { CanonicalModel = "Lumia 636", Comments="China" } },
+            // Lumia 638
+            { "RM-1010", new CanonicalPhoneName() { CanonicalModel = "Lumia 638", Comments="China" } },
+            // Lumia 530
+            { "RM-1017", new CanonicalPhoneName() { CanonicalModel = "Lumia 530", Comments="Single SIM" } },
+            { "RM-1018", new CanonicalPhoneName() { CanonicalModel = "Lumia 530", Comments="Single SIM" } },
+            { "RM-1019", new CanonicalPhoneName() { CanonicalModel = "Lumia 530", Comments="Dual SIM" } },
+            { "RM-1020", new CanonicalPhoneName() { CanonicalModel = "Lumia 530", Comments="Dual SIM" } },
+            // Lumia 730
+            { "RM-1040", new CanonicalPhoneName() { CanonicalModel = "Lumia 730", Comments="Dual SIM" } },
+            // Lumia 735
+            { "RM-1038", new CanonicalPhoneName() { CanonicalModel = "Lumia 735" } },
+            { "RM-1039", new CanonicalPhoneName() { CanonicalModel = "Lumia 735" } },
+            { "RM-1041", new CanonicalPhoneName() { CanonicalModel = "Lumia 735", Comments="Verizon" } },
+            // Lumia 830
+            { "RM-983", new CanonicalPhoneName() { CanonicalModel = "Lumia 830" } },
+            { "RM-984", new CanonicalPhoneName() { CanonicalModel = "Lumia 830" } },
+            { "RM-985", new CanonicalPhoneName() { CanonicalModel = "Lumia 830" } },
+            { "RM-1049", new CanonicalPhoneName() { CanonicalModel = "Lumia 830" } },
+            // Lumia 535
+            { "RM-1089", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 535" } },
+            { "RM-1090", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 535" } },
+            { "RM-1091", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 535" } },
+            { "RM-1092", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 535" } },
+            // Lumia 435
+            { "RM-1068", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
+            { "RM-1069", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
+            { "RM-1070", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
+            { "RM-1071", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
+            // Lumia 532
+            { "RM-1031", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
+            { "RM-1032", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
+            { "RM-1034", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
+            // Lumia 640
+            { "RM-1075", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
         };
     }
 
@@ -484,5 +541,4 @@ namespace UniversalAnalyticsPlugin
             get { return CanonicalManufacturer + " " + CanonicalModel; }
         }
     }
-
 }
