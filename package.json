@@ -20,8 +20,9 @@
     "cordova-android",
     "cordova-ios",
     "analytics",
-    "google"
-    "universal"
+    "google",
+    "universal",
+    "universalanalytics"
   ],
   "author": "Dan Wilson",
   "license": "MIT"
