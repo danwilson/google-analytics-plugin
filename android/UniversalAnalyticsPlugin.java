@@ -135,8 +135,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private <T> void addCustomDimensionsToHitBuilder(T builder) {
-		//unfortunately the base HitBuilders.HitBuilder class is not public, therefore have to use reflection to use
-		//the common setCustomDimension (int index, String dimension) method
+        //unfortunately the base HitBuilders.HitBuilder class is not public, therefore have to use reflection to use
+        //the common setCustomDimension (int index, String dimension) method
         try {
             Method builderMethod = builder.getClass().getMethod("setCustomDimension", Integer.TYPE, String.class);
 	    	
