@@ -48,6 +48,7 @@ To set a UserId:
 To enable verbose logging:
 * `window.analytics.debugMode()`
 
+To enable/disable automatic reporting of uncaught exceptions
 * `window.analytics.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
 
 #Installing Without the CLI <a name="nocli"></a>
