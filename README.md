@@ -48,6 +48,8 @@ To set a UserId:
 To enable verbose logging:
 * `window.analytics.debugMode()`
 
+* `window.analytics.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
+
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:
 ```xml
