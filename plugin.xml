@@ -40,7 +40,7 @@
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
     <framework src="libz.dylib" />
-    <framework src="libsqlite3.0.dylib" />
+    <framework src="libsqlite3.dylib" />
   </platform>
 
   <platform name="android">
