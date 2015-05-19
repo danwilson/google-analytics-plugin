@@ -25,6 +25,7 @@
     <source-file src="ios/UniversalAnalyticsPlugin.m" />
 
     <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
+    <source-file src="ios/libAdIdAccess.a" framework="true" />
     <header-file src="ios/GAIDictionaryBuilder.h" />
     <header-file src="ios/GAIFields.h" />
     <header-file src="ios/GAILogger.h" />
@@ -39,6 +40,7 @@
 
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
+    <framework src="AdSupport.framework" />
     <framework src="libz.dylib" />
     <framework src="libsqlite3.0.dylib" />
   </platform>
@@ -54,6 +56,15 @@
     <config-file target="AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.INTERNET" />
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+      <!-- Google Play Store Campaign Measurement -->
+      <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+      <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+                android:exported="true">
+        <intent-filter>
+          <action android:name="com.android.vending.INSTALL_REFERRER" />
+        </intent-filter>
+      </receiver>
     </config-file>
     <source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
   </platform>

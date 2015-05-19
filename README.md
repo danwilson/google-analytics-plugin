@@ -24,6 +24,9 @@ In your 'deviceready' handler, set up your Analytics tracker:
 To track a Screen (PageView):
 * `window.analytics.trackView('Screen Title')`
 
+To track a Screen (PageView) w/ campaign detilas:
+* `window.analytics.trackView('Screen Title', 'my-scheme://content/1111?utm_source=google&utm_campaign=my-campaign')`
+
 To track an Event:
 * `window.analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 

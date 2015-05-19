@@ -41,7 +41,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return true;
         } else if (TRACK_VIEW.equals(action)) {
             String screen = args.getString(0);
-            this.trackView(screen, callbackContext);
+            String deepLinkUrl = args.optString(1);
+            this.trackView(screen, deepLinkUrl, callbackContext);
             return true;
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
@@ -137,7 +138,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void trackView(String screenname, CallbackContext callbackContext) {
+    private void trackView(String screenname, String deepLinkUrl, CallbackContext callbackContext) {
         if (! trackerStarted ) {
             callbackContext.error("Tracker not started");
             return;
@@ -148,7 +149,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         if (null != screenname && screenname.length() > 0) {
             tracker.setScreenName(screenname);
             tracker.send(new HitBuilders
-                    .AppViewBuilder()
+                    .ScreenViewBuilder()
+                    .setCampaignParamsFromUrl(deepLinkUrl)
                     .build()
                     );
             callbackContext.success("Track Screen: " + screenname);

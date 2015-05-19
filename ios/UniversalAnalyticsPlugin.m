@@ -171,9 +171,15 @@
 
     [self addCustomDimensionsToTracker:tracker];
 
+    NSString* deepLinkUrl = [command.arguments objectAtIndex:1];
+    GAIDictionaryBuilder* openParams = [[GAIDictionaryBuilder alloc] init];
+
+    if (deepLinkUrl) {
+        [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
+    }
 
     [tracker set:kGAIScreenName value:screenName];
-    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+    [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:[openParams build]] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
