@@ -46,8 +46,6 @@
   </platform>
 
   <platform name="android">
-    <dependency id="com.google.playservices@19.0.0" />
-
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />

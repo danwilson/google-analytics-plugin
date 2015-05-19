@@ -67,4 +67,8 @@ UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, 
   cordova.exec(success, error, 'UniversalAnalytics', 'addTransactionItem', [transactionId, name ,sku, category, price, quantity, currencyCode]);
 };
 
+UniversalAnalyticsPlugin.prototype.allowIDFACollection = function () {
+  cordova.exec(function () {}, function () {}, []);
+};
+
 module.exports = new UniversalAnalyticsPlugin();
