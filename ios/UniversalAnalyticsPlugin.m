@@ -71,6 +71,9 @@
 {
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     tracker.allowIDFACollection = YES;
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command
