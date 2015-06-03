@@ -22,7 +22,8 @@
 
     [GAI sharedInstance].dispatchInterval = 10;
 
-    [[GAI sharedInstance] trackerWithTrackingId:accountId];
+    id tracker = [[GAI sharedInstance] trackerWithTrackingId:accountId];
+    tracker.allowIDFACollection = YES;
 
     _trackerStarted = true;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
