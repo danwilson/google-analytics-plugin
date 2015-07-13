@@ -44,7 +44,7 @@
   </platform>
 
   <platform name="android">
-    <dependency id="com.google.playservices@19.0.0" />
+    <framework src="com.google.android.gms:play-services-analytics:+" />
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
