@@ -26,6 +26,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     public static final String SET_USER_ID = "setUserId";
     public static final String DEBUG_MODE = "debugMode";
+    public static final String ENABLE_AD_ID_COLLECTION = "enableAdvertisingIdCollection";
 
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
@@ -102,6 +103,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.setUserId(userId, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
+        } else if(ENABLE_AD_ID_COLLECTION.equals(action)) {
+            Boolean isEnabled = args.getBoolean(0);
+            this.enableAdIdCollection(isEnabled, callbackContext);
         }
         return false;
     }
@@ -290,5 +294,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         tracker.set("&uid", userId);
         callbackContext.success("Set user id" + userId);
+    }
+
+    private void enableAdIdCollection(Boolean isEnabled, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        Tracker tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).getDefaultTracker();
+        tracker.enableAdvertisingIdCollection(isEnabled);
+        callbackContext.success((isEnabled ? "En" : "Dis")+ "abled ad id collection for Display Advertisement");
     }
 }

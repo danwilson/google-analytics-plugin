@@ -13,6 +13,14 @@ UniversalAnalyticsPlugin.prototype.debugMode = function(success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'debugMode', []);
 };
 
+/**
+ * Enable/Disable ad id collection to support display advertisement
+ * @see https://support.google.com/analytics/answer/2444872/
+ */
+UniversalAnalyticsPlugin.prototype.enableAdvertisingIdCollection = function(enabled, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'enableAdvertisingIdCollection', [enabled]);
+};
+
 UniversalAnalyticsPlugin.prototype.trackView = function(screen, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen]);
 };

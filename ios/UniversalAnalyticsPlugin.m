@@ -67,6 +67,24 @@
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void) enableAdvertisingIdCollection: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* pluginResult = nil;
+  bool isEnabled = [[command.arguments objectAtIndex:0] boolValue];
+
+  if ( ! _trackerStarted) {
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+  }
+
+  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+  tracker.allowIDFACollection = isEnabled ? YES : NO;
+
+  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
