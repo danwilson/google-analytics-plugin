@@ -21,8 +21,7 @@
 - (void) trackException: (CDVInvokedUrlCommand*)command;
 - (void) addTransaction: (CDVInvokedUrlCommand*)command;
 - (void) addTransactionItem: (CDVInvokedUrlCommand*)command;
-/* cemerson 2015081x */
-- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*)command;
+- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*)command; /* cemerson 2015081x */
 
 @end
 
