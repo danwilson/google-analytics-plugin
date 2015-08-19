@@ -67,6 +67,7 @@ UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, 
 /* Reference: http://stackoverflow.com/a/26653346/826308 */
 UniversalAnalyticsPlugin.prototype.optOutAndStopTracking = function(success, error) { /* cemerson 2015081x */
   cordova.exec(success, error, 'UniversalAnalytics', 'optOutAndStopTracking', []);
+  console.log('UniversalAnalyticsPlugin: optOutAndStopTracking');
 };
 
 
