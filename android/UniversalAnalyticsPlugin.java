@@ -115,6 +115,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
+            GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(false);    
             GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
         } else {
             callbackContext.error("tracker id is not valid");
