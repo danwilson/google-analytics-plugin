@@ -1,337 +1,305 @@
-//UniversalAnalyticsPlugin.m
-//Created by Daniel Wilson 2013-09-19
+package com.danielcwilson.plugins.analytics;
 
-#import "UniversalAnalyticsPlugin.h"
-#import "GAI.h"
-#import "GAIDictionaryBuilder.h"
-#import "GAIFields.h"
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger.LogLevel;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
-@implementation UniversalAnalyticsPlugin
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CallbackContext;
 
-- (void) pluginInitialize
-{
-    _debugMode = false;
-    _trackerStarted = false;
-    _customDimensions = nil;
-}
+import org.json.JSONArray;
+import org.json.JSONException;
 
-- (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* accountId = [command.arguments objectAtIndex:0];
+import java.util.HashMap;
+import java.util.Map.Entry;
 
-    [GAI sharedInstance].dispatchInterval = 10;
+public class UniversalAnalyticsPlugin extends CordovaPlugin {
+    public static final String START_TRACKER = "startTrackerWithId";
+    public static final String TRACK_VIEW = "trackView";
+    public static final String TRACK_EVENT = "trackEvent";
+    public static final String TRACK_EXCEPTION = "trackException";
+    public static final String TRACK_TIMING = "trackTiming";
+    public static final String ADD_DIMENSION = "addCustomDimension";
+    public static final String ADD_TRANSACTION = "addTransaction";
+    public static final String ADD_TRANSACTION_ITEM = "addTransactionItem";
 
-    [[GAI sharedInstance] trackerWithTrackingId:accountId];
+    public static final String SET_USER_ID = "setUserId";
+    public static final String DEBUG_MODE = "debugMode";
+    public static final String OPT_OUT_AND_STOP_TRACKING = "optOutAndStopTracking";
 
-    _trackerStarted = true;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    /* NSLog(@"successfully started GAI tracker"); */
-}
 
-- (void) addCustomDimensionsToTracker: (id<GAITracker>)tracker
-{
-    if (_customDimensions) {
-      for (NSString *key in _customDimensions) {
-        NSString *value = [_customDimensions objectForKey:key];
+    public Boolean trackerStarted = false;
+    public Boolean debugModeEnabled = false;
+    public HashMap<String, String> customDimensions = new HashMap<String, String>();
 
-        /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
-        [tracker set:[GAIFields customDimensionForIndex:[key intValue]]
-        value:value];
-      }
-    }
-}
-  
-- (void) debugMode: (CDVInvokedUrlCommand*) command
-{
-  _debugMode = true;
-  [[GAI sharedInstance].logger setLogLevel:kGAILogLevelVerbose];
-}
+    public Tracker tracker;
 
-- (void) setUserId: (CDVInvokedUrlCommand*)command
-{
-  CDVPluginResult* pluginResult = nil;
-  NSString* userId = [command.arguments objectAtIndex:0];
-
-  if ( ! _trackerStarted) {
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    return;
-  }
-
-  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-  [tracker set:@"&uid" value: userId];
-
-  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void) addCustomDimension: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* key = [command.arguments objectAtIndex:0];
-    NSString* value = [command.arguments objectAtIndex:1];
-
-    if ( ! _customDimensions) {
-      _customDimensions = [[NSMutableDictionary alloc] init];
-    }
-
-    _customDimensions[key] = value;
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void) trackEvent: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-
-    if ( ! _trackerStarted) {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      return;
-    }
-
-    NSString *category = nil;
-    NSString *action = nil;
-    NSString *label = nil;
-    NSNumber *value = nil;
-
-    if ([command.arguments count] > 0)
-        category = [command.arguments objectAtIndex:0];
-
-    if ([command.arguments count] > 1)
-        action = [command.arguments objectAtIndex:1];
-
-    if ([command.arguments count] > 2)
-        label = [command.arguments objectAtIndex:2];
-
-    if ([command.arguments count] > 3)
-        value = [command.arguments objectAtIndex:3];
-
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-    [self addCustomDimensionsToTracker:tracker];
-
-    [tracker send:[[GAIDictionaryBuilder
-    createEventWithCategory: category //required
-         action: action //required
-          label: label
-          value: value] build]];
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void) trackException: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-
-    if ( ! _trackerStarted) {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      return;
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (START_TRACKER.equals(action)) {
+            String id = args.getString(0);
+            this.startTracker(id, callbackContext);
+            return true;
+        } else if (TRACK_VIEW.equals(action)) {
+            String screen = args.getString(0);
+            this.trackView(screen, callbackContext);
+            return true;
+        } else if (TRACK_EVENT.equals(action)) {
+            int length = args.length();
+            if (length > 0) {
+                this.trackEvent(
+                        args.getString(0),
+                        length > 1 ? args.getString(1) : "",
+                                length > 2 ? args.getString(2) : "",
+                                        length > 3 ? args.getLong(3) : 0,
+                                                callbackContext);
+            }
+            return true;
+        } else if (TRACK_EXCEPTION.equals(action)) {
+            String description = args.getString(0);
+            Boolean fatal = args.getBoolean(1);
+            this.trackException(description, fatal, callbackContext);
+            return true;
+        } else if (TRACK_TIMING.equals(action)) {
+            int length = args.length();
+            if (length > 0) {
+                this.trackTiming(args.getString(0), length > 1 ? args.getLong(1) : 0, length > 2 ? args.getString(2) : "", length > 3 ? args.getString(3) : "", callbackContext);
+            }
+            return true;
+        } else if (ADD_DIMENSION.equals(action)) {
+            String key = args.getString(0);
+            String value = args.getString(1);
+            this.addCustomDimension(key, value, callbackContext);
+            return true;
+        } else if (ADD_TRANSACTION.equals(action)) {
+            int length = args.length();
+            if (length > 0) {
+                this.addTransaction(
+                        args.getString(0),
+                        length > 1 ? args.getString(1) : "",
+                                length > 2 ? args.getDouble(2) : 0,
+                                        length > 3 ? args.getDouble(3) : 0,
+                                                length > 4 ? args.getDouble(4) : 0,
+                                                        length > 5 ? args.getString(5) : null,
+                                                                callbackContext);
+            }
+            return true;
+        } else if (ADD_TRANSACTION_ITEM.equals(action)) {
+            int length = args.length();
+            if (length > 0) {
+                this.addTransactionItem(
+                        args.getString(0),
+                        length > 1 ? args.getString(1) : "",
+                                length > 2 ? args.getString(2) : "",
+                                        length > 3 ? args.getString(3) : "",
+                                                length > 4 ? args.getDouble(4) : 0,
+                                                        length > 5 ? args.getLong(5) : 0,
+                                                                length > 6 ? args.getString(6) : null,
+                                                                        callbackContext);
+            }
+            return true;
+        } else if (SET_USER_ID.equals(action)) {
+            String userId = args.getString(0);
+            this.setUserId(userId, callbackContext);
+        } else if (DEBUG_MODE.equals(action)) {
+            this.debugMode(callbackContext);        
+        } else if (OPT_OUT_AND_STOP_TRACKING.equals(action)) { /* cemerson 2015081x */
+            this.optOutAndStopTracking(callbackContext);            
+        }
+        return false;
     }
 
-    NSString *description = nil;
-    NSNumber *fatal = nil;
-
-    if ([command.arguments count] > 0)
-        description = [command.arguments objectAtIndex:0];
-
-    if ([command.arguments count] > 1)
-        fatal = [command.arguments objectAtIndex:1];
-
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-    [self addCustomDimensionsToTracker:tracker];
-
-    [tracker send:[[GAIDictionaryBuilder
-    createExceptionWithDescription: description
-                                     withFatal: fatal] build]];
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void) trackView: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-
-    if ( ! _trackerStarted) {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      return;
+    private void startTracker(String id, CallbackContext callbackContext) {
+        if (null != id && id.length() > 0) {
+            tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
+            callbackContext.success("tracker started");
+            trackerStarted = true;
+            GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
+        } else {
+            callbackContext.error("tracker id is not valid");
+        }
     }
 
-    NSString* screenName = [command.arguments objectAtIndex:0];
-
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-    [self addCustomDimensionsToTracker:tracker];
-
-
-    [tracker set:kGAIScreenName value:screenName];
-    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void) trackTiming: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-
-    if ( ! _trackerStarted) {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      return;
+    private void addCustomDimension(String key, String value, CallbackContext callbackContext) {
+        if (null != key && key.length() > 0 && null != value && value.length() > 0) {
+            customDimensions.put(key, value);
+            callbackContext.success("custom dimension started");
+        } else {
+            callbackContext.error("Expected non-empty string arguments.");
+        }
     }
 
-    NSString *category = nil;
-    NSNumber *intervalInMilliseconds = nil;
-    NSString *name = nil;
-    NSString *label = nil;
-
-    if ([command.arguments count] > 0)
-        category = [command.arguments objectAtIndex:0];
-
-    if ([command.arguments count] > 1)
-        intervalInMilliseconds = [command.arguments objectAtIndex:1];
-
-    if ([command.arguments count] > 2)
-        name = [command.arguments objectAtIndex:2];
-
-    if ([command.arguments count] > 3)
-        label = [command.arguments objectAtIndex:3];
-
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-    [self addCustomDimensionsToTracker:tracker];
-
-    [tracker send:[[GAIDictionaryBuilder
-    createTimingWithCategory: category //required
-         interval: intervalInMilliseconds //required
-           name: name
-          label: label] build]];
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void) addTransaction: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-
-    if ( ! _trackerStarted) {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      return;
+    private void addCustomDimensionsToTracker(Tracker tracker) {
+        for (Entry<String, String> entry : customDimensions.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            //System.out.println("Setting tracker dimension slot " + key + ": <" + value+">");
+            tracker.send(new HitBuilders
+                    .AppViewBuilder()
+                    .setCustomDimension((Integer.parseInt(key)), value).build());
+        }
     }
 
-    NSString *transactionId = nil;
-    NSString *affiliation = nil;
-    NSNumber *revenue = nil;
-    NSNumber *tax = nil;
-    NSNumber *shipping = nil;
-    NSString *currencyCode = nil;
+    private void trackView(String screenname, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
 
+        addCustomDimensionsToTracker(tracker);
 
-    if ([command.arguments count] > 0)
-        transactionId = [command.arguments objectAtIndex:0];
-
-    if ([command.arguments count] > 1)
-        affiliation = [command.arguments objectAtIndex:1];
-
-    if ([command.arguments count] > 2)
-        revenue = [command.arguments objectAtIndex:2];
-
-    if ([command.arguments count] > 3)
-        tax = [command.arguments objectAtIndex:3];
-
-    if ([command.arguments count] > 4)
-        shipping = [command.arguments objectAtIndex:4];
-
-    if ([command.arguments count] > 5)
-        currencyCode = [command.arguments objectAtIndex:5];
-
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-
-    [tracker send:[[GAIDictionaryBuilder createTransactionWithId:transactionId             // (NSString) Transaction ID
-                                                     affiliation:affiliation         // (NSString) Affiliation
-                                                         revenue:revenue                  // (NSNumber) Order revenue (including tax and shipping)
-                                                             tax:tax                  // (NSNumber) Tax
-                                                        shipping:shipping                      // (NSNumber) Shipping
-                                                    currencyCode:currencyCode] build]];        // (NSString) Currency code
-
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-
-
-- (void) addTransactionItem: (CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-
-    if ( ! _trackerStarted) {
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
-      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-      return;
+        if (null != screenname && screenname.length() > 0) {
+            tracker.setScreenName(screenname);
+            tracker.send(new HitBuilders
+                    .AppViewBuilder()
+                    .build()
+                    );
+            callbackContext.success("Track Screen: " + screenname);
+        } else {
+            callbackContext.error("Expected one non-empty string argument.");
+        }
     }
 
-    NSString *transactionId = nil;
-    NSString *name = nil;
-    NSString *sku = nil;
-    NSString *category = nil;
-    NSNumber *price = nil;
-    NSNumber *quantity = nil;
-    NSString *currencyCode = nil;
+    private void trackEvent(String category, String action, String label, long value, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        addCustomDimensionsToTracker(tracker);
+
+        if (null != category && category.length() > 0) {
+            tracker.send(new HitBuilders
+                    .EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .setLabel(label)
+                    .setValue(value)
+                    .build()
+                    );
+            callbackContext.success("Track Event: " + category);
+        } else {
+            callbackContext.error("Expected non-empty string arguments.");
+        }
+    }
+
+    private void trackException(String description, Boolean fatal, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        addCustomDimensionsToTracker(tracker);
+
+        if (null != description && description.length() > 0) {
+            tracker.send(new HitBuilders
+                    .ExceptionBuilder()
+                    .setDescription(description)
+                    .setFatal(fatal)
+                    .build()
+                    );
+            callbackContext.success("Track Exception: " + description);
+        } else {
+            callbackContext.error("Expected non-empty string arguments.");
+        }
+    }
+
+    private void trackTiming(String category, long intervalInMilliseconds, String name, String label, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        addCustomDimensionsToTracker(tracker);
+
+        if (null != category && category.length() > 0) {
+            tracker.send(new HitBuilders
+                    .TimingBuilder()
+                    .setCategory(category)
+                    .setValue(intervalInMilliseconds)
+                    .setVariable(name)
+                    .setLabel(label)
+                    .build()
+                    );
+            callbackContext.success("Track Timing: " + category);
+        } else {
+            callbackContext.error("Expected non-empty string arguments.");
+        }
+    }
+
+    private void addTransaction(String id, String affiliation, double revenue, double tax, double shipping, String currencyCode, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        addCustomDimensionsToTracker(tracker);
+
+        if (null != id && id.length() > 0) {
+            tracker.send(new HitBuilders
+                    .TransactionBuilder()
+                    .setTransactionId(id)
+                    .setAffiliation(affiliation)
+                    .setRevenue(revenue).setTax(tax)
+                    .setShipping(shipping)
+                    .setCurrencyCode(currencyCode)
+                    .build()
+                    ); //Deprecated
+            callbackContext.success("Add Transaction: " + id);
+        } else {
+            callbackContext.error("Expected non-empty ID.");
+        }
+    }
+
+    private void addTransactionItem(String id, String name, String sku, String category, double price, long quantity, String currencyCode, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        addCustomDimensionsToTracker(tracker);
+
+        if (null != id && id.length() > 0) {
+
+            tracker.send(new HitBuilders
+                    .ItemBuilder()
+                    .setTransactionId(id)
+                    .setName(name)
+                    .setSku(sku)
+                    .setCategory(category)
+                    .setPrice(price)
+                    .setQuantity(quantity)
+                    .setCurrencyCode(currencyCode)
+                    .build()
+                    ); //Deprecated
+            callbackContext.success("Add Transaction Item: " + id);
+        } else {
+            callbackContext.error("Expected non-empty ID.");
+        }
+    }
+
+    private void debugMode(CallbackContext callbackContext) {
+        GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
+
+        this.debugModeEnabled = true;
+        callbackContext.success("debugMode enabled");
+    }
+
+    private void setUserId(String userId, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        tracker.set("&uid", userId);
+        callbackContext.success("Set user id" + userId);
+    }
+    
+    private void optOutAndStopTracking(CallbackContext callbackContext) { /* cemerson 2015081x */        
+        GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(true);    
+        callbackContext.success("Tracking opted out and stopped");
+    }
 
 
-    if ([command.arguments count] > 0)
-        transactionId = [command.arguments objectAtIndex:0];
-
-    if ([command.arguments count] > 1)
-        name = [command.arguments objectAtIndex:1];
-
-    if ([command.arguments count] > 2)
-        sku = [command.arguments objectAtIndex:2];
-
-    if ([command.arguments count] > 3)
-        category = [command.arguments objectAtIndex:3];
-
-    if ([command.arguments count] > 4)
-        price = [command.arguments objectAtIndex:4];
-
-    if ([command.arguments count] > 5)
-        quantity = [command.arguments objectAtIndex:5];
-
-    if ([command.arguments count] > 6)
-        currencyCode = [command.arguments objectAtIndex:6];
-
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-
-    [tracker send:[[GAIDictionaryBuilder createItemWithTransactionId:transactionId         // (NSString) Transaction ID
-                                                                name:name  // (NSString) Product Name
-                                                                 sku:sku           // (NSString) Product SKU
-                                                            category:category  // (NSString) Product category
-                                                               price:price               // (NSNumber)  Product price
-                                                            quantity:quantity                 // (NSNumber)  Product quantity
-                                                        currencyCode:currencyCode] build]];    // (NSString) Currency code
-
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
-
-- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*) command /* cemerson 2015081x */
-{  
-  [[GAI sharedInstance].optOut = YES];  
-}  
-
-@end
