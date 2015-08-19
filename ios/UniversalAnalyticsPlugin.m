@@ -42,7 +42,7 @@
       }
     }
 }
-
+  
 - (void) debugMode: (CDVInvokedUrlCommand*) command
 {
   _debugMode = true;
@@ -328,5 +328,11 @@
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+
+/* cemerson 2015081x */
+- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*) command
+{  
+  [[GAI sharedInstance].setOptOut = YES];  
+}  
 
 @end
