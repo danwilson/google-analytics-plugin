@@ -63,12 +63,16 @@ UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, 
   cordova.exec(success, error, 'UniversalAnalytics', 'addTransactionItem', [transactionId, name ,sku, category, price, quantity, currencyCode]);
 };
 
-/* Opts out of tracking / also stops tracking after initialized */
-/* Reference: http://stackoverflow.com/a/26653346/826308 */
-UniversalAnalyticsPlugin.prototype.optOutAndStopTracking = function(success, error) { /* cemerson 2015081x */
-  cordova.exec(success, error, 'UniversalAnalytics', 'optOutAndStopTracking', []);
-  console.log('UniversalAnalyticsPlugin: optOutAndStopTracking');
+/* Opts out of tracking */
+UniversalAnalyticsPlugin.prototype.trackingOptOut = function(success, error) { /* cemerson 2015081x */
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackingOptOut', []);
+  console.log('UniversalAnalyticsPlugin: trackingOptOut');
 };
 
+/*  stop tracking */
+UniversalAnalyticsPlugin.prototype.stopTracking = function(success, error) { /* cemerson 2015081x */
+  cordova.exec(success, error, 'UniversalAnalytics', 'stopTracking', []);
+  console.log('UniversalAnalyticsPlugin: stopTracking');
+};
 
 module.exports = new UniversalAnalyticsPlugin();
