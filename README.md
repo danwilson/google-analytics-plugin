@@ -67,8 +67,8 @@ To enable verbose logging:
 To toggle opt out (calling setTrackingWithId() will toggle off again):
 * `window.analytics.trackingOptOut()`
 
-To stop tracking after setTrackingWithId() has been called/initialized:
-* `window.analytics.stopTracking()`
+To stop tracking after setTrackingWithId() has been called/initialized (currently iOS only):
+* `window.analytics.stopTracking()` 
 
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:
