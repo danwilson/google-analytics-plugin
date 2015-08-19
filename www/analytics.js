@@ -69,4 +69,5 @@ UniversalAnalyticsPlugin.prototype.optOutAndStopTracking = function(success, err
   cordova.exec(success, error, 'UniversalAnalytics', 'optOutAndStopTracking', []);
 };
 
+
 module.exports = new UniversalAnalyticsPlugin();
