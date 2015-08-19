@@ -329,8 +329,7 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-/* cemerson 2015081x */
-- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*) command
+- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*) command /* cemerson 2015081x */
 {  
   [[GAI sharedInstance].setOptOut = YES];  
 }  
