@@ -26,8 +26,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     public static final String SET_USER_ID = "setUserId";
     public static final String DEBUG_MODE = "debugMode";
-    public static final String OPT_OUT_AND_STOP_TRACKING = "optOutAndStopTracking";
-
+    public static final String OPT_OUT = "trackingOptOut";
+    public static final String STOP_TRACKING = "stopTracking";
 
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
@@ -104,8 +104,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.setUserId(userId, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);        
-        } else if (OPT_OUT_AND_STOP_TRACKING.equals(action)) { /* cemerson 2015081x */
-            this.optOutAndStopTracking(callbackContext);            
+        } else if (OPT_OUT.equals(action)) { 
+            this.trackingOptOut(callbackContext);            
+        } else if (STOP_TRACKING.equals(action)) {
+            this.stopTracking(callbackContext);
         }
         return false;
     }
@@ -297,9 +299,13 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("Set user id" + userId);
     }
     
-    private void optOutAndStopTracking(CallbackContext callbackContext) { /* cemerson 2015081x */        
+    private void trackingOptOut(CallbackContext callbackContext) { /* cemerson 2015081x */        
         GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(true);    
-        callbackContext.success("Tracking opted out and stopped");
+        callbackContext.success("trackingOptOut(): Tracking opted out and stopped");
+    }
+    private void stopTracking(CallbackContext callbackContext) { /* cemerson 2015081x */        
+        // GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(true);    
+        callbackContext.success("stopTracking(): Method not yet implemented for ANDROID");
     }
 
 
