@@ -19,16 +19,22 @@
 {
     CDVPluginResult* pluginResult = nil;
     NSString* accountId = [command.arguments objectAtIndex:0];
+    
+    /* always remove default tracker first just in case (?) */
+    [[GAI sharedInstance] removeTrackerByName:@"default"];    
+    NSLog(@"removed old/previous GAI tracker");
 
     [GAI sharedInstance].optOut = NO;
+
     [GAI sharedInstance].dispatchInterval = 10;
-
-    [[GAI sharedInstance] trackerWithTrackingId:accountId];
-
+    
+    //  [[GAI sharedInstance] trackerWithTrackingId:accountId];
+    // Use trackerWithName instead to allow ability to stop it via removeTrackerByName (?)
+    [[GAI sharedInstance] trackerWithName:@"default" trackingId:accountId];
     _trackerStarted = true;
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    /* NSLog(@"successfully started GAI tracker"); */
+    NSLog(@"successfully started GAI tracker");
 }
 
 - (void) addCustomDimensionsToTracker: (id<GAITracker>)tracker
@@ -330,9 +336,14 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void) optOutAndStopTracking: (CDVInvokedUrlCommand*) command /* cemerson 2015081x */
-{  
-  [GAI sharedInstance].optOut = YES;
+- (void) stopTracking: (CDVInvokedUrlCommand*) command
+{    
+    [[GAI sharedInstance] removeTrackerByName:@"default"];
+}  
+
+- (void) trackingOptOut: (CDVInvokedUrlCommand*) command
+{    
+    [GAI sharedInstance].optOut = YES;
 }  
 
 @end
