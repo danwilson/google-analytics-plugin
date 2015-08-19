@@ -63,8 +63,8 @@ UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, 
   cordova.exec(success, error, 'UniversalAnalytics', 'addTransactionItem', [transactionId, name ,sku, category, price, quantity, currencyCode]);
 };
 
-/* cemerson 2015081x: opts out of tracking / also stops tracking after initialized */
-UniversalAnalyticsPlugin.prototype.optOutAndStopTracking = function(success, error) {
+/* Opts out of tracking / also stops tracking after initialized */
+UniversalAnalyticsPlugin.prototype.optOutAndStopTracking = function(success, error) { /* cemerson 2015081x */
   cordova.exec(success, error, 'UniversalAnalytics', 'optOutAndStopTracking', []);
 };
 
