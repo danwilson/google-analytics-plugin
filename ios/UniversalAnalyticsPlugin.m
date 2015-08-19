@@ -331,7 +331,7 @@
 
 - (void) optOutAndStopTracking: (CDVInvokedUrlCommand*) command /* cemerson 2015081x */
 {  
-  [[GAI sharedInstance].setOptOut = YES];  
+  [[GAI sharedInstance].optOut = YES];  
 }  
 
 @end
