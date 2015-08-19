@@ -26,6 +26,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     public static final String SET_USER_ID = "setUserId";
     public static final String DEBUG_MODE = "debugMode";
+    public static final String OPT_OUT_AND_STOP_TRACKING = "optOutAndStopTracking";
+
 
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
@@ -102,6 +104,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.setUserId(userId, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
+        /* cemerson 2015081x */
+        } else if (OPT_OUT_AND_STOP_TRACKING.equals(action)) {
+            this.optOutAndStopTracking(callbackContext);            
         }
         return false;
     }
@@ -291,4 +296,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         tracker.set("&uid", userId);
         callbackContext.success("Set user id" + userId);
     }
+
+    /* cemerson 2015081x */
+    private void optOutAndStopTracking(CallbackContext callbackContext) {        
+        GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(true);    
+        callbackContext.success("Tracking opted out and stopped");
+    }
+
+
 }
