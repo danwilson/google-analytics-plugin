@@ -64,7 +64,7 @@ To set a UserId:
 To enable verbose logging:
 * `window.analytics.debugMode()`
 
-To toggle opt out (calling setTrackingWithId() will toggle off again):
+To toggle opt out (calling setTrackingWithId() will toggle off again) (currently iOS only):
 * `window.analytics.trackingOptOut()`
 
 To stop tracking after setTrackingWithId() has been called/initialized (currently iOS only):
