@@ -117,7 +117,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
-            GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(false);    
+            // OPT IN?? GoogleAnalytics.getInstance(this.cordova.getActivity()).??? 
             GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
         } else {
             callbackContext.error("tracker id is not valid");
@@ -299,14 +299,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("Set user id" + userId);
     }
     
-    private void trackingOptOut(CallbackContext callbackContext) { /* cemerson 2015081x */        
-        GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(true);    
-        callbackContext.success("trackingOptOut(): Tracking opted out and stopped");
+    private void trackingOptOut(CallbackContext callbackContext) { /* cemerson 2015081x */                
+        // ??? GoogleAnalytics.getInstance(this.cordova.getActivity()). ????
+        callbackContext.success("trackingOptOut(): Method not yet implemented for ANDROID");
     }
     private void stopTracking(CallbackContext callbackContext) { /* cemerson 2015081x */        
-        // GoogleAnalytics.getInstance(this.cordova.getActivity()).setOptOut(true);    
+        // ??? GoogleAnalytics.getInstance(this.cordova.getActivity()). ????
         callbackContext.success("stopTracking(): Method not yet implemented for ANDROID");
     }
-
-
 }
