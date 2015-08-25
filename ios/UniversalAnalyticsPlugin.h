@@ -6,8 +6,8 @@
 #import "GAI.h"
 
 @interface UniversalAnalyticsPlugin : CDVPlugin {
-    bool _trackerStarted;
-    bool _debugMode;
+  bool _trackerStarted;
+  bool _debugMode;
 	NSMutableDictionary *_customDimensions;
 }
 
