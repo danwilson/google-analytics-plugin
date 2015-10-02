@@ -25,6 +25,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String ADD_TRANSACTION_ITEM = "addTransactionItem";
 
     public static final String SET_USER_ID = "setUserId";
+    public static final String SET_ANONYMIZE_IP = "setAnonymizeIp";
     public static final String DEBUG_MODE = "debugMode";
 
     public Boolean trackerStarted = false;
@@ -100,6 +101,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (SET_USER_ID.equals(action)) {
             String userId = args.getString(0);
             this.setUserId(userId, callbackContext);
+        } else if (SET_ANONYMIZE_IP.equals(action)) {
+            boolean anonymize = args.getBoolean(0);
+            this.setAnonymizeIp(anonymize, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
         }
@@ -280,6 +284,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         this.debugModeEnabled = true;
         callbackContext.success("debugMode enabled");
+    }
+    
+    private void setAnonymizeIp(boolean anonymize, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        tracker.setAnonymizeIp(anonymize);
+        callbackContext.success("Set AnonymizeIp " + anonymize);
     }
 
     private void setUserId(String userId, CallbackContext callbackContext) {
