@@ -1,7 +1,7 @@
 google-analytics-plugin
 =======================
 
-Cordova (PhoneGap) 3.0+ Plugin to connect to Google's native Universal Analytics SDK 3.0
+Cordova (PhoneGap) 3.0+ Plugin to connect to Google's native Universal Analytics SDK 3.14
 
 Prerequisites:
 * A Cordova 3.0+ project for iOS and/or Android
@@ -94,4 +94,3 @@ var analyticsService = require('app/data/AnalyticsService');
 
 analyticsService.trackView('Home');
 ```
-
