@@ -23,7 +23,6 @@
 
     <header-file src="ios/UniversalAnalyticsPlugin.h" />
     <source-file src="ios/UniversalAnalyticsPlugin.m" />
-
     <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
     <header-file src="ios/GAIDictionaryBuilder.h" />
     <header-file src="ios/GAIFields.h" />
@@ -40,7 +39,7 @@
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
     <framework src="libz.dylib" />
-    <framework src="libsqlite3.0.dylib" />
+    <framework src="libsqlite3.dylib" />
   </platform>
 
   <platform name="android">
