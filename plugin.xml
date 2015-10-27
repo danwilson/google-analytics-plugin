@@ -54,6 +54,21 @@
       <uses-permission android:name="android.permission.INTERNET" />
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     </config-file>
+    <!-- Add support for devices without Google Play Services installed. -->
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:enabled="true">
+        <intent-filter>
+          <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+        </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService" android:enabled="true" android:exported="false"/>
+        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:exported="true">
+          <intent-filter>
+            <action android:name="com.android.vending.INSTALL_REFERRER" />
+          </intent-filter>
+        </receiver>
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+    </config-file>
     <source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
   </platform>
 </plugin>
