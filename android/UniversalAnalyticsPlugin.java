@@ -26,6 +26,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     public static final String SET_USER_ID = "setUserId";
     public static final String DEBUG_MODE = "debugMode";
+    public static final String ENABLE_UNCAUGHT_EXCEPTION_REPORTING = "enableUncaughtExceptionReporting";
 
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
@@ -102,6 +103,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.setUserId(userId, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
+        } else if (ENABLE_UNCAUGHT_EXCEPTION_REPORTING.equals(action)) {
+            Boolean enable = args.getBoolean(0);
+            this.enableUncaughtExceptionReporting(enable, callbackContext);
         }
         return false;
     }
@@ -290,5 +294,15 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         tracker.set("&uid", userId);
         callbackContext.success("Set user id" + userId);
+    }
+    
+    private void enableUncaughtExceptionReporting(Boolean enable, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        tracker.enableExceptionReporting(enable);
+        callbackContext.success((enable ? "Enabled" : "Disabled") + " uncaught exception reporting");
     }
 }
