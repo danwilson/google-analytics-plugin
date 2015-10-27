@@ -2,12 +2,12 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-google-analytics"
-    version="0.8.0">
+    version="0.8.1">
   <engines>
     <engine name="cordova" version=">=3.0.0" />
   </engines>
   <name>Google Universal Analytics Plugin</name>
-  <description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS) and SDK 4.0 (Android)</description>
+  <description>Simple tracking (screens/events) for Google Analytics SDK 3.14 (iOS) and SDK 4.0 (Android)</description>
   <author>Daniel C. Wilson</author>
   <license>MIT License</license>
   <js-module src="www/analytics.js" name="UniversalAnalytics">
@@ -23,7 +23,6 @@
 
     <header-file src="ios/UniversalAnalyticsPlugin.h" />
     <source-file src="ios/UniversalAnalyticsPlugin.m" />
-
     <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
     <header-file src="ios/GAIDictionaryBuilder.h" />
     <header-file src="ios/GAIFields.h" />
@@ -40,7 +39,7 @@
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
     <framework src="libz.dylib" />
-    <framework src="libsqlite3.0.dylib" />
+    <framework src="libsqlite3.dylib" />
   </platform>
 
   <platform name="android">
