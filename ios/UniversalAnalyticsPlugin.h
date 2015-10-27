@@ -21,6 +21,8 @@
 - (void) trackException: (CDVInvokedUrlCommand*)command;
 - (void) addTransaction: (CDVInvokedUrlCommand*)command;
 - (void) addTransactionItem: (CDVInvokedUrlCommand*)command;
+- (void) stopTracking: (CDVInvokedUrlCommand*) command;
+- (void) trackingOptOut: (CDVInvokedUrlCommand*) command;
 
 @end
 

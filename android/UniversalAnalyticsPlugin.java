@@ -26,6 +26,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     public static final String SET_USER_ID = "setUserId";
     public static final String DEBUG_MODE = "debugMode";
+    public static final String OPT_OUT = "trackingOptOut";
+    public static final String STOP_TRACKING = "stopTracking";
 
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
@@ -101,7 +103,11 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             String userId = args.getString(0);
             this.setUserId(userId, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
-            this.debugMode(callbackContext);
+            this.debugMode(callbackContext);        
+        } else if (OPT_OUT.equals(action)) { 
+            this.trackingOptOut(callbackContext);            
+        } else if (STOP_TRACKING.equals(action)) {
+            this.stopTracking(callbackContext);
         }
         return false;
     }
@@ -111,6 +117,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
+            // OPT IN?? GoogleAnalytics.getInstance(this.cordova.getActivity()).??? 
             GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
         } else {
             callbackContext.error("tracker id is not valid");
@@ -290,5 +297,14 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         tracker.set("&uid", userId);
         callbackContext.success("Set user id" + userId);
+    }
+    
+    private void trackingOptOut(CallbackContext callbackContext) { /* cemerson 2015081x */                
+        // ??? GoogleAnalytics.getInstance(this.cordova.getActivity()). ????
+        callbackContext.success("trackingOptOut(): Method not yet implemented for ANDROID");
+    }
+    private void stopTracking(CallbackContext callbackContext) { /* cemerson 2015081x */        
+        // ??? GoogleAnalytics.getInstance(this.cordova.getActivity()). ????
+        callbackContext.success("stopTracking(): Method not yet implemented for ANDROID");
     }
 }
