@@ -178,20 +178,21 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void trackView(String screenname, String trackerId, CallbackContext callbackContext) {
-        if (! trackerStarted(trackerId) ) {
+        if (!trackerStarted(trackerId)) {
             callbackContext.error("Tracker not started");
             return;
         }
 
         Tracker tracker = getTracker(trackerId);
 
-        if (null != screenname && screenname.length() > 0 && tracker != null) {
+        if (null != screenname && screenname.length() > 0) {
             tracker.setScreenName(screenname);
             
             HitBuilders.AppViewBuilder hitBuilder = new HitBuilders.AppViewBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
             
             tracker.send(hitBuilder.build());
+            System.out.println("GA SHOUTEM DEBUG performing: trackView on tracker" + trackerId);
             callbackContext.success("Track Screen: " + screenname);
         } else {
             callbackContext.error("Expected one non-empty string argument.");
@@ -199,14 +200,14 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void trackEvent(String category, String action, String label, long value, String trackerId, CallbackContext callbackContext) {
-        if (! trackerStarted(trackerId) ) {
+        if (!trackerStarted(trackerId)) {
             callbackContext.error("Tracker not started");
             return;
         }
 
         Tracker tracker = getTracker(trackerId);
 
-        if (null != category && category.length() > 0 && tracker != null) {
+        if (null != category && category.length() > 0) {
             HitBuilders.EventBuilder hitBuilder = new HitBuilders.EventBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
             
@@ -224,14 +225,14 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void trackException(String description, Boolean fatal, String trackerId, CallbackContext callbackContext) {
-        if (! trackerStarted(trackerId) ) {
+        if (!trackerStarted(trackerId)) {
             callbackContext.error("Tracker not started");
             return;
         }
 
         Tracker tracker = getTracker(trackerId);
 
-        if (null != description && description.length() > 0 && tracker != null) {
+        if (null != description && description.length() > 0) {
             HitBuilders.ExceptionBuilder hitBuilder = new HitBuilders.ExceptionBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
         	
@@ -254,7 +255,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         Tracker tracker = getTracker(trackerId);
 
-        if (null != category && category.length() > 0 && trackerId != null) {
+        if (null != category && category.length() > 0) {
             HitBuilders.TimingBuilder hitBuilder = new HitBuilders.TimingBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
         	
@@ -279,7 +280,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         Tracker tracker = getTracker(trackerId);
 
-        if (null != id && id.length() > 0 && tracker != null) {
+        if (null != id && id.length() > 0) {
             HitBuilders.TransactionBuilder hitBuilder = new HitBuilders.TransactionBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
         	
@@ -305,7 +306,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         Tracker tracker = getTracker(trackerId);
 
-        if (null != id && id.length() > 0 && tracker != null) {
+        if (null != id && id.length() > 0) {
             HitBuilders.ItemBuilder hitBuilder = new HitBuilders.ItemBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
 
@@ -333,7 +334,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private void setUserId(String userId, String trackerId, CallbackContext callbackContext) {
-        if (! trackerStarted(trackerId)) {
+        if (!trackerStarted(trackerId)) {
             callbackContext.error("Tracker not started");
             return;
         }
@@ -344,7 +345,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
     
     private void enableUncaughtExceptionReporting(Boolean enable, String trackerId, CallbackContext callbackContext) {
-        if (! trackerStarted(trackerId) ) {
+        if (!trackerStarted(trackerId)) {
             callbackContext.error("Tracker not started");
             return;
         }
