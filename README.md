@@ -32,38 +32,41 @@ The plugin.xml file will add the Google Analytics SDK files for Android and/or i
 If you are not using the CLI, follow the steps in the section [Installing Without the CLI](#nocli)
 
 #JavaScript Usage
-In your 'deviceready' handler, set up your Analytics tracker:
-* `window.analytics.startTrackerWithId('UA-XXXX-YY')` where UA-XXXX-YY is your Google Analytics Mobile App property
 
-To track a Screen (PageView):
-* `window.analytics.trackView('Screen Title')`
+```js
+// in your 'deviceready' handler, set up your analytics tracker:
+window.analytics.startTrackerWithId('UA-XXXX-YY') where UA-XXXX-YY is your Google Analytics Mobile App property
 
-To track an Event:
-* `window.analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
+// track pageview
+window.analytics.trackView('Screen Title')
 
-To track an Exception:
-* `window.analytics.trackException('Description', Fatal)` where Fatal is boolean
+// track event: (label/value optional, value is numeric)
+window.analytics.trackEvent('Category', 'Action', 'Label', Value)
 
-To track User Timing (App Speed):
-* `window.analytics.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label')` where IntervalInMilliseconds is numeric
+// track exception: 
+window.analytics.trackException('Description', fatal)
 
-To add a Transaction (Ecommerce)
-* `window.analytics.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')` where Revenue, Tax, and Shipping are numeric
+// track user timing: (intervalInMilliseconds is numeric)
+window.analytics.trackTiming('Category', intervalInMilliseconds, 'Variable', 'Label')
 
-To add a Transaction Item (Ecommerce)
-* `window.analytics.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')` where Price and Quantity are numeric
+// add ecommerce transaction (revenue, tax, and shipping are numeric)
+window.analytics.addTransaction('ID', 'Affiliation', revenue, tax, shipping, 'Currency Code')
 
-To add a Custom Dimension
-* `window.analytics.addCustomDimension('Key', 'Value', success, error)`
+// add ecommerce transaction item (price and quantity are numeric)
+window.analytics.addTransactionItem('ID', 'Name', 'SKU', 'Category', price, quantity, 'Currency Code')
 
-To set a UserId:
-* `window.analytics.setUserId('my-user-id')`
+// add custom dimension
+window.analytics.addCustomDimension('Key', 'Value', success, error)
 
-To enable verbose logging:
-* `window.analytics.debugMode()`
+// set userid:
+window.analytics.setUserId('my-user-id')
 
-To enable/disable automatic reporting of uncaught exceptions
-* `window.analytics.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
+// enable verbose logging:
+window.analytics.debugMode()
+
+// enable/disable automatic reporting of uncaught exceptions
+window.analytics.enableUncaughtExceptionReporting(Enable, success, error) where Enable is boolean
+```
 
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:
