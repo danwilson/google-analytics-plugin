@@ -31,7 +31,7 @@ The plugin.xml file will add the Google Analytics SDK files for Android, iOS and
 
 If you are not using the CLI, follow the steps in the section [Installing Without the CLI](#nocli)
 
-Windows Phone users have to manually add the [Google Analytics SDK for Windows 8 and Windows Phone](https://googleanalyticssdk.codeplex.com/) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK). This plugin requires v1.2.12 or higher.
+Windows Phone users have to manually add the [Google Analytics SDK for Windows 8 and Windows Phone](https://googleanalyticssdk.codeplex.com/) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK). This plugin requires v1.3.0 or higher.
 
 #JavaScript Usage
 In your 'deviceready' handler, set up your Analytics tracker:
@@ -58,7 +58,7 @@ To add a Transaction Item (Ecommerce)
 To add a Custom Dimension
 * `window.analytics.addCustomDimension('Key', 'Value', success, error)`
 
-To set a UserId (not currently supported on Windows Phone 8):
+To set a UserId:
 * `window.analytics.setUserId('my-user-id')`
 
 To enable verbose logging:
