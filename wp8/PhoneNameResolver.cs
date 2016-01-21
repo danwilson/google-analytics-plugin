@@ -24,6 +24,7 @@ namespace UniversalAnalyticsPlugin
             {
                 case "NOKIA":
                 case "MICROSOFT":
+                case "MICROSOFTMDG":
                     return ResolveNokia(manufacturer, model);
                 case "HTC":
                     return ResolveHtc(manufacturer, model);
@@ -256,6 +257,9 @@ namespace UniversalAnalyticsPlugin
 
             // Jil Sander
             { "LG-E906", new CanonicalPhoneName() { CanonicalModel = "Jil Sander" } },
+
+            // Lancet
+            { "LGVW820", new CanonicalPhoneName() { CanonicalModel = "Lancet" } },
         };
 
         private static Dictionary<string, CanonicalPhoneName> samsungLookupTable = new Dictionary<string, CanonicalPhoneName>()
@@ -518,12 +522,42 @@ namespace UniversalAnalyticsPlugin
             { "RM-1069", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
             { "RM-1070", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
             { "RM-1071", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
+            { "RM-1114", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 435", Comments="DS" } },
             // Lumia 532
             { "RM-1031", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
             { "RM-1032", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
             { "RM-1034", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
+            { "RM-1115", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 532", Comments="DS" } },
             // Lumia 640
+            { "RM-1072", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
+            { "RM-1073", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
+            { "RM-1074", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
             { "RM-1075", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
+            { "RM-1077", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
+            { "RM-1109", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
+            { "RM-1113", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640" } },
+            // Lumia 640XL
+            { "RM-1062", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            { "RM-1063", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            { "RM-1064", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            { "RM-1065", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            { "RM-1066", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            { "RM-1067", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            { "RM-1096", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 640 XL" } },
+            // Lumia 540
+            { "RM-1140", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 540" } },
+            { "RM-1141", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 540" } },
+            // Lumia 430
+            { "RM-1099", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 430", Comments="DS" } },
+            // Lumia 950
+            { "RM-1104", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 950", Comments="DS" } },
+            { "RM-1105", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 950", Comments="DS" } },
+            { "RM-1118", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 950", Comments="DS" } },
+            // Lumia 950 XL
+            { "RM-1085", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 950 XL" } },
+            { "RM-1116", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 950 XL", Comments="DS" } },
+            // Lumia 550
+            { "RM-1127", new CanonicalPhoneName() { CanonicalManufacturer="MICROSOFT", CanonicalModel = "Lumia 550" } },
         };
     }
 
