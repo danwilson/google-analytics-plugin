@@ -1,76 +1,74 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-google-analytics" version="0.8.0">
-    <engines>
-        <engine name="cordova" version=">=3.0.0" />
-    </engines>
-    <name>Google Universal Analytics Plugin</name>
-    <description>Simple tracking (screens/events) for Google Analytics SDK 3.0 (iOS) and SDK 4.0 (Android)</description>
-    <author>Daniel C. Wilson</author>
-    <license>MIT License</license>
-    <js-module src="www/analytics.js" name="UniversalAnalytics">
-        <clobbers target="analytics" />
-    </js-module>
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-google-analytics"
+        version="0.8.1">
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+  </engines>
+  <name>Google Universal Analytics Plugin</name>
+  <description>Simple tracking (screens/events) for Google Analytics SDK 3.14 (iOS) and SDK 4.0 (Android)</description>
+  <author>Daniel C. Wilson</author>
+  <license>MIT License</license>
+  <js-module src="www/analytics.js" name="UniversalAnalytics">
+    <clobbers target="analytics" />
+  </js-module>
 
-    <platform name="ios">
-        <config-file target="config.xml" parent="/*">
-            <feature name="UniversalAnalytics">
-                <param name="ios-package" value="UniversalAnalyticsPlugin" />
-            </feature>
-        </config-file>
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="UniversalAnalytics">
+        <param name="ios-package" value="UniversalAnalyticsPlugin" />
+      </feature>
+    </config-file>
 
-        <header-file src="ios/UniversalAnalyticsPlugin.h" />
-        <source-file src="ios/UniversalAnalyticsPlugin.m" />
+    <header-file src="ios/UniversalAnalyticsPlugin.h" />
+    <source-file src="ios/UniversalAnalyticsPlugin.m" />
+    <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
+    <header-file src="ios/GAIDictionaryBuilder.h" />
+    <header-file src="ios/GAIFields.h" />
+    <header-file src="ios/GAILogger.h" />
+    <header-file src="ios/GAITrackedViewController.h" />
+    <header-file src="ios/GAI.h" />
+    <header-file src="ios/GAITracker.h" />
+    <header-file src="ios/GAIEcommerceFields.h" />
+    <header-file src="ios/GAIEcommerceProduct.h" />
+    <header-file src="ios/GAIEcommerceProductAction.h" />
+    <header-file src="ios/GAIEcommercePromotion.h" />
 
-        <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
-        <header-file src="ios/GAIDictionaryBuilder.h" />
-        <header-file src="ios/GAIFields.h" />
-        <header-file src="ios/GAILogger.h" />
-        <header-file src="ios/GAITrackedViewController.h" />
-        <header-file src="ios/GAI.h" />
-        <header-file src="ios/GAITracker.h" />
-        <header-file src="ios/GAIEcommerceFields.h" />
-        <header-file src="ios/GAIEcommerceProduct.h" />
-        <header-file src="ios/GAIEcommerceProductAction.h" />
-        <header-file src="ios/GAIEcommercePromotion.h" />
 
+    <framework src="SystemConfiguration.framework" />
+    <framework src="CoreData.framework" />
+    <framework src="libz.dylib" />
+    <framework src="libsqlite3.dylib" />
+  </platform>
 
-        <framework src="SystemConfiguration.framework" />
-        <framework src="CoreData.framework" />
-        <framework src="libz.dylib" />
-        <framework src="libsqlite3.0.dylib" />
-    </platform>
+  <platform name="android">
+    <framework src="com.google.android.gms:play-services-analytics:+" />
 
-    <platform name="android">
-        <framework src="com.google.android.gms:play-services-analytics:+" />
-
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="UniversalAnalytics">
-                <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
-            </feature>
-        </config-file>
-        <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.INTERNET" />
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-        </config-file>
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
-      dispatching on non-Google Play devices -->
-            <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:enabled="true">
-                <intent-filter>
-                    <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
-                </intent-filter>
-            </receiver>
-            <service android:name="com.google.android.gms.analytics.AnalyticsService" android:enabled="true" android:exported="false" />
-
-            <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-			  installation campaign reporting -->
-            <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:exported="true">
-                <intent-filter>
-                    <action android:name="com.android.vending.INSTALL_REFERRER" />
-                </intent-filter>
-            </receiver>
-            <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-        </config-file>
-        <source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
-    </platform>
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="UniversalAnalytics">
+        <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
+      </feature>
+    </config-file>
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    </config-file>
+    <!-- Add support for devices without Google Play Services installed. -->
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:enabled="true">
+        <intent-filter>
+          <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+        </intent-filter>
+      </receiver>
+      <service android:name="com.google.android.gms.analytics.AnalyticsService" android:enabled="true" android:exported="false"/>
+      <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:exported="true">
+        <intent-filter>
+          <action android:name="com.android.vending.INSTALL_REFERRER" />
+        </intent-filter>
+      </receiver>
+      <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+    </config-file>
+    <source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
+  </platform>
 </plugin>
