@@ -43,9 +43,6 @@
   </platform>
 
   <platform name="android">
-
-    <framework src="com.google.android.gms:play-services-analytics:+" />
-
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
