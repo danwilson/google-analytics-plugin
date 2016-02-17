@@ -202,6 +202,8 @@ namespace Cordova.Extension.Commands
 
             if (hasIndex && value != null)
             {
+                // Remove the key if it already exists
+                _customDimensions.Remove(index);
                 _customDimensions.Add(index, value);
                 DispatchCommandResult(new PluginResult(PluginResult.Status.OK, "Add Custom Dimension: " + index));
             }
