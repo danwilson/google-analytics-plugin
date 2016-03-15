@@ -84,6 +84,7 @@
 
   pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
 
 - (void) enableUncaughtExceptionReporting: (CDVInvokedUrlCommand*)command
 {
