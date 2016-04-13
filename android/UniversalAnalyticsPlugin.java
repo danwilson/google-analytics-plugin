@@ -104,10 +104,19 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
         } else if (ALLOW_IDFA_COLLECTION.equals(action)) {
-            callbackContext.success("Don't need to enable IDFA for android");
+            this.allowIdfaCollection(callbackContext);
             return true;
         }
         return false;
+    }
+
+    private void allowIdfaCollection(CallbackContext callbackContext) {
+        if (tracker != null) {
+            tracker.enableAdvertisingIdCollection(true);
+            callbackContext.success("IDFA tracking enabled");
+        } else {
+            callbackContext.error("IDFA couldn't be turned on since the tracker is null.");
+        }
     }
 
     private void startTracker(String id, CallbackContext callbackContext) {
