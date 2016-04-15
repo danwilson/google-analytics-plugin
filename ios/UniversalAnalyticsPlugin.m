@@ -13,6 +13,7 @@
     _debugMode = false;
     _trackerStarted = false;
     _customDimensions = nil;
+    _campaignData = [NSMutableDictionary dictionary];
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
@@ -123,12 +124,12 @@
 
     [self addCustomDimensionsToTracker:tracker];
 
-    [tracker send:[[GAIDictionaryBuilder
-    createEventWithCategory: category //required
-         action: action //required
-          label: label
-          value: value] build]];
-
+    [tracker send:[[[GAIDictionaryBuilder
+                     createEventWithCategory: category //required
+                     action: action //required
+                     label: label
+                     value: value] setAll:_campaignData] build]];
+    
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -156,11 +157,35 @@
 
     [self addCustomDimensionsToTracker:tracker];
 
-    [tracker send:[[GAIDictionaryBuilder
+    [tracker send:[[[GAIDictionaryBuilder
     createExceptionWithDescription: description
-                                     withFatal: fatal] build]];
+                     withFatal: fatal] setAll:_campaignData] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void) setCampaignData: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+    
+    NSDictionary* campaignData = [command.arguments objectAtIndex:0];
+    NSString* utm_id = [campaignData valueForKey:@"utm_id"];
+    NSString* utm_campaign = [campaignData valueForKey:@"utm_campaign"];
+    NSString* utm_content = [campaignData valueForKey:@"utm_content"];
+    NSString* utm_source = [campaignData valueForKey:@"utm_source"];
+    NSString* utm_term = [campaignData valueForKey:@"utm_term"];
+    NSString* utm_medium = [campaignData valueForKey:@"utm_medium"];
+
+    [_campaignData setObject:utm_id forKey:kGAICampaignId];
+    [_campaignData setObject:utm_campaign forKey:kGAICampaignName];
+    [_campaignData setObject:utm_content  forKey:kGAICampaignContent];
+    [_campaignData setObject:utm_medium forKey:kGAICampaignMedium];
+    [_campaignData setObject:utm_source forKey:kGAICampaignSource];
+    [_campaignData setObject:utm_term forKey:kGAICampaignKeyword];
+        
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -188,7 +213,7 @@
     }
 
     [tracker set:kGAIScreenName value:screenName];
-    [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:[openParams build]] build]];
+    [tracker send:[[[[GAIDictionaryBuilder createScreenView] setAll:[openParams build]] setAll:_campaignData] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -225,11 +250,11 @@
 
     [self addCustomDimensionsToTracker:tracker];
 
-    [tracker send:[[GAIDictionaryBuilder
+    [tracker send:[[[GAIDictionaryBuilder
     createTimingWithCategory: category //required
          interval: intervalInMilliseconds //required
            name: name
-          label: label] build]];
+          label: label] setAll:_campaignData] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -274,12 +299,12 @@
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
 
-    [tracker send:[[GAIDictionaryBuilder createTransactionWithId:transactionId             // (NSString) Transaction ID
+    [tracker send:[[[GAIDictionaryBuilder createTransactionWithId:transactionId             // (NSString) Transaction ID
                                                      affiliation:affiliation         // (NSString) Affiliation
                                                          revenue:revenue                  // (NSNumber) Order revenue (including tax and shipping)
                                                              tax:tax                  // (NSNumber) Tax
                                                         shipping:shipping                      // (NSNumber) Shipping
-                                                    currencyCode:currencyCode] build]];        // (NSString) Currency code
+                                                     currencyCode:currencyCode] setAll:_campaignData] build]];        // (NSString) Currency code
 
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -331,13 +356,13 @@
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
 
-    [tracker send:[[GAIDictionaryBuilder createItemWithTransactionId:transactionId         // (NSString) Transaction ID
+    [tracker send:[[[GAIDictionaryBuilder createItemWithTransactionId:transactionId         // (NSString) Transaction ID
                                                                 name:name  // (NSString) Product Name
                                                                  sku:sku           // (NSString) Product SKU
                                                             category:category  // (NSString) Product category
                                                                price:price               // (NSNumber)  Product price
                                                             quantity:quantity                 // (NSNumber)  Product quantity
-                                                        currencyCode:currencyCode] build]];    // (NSString) Currency code
+                                                         currencyCode:currencyCode] setAll:_campaignData] build]];    // (NSString) Currency code
 
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
