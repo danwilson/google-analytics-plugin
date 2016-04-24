@@ -177,12 +177,29 @@
     NSString* utm_term = [campaignData valueForKey:@"utm_term"];
     NSString* utm_medium = [campaignData valueForKey:@"utm_medium"];
 
-    [_campaignData setObject:utm_id forKey:kGAICampaignId];
-    [_campaignData setObject:utm_campaign forKey:kGAICampaignName];
-    [_campaignData setObject:utm_content  forKey:kGAICampaignContent];
-    [_campaignData setObject:utm_medium forKey:kGAICampaignMedium];
-    [_campaignData setObject:utm_source forKey:kGAICampaignSource];
-    [_campaignData setObject:utm_term forKey:kGAICampaignKeyword];
+    if (utm_id != nil) {
+        [_campaignData setObject:utm_id forKey:kGAICampaignId];
+    }
+    
+    if (utm_campaign != nil) {
+        [_campaignData setObject:utm_campaign forKey:kGAICampaignName];
+    }
+    
+    if (utm_content != nil) {
+        [_campaignData setObject:utm_content  forKey:kGAICampaignContent];
+    }
+    
+    if (utm_medium != nil) {
+        [_campaignData setObject:utm_medium forKey:kGAICampaignMedium];
+    }
+    
+    if (utm_source != nil) {
+        [_campaignData setObject:utm_source forKey:kGAICampaignSource];
+    }
+
+    if (utm_term != nil) {
+        [_campaignData setObject:utm_term forKey:kGAICampaignKeyword];
+    }
         
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     
