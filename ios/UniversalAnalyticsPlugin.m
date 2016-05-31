@@ -20,7 +20,7 @@
     CDVPluginResult* pluginResult = nil;
     NSString* accountId = [command.arguments objectAtIndex:0];
 
-    [GAI sharedInstance].dispatchInterval = 10;
+    [GAI sharedInstance].dispatchInterval = 1;
 
     [[GAI sharedInstance] trackerWithTrackingId:accountId];
 
