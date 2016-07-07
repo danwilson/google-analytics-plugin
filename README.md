@@ -4,7 +4,7 @@ google-analytics-plugin
 Cordova (PhoneGap) 3.0+ Plugin to connect to Google's native Universal Analytics SDK
 
 Prerequisites:
-* A Cordova 3.0+ project for iOS and/or Android
+* A Cordova 3.0+ project for iOS, Android and/or Windows Phone 8
 * A Mobile App property through the Google Analytics Admin Console
 * (Android) Google Play Services SDK installed via [Android SDK Manager](https://developer.android.com/sdk/installing/adding-packages.html)
 
@@ -27,9 +27,11 @@ cordova plugin add com.danielcwilson.plugins.googleanalytics
 
 *Important Note* If the latest versions (0.8.0+) of this plugin are not working for you with Android on Cordova 5.0+, please try the suggestions in [Issues 123](https://github.com/danwilson/google-analytics-plugin/issues/123#issuecomment-151145095). Google Play Services has been very confusing to integrate, but in recent months it has been simplified.  This plugin uses the new simpler way (including it as a framework instead of bundling it which can conflict with other plugins bundling it), but if you previously installed this plugin some old files might still be lingering.
 
-The plugin.xml file will add the Google Analytics SDK files for Android and/or iOS.  Follow [Google's steps](#sdk-files) if you need to update these later.  Also make sure to review the Google Analytics [terms](http://www.google.com/analytics/terms/us.html) and [SDK Policy](https://developers.google.com/analytics/devguides/collection/protocol/policy)
+The plugin.xml file will add the Google Analytics SDK files for Android, iOS and/or Windows Phone 8.  Follow [Google's steps](#sdk-files) if you need to update these later.  Also make sure to review the Google Analytics [terms](http://www.google.com/analytics/terms/us.html) and [SDK Policy](https://developers.google.com/analytics/devguides/collection/protocol/policy)
 
 If you are not using the CLI, follow the steps in the section [Installing Without the CLI](#nocli)
+
+Windows Phone users have to manually add the [Google Analytics SDK for Windows 8 and Windows Phone](https://googleanalyticssdk.codeplex.com/) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK). This plugin requires v1.3.0 or higher.
 
 #JavaScript Usage
 In your 'deviceready' handler, set up your Analytics tracker:
@@ -79,11 +81,17 @@ Copy the files manually into your project and add the following to your config.x
   <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
 </feature>
 ```
+```xml
+<feature name="UniversalAnalytics">
+  <param name="wp-package" value="UniversalAnalyticsPlugin" />
+</feature>
+```
 <a name="sdk-files"></a>
 You also will need to manually add the Google Analytics SDK files:
 * Download the Google Analytics SDK 3.0 for [iOS](https://developers.google.com/analytics/devguides/collection/ios/) and/or [Android](https://developers.google.com/analytics/devguides/collection/android/)
 * For iOS, add the downloaded Google Analytics SDK header files and libraries according to the [Getting Started](https://developers.google.com/analytics/devguides/collection/ios/v3) documentation
 * For Android, add `libGoogleAnalyticsServices.jar` to your Cordova Android project's `/libs` directory and build path
+* For Windows Phone, add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK)
 
 #Integrating with Lavaca
 The `lavaca` directory includes a component that can be added to a <a href="http://getlavaca.com">Lavaca</a> project.  It offers a way to use the web `analytics.js` when the app is running in the browser and not packaged as Cordova.
