@@ -43,6 +43,9 @@ To track a Screen (PageView):
 To track an Event:
 * `window.analytics.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
+To track an custom metrics:
+* `window.analytics.trackMetric('key', Value)` Value is optional
+
 To track an Exception:
 * `window.analytics.trackException('Description', Fatal)` where Fatal is boolean
 
