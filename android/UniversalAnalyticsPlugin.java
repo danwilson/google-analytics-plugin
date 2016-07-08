@@ -178,7 +178,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         if (null != screenname && screenname.length() > 0) {
             tracker.setScreenName(screenname);
             
-            HitBuilders.AppViewBuilder hitBuilder = new HitBuilders.AppViewBuilder();
+            HitBuilders.ScreenViewBuilder hitBuilder = new HitBuilders.ScreenViewBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
             
             tracker.send(hitBuilder.build());
