@@ -10,7 +10,10 @@ declare class UniversalAnalyticsPlugin {
 	/** Enables verbose logging */
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 	
-	/** To track a Screen (PageView) */
+	/** Track a Custom Metric */
+	public trackMetric(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
+	
+	/** Track a Screen (PageView) */
 	public trackView(screen:String, successCallback?:Function, errorCallback?:Function):void;
 	
 	/** Add a Custom Dimension */
