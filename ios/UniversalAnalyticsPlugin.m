@@ -100,6 +100,34 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void) trackMetric: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+
+    if ( ! _trackerStarted) {
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+      return;
+    }
+
+    NSNumber *key = nil;
+    NSNumber *value = nil;
+
+    if ([command.arguments count] > 0)
+        key = [command.arguments objectAtIndex:0];
+
+    if ([command.arguments count] > 1)
+        value = [command.arguments objectAtIndex:1];
+
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+
+    [tracker set:[GAIFields customMetricForIndex:key]
+           value:[[NSNumber numberWithInt:value] stringValue]];
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void) trackEvent: (CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
@@ -190,7 +218,7 @@
 
 
     [tracker set:kGAIScreenName value:screenName];
-    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

@@ -13,6 +13,10 @@ UniversalAnalyticsPlugin.prototype.debugMode = function(success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'debugMode', []);
 };
 
+UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
+};
+
 UniversalAnalyticsPlugin.prototype.trackView = function(screen, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen]);
 };

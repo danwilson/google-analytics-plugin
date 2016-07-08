@@ -22,6 +22,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String TRACK_EVENT = "trackEvent";
     public static final String TRACK_EXCEPTION = "trackException";
     public static final String TRACK_TIMING = "trackTiming";
+    public static final String TRACK_METRIC = "trackMetric";
     public static final String ADD_DIMENSION = "addCustomDimension";
     public static final String ADD_TRANSACTION = "addTransaction";
     public static final String ADD_TRANSACTION_ITEM = "addTransactionItem";
@@ -66,6 +67,15 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             int length = args.length();
             if (length > 0) {
                 this.trackTiming(args.getString(0), length > 1 ? args.getLong(1) : 0, length > 2 ? args.getString(2) : "", length > 3 ? args.getString(3) : "", callbackContext);
+            }
+            return true;
+        } else if (TRACK_METRIC.equals(action)) {
+            int length = args.length();
+            if (length > 0) {
+                this.trackMetric(
+                args.getInt(0),
+                length > 1 ? args.getString(1) : "",
+                callbackContext);
             }
             return true;
         } else if (ADD_DIMENSION.equals(action)) {
@@ -201,6 +211,24 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
+    private void trackMetric(Integer key, String value, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        if (key>=0) {
+            HitBuilders.ScreenViewBuilder hitBuilder = new HitBuilders.ScreenViewBuilder();
+            tracker.send(hitBuilder
+                            .setCustomMetric(key, Float.parseFloat(value))
+                            .build()
+                        );
+            callbackContext.success("Track Metric: " + key + ", value: " + value);
+        } else {
+            callbackContext.error("Expected integer key: " + key + ", and string value: " + value);
+        }
+    }
+    
     private void trackException(String description, Boolean fatal, CallbackContext callbackContext) {
         if (! trackerStarted ) {
             callbackContext.error("Tracker not started");
