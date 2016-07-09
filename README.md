@@ -60,11 +60,14 @@ To add a Transaction Item (Ecommerce)
 
 To add a Custom Dimension
 * `window.analytics.addCustomDimension('Key', 'Value', success, error)`
-* Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking. 
+* Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking.
 * e.g. `window.analytics.addCustomDimension(1, 'Value', success, error)`
 
 To set a UserId:
 * `window.analytics.setUserId('my-user-id')`
+
+To set a specific app version:
+* `window.analytics.setAppVersion('1.33.7')`
 
 To enable verbose logging:
 * `window.analytics.debugMode()`
