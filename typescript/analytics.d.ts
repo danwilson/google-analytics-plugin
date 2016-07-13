@@ -7,6 +7,9 @@ declare class UniversalAnalyticsPlugin {
 	/** Sets a UserId */
 	public setUserId(id:String, successCallback?:Function, errorCallback?:Function):void;
 	
+	/** Sets a AppVersion */
+	public setAppVersion(version:string, successCallback?:Function, errorCallback?:Function):void;
+
 	/** Enables verbose logging */
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 	
