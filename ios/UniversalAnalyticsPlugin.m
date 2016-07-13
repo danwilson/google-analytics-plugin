@@ -216,7 +216,7 @@
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
         [self addCustomDimensionsToTracker:tracker];
-        [tracker set:kGAIScreenName value:screenName];
+        
         [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 
         [tracker send:[[GAIDictionaryBuilder
