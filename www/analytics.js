@@ -4,6 +4,10 @@ UniversalAnalyticsPlugin.prototype.startTrackerWithId = function(id, success, er
   cordova.exec(success, error, 'UniversalAnalytics', 'startTrackerWithId', [id]);
 };
 
+UniversalAnalyticsPlugin.prototype.setAllowIDFACollection = function(bool, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'setAllowIDFACollection', [bool]);
+};
+
 UniversalAnalyticsPlugin.prototype.setUserId = function(id, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'setUserId', [id]);
 };

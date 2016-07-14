@@ -30,6 +30,19 @@
     /* NSLog(@"successfully started GAI tracker"); */
 }
 
+- (void) setAllowIDFACollection: (CDVInvokedUrlCommand*) command
+{
+    CDVPluginResult* pluginResult = nil;
+    if ( ! _trackerStarted) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
+    
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    tracker.allowIDFACollection = [[command argumentAtIndex:0 withDefault:@(NO)] boolValue];
+}
+
 - (void) addCustomDimensionsToTracker: (id<GAITracker>)tracker
 {
     if (_customDimensions) {
