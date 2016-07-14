@@ -13,10 +13,12 @@
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command;
 - (void) setUserId: (CDVInvokedUrlCommand*)command;
+- (void) setAppVersion: (CDVInvokedUrlCommand*)command;
 - (void) debugMode: (CDVInvokedUrlCommand*)command;
 - (void) enableUncaughtExceptionReporting: (CDVInvokedUrlCommand*)command;
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command;
 - (void) trackEvent: (CDVInvokedUrlCommand*)command;
+- (void) trackMetric: (CDVInvokedUrlCommand*)command;
 - (void) trackTiming: (CDVInvokedUrlCommand*)command;
 - (void) trackView: (CDVInvokedUrlCommand*)command;
 - (void) trackException: (CDVInvokedUrlCommand*)command;

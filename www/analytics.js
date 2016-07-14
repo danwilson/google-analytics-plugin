@@ -10,11 +10,18 @@ UniversalAnalyticsPlugin.prototype.setUserId = function(id, success, error) {
 
 UniversalAnalyticsPlugin.prototype.setAnonymizeIp = function(anonymize, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'setAnonymizeIp', [anonymize]);
+
+UniversalAnalyticsPlugin.prototype.setAppVersion = function(version, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'setAppVersion', [version]);
 };
 
 /* enables verbose logging */
 UniversalAnalyticsPlugin.prototype.debugMode = function(success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'debugMode', []);
+};
+
+UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
 };
 
 UniversalAnalyticsPlugin.prototype.trackView = function(screen, success, error) {
