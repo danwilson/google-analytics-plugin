@@ -61,7 +61,7 @@
         </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.analytics.AnalyticsService" android:enabled="true" android:exported="false"/>
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:exported="true">
+        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:exported="true" android:permission="android.permission.INSTALL_PACKAGES">
           <intent-filter>
             <action android:name="com.android.vending.INSTALL_REFERRER" />
           </intent-filter>
