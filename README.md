@@ -1,7 +1,7 @@
 google-analytics-plugin 
 =======================
-[![npm](https://img.shields.io/npm/v/nativescript-svg.svg)](https://www.npmjs.com/package/cordova-plugin-google-analytics)
-[![npm](https://img.shields.io/npm/dt/nativescript-svg.svg?label=npm%20downloads)](https://www.npmjs.com/package/cordova-google-analytics-plugin)
+[![npm](https://img.shields.io/npm/v/cordova-plugin-google-analytics)](https://www.npmjs.com/package/cordova-plugin-google-analytics)
+[![npm](https://img.shields.io/npm/dt/cordova-plugin-google-analytics.svg?label=npm%20downloads)](https://www.npmjs.com/package/cordova-google-analytics-plugin)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
 Cordova (PhoneGap) 3.0+ Plugin to connect to Google's native Universal Analytics SDK
