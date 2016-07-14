@@ -8,6 +8,10 @@ UniversalAnalyticsPlugin.prototype.setUserId = function(id, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'setUserId', [id]);
 };
 
+UniversalAnalyticsPlugin.prototype.setAnonymizeIp = function(anonymize, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'setAnonymizeIp', [anonymize]);
+};
+
 UniversalAnalyticsPlugin.prototype.setAppVersion = function(version, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'setAppVersion', [version]);
 };

@@ -48,6 +48,9 @@ define(function(require) {
     setUserId: function() {
       throw 'setUserId is not implemented for Lavaca';
     },
+    setAnonymizeIp: function() {
+      throw 'setAnonymizeIp is not implemented for Lavaca';
+    },
     setAppVersion: function() {
       throw 'setAppVersion is not implemented for Lavaca';
     },
