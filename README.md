@@ -1,4 +1,4 @@
-google-analytics-plugin
+google-analytics-plugin [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
 =======================
 
 Cordova (PhoneGap) 3.0+ Plugin to connect to Google's native Universal Analytics SDK
