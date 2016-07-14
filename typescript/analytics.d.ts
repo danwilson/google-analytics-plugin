@@ -8,7 +8,7 @@ declare class UniversalAnalyticsPlugin {
 	public setUserId(id:String, successCallback?:Function, errorCallback?:Function):void;
 
   /** Sets a setAnonymizeIp */
-  public setAnonymizeIp(anonymize:String, successCallback?:Function, errorCallback?:Function):void;
+  public setAnonymizeIp(anonymize:Boolean, successCallback?:Function, errorCallback?:Function):void;
 
   /** Sets a AppVersion */
 	public setAppVersion(version:string, successCallback?:Function, errorCallback?:Function):void;
