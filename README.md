@@ -72,6 +72,9 @@ To set a UserId:
 To set a specific app version:
 * `window.analytics.setAppVersion('1.33.7')`
 
+To set a anonymize Ip address:
+* `window.analytics.setAnonymizeIp(true)`
+
 To enable verbose logging:
 * `window.analytics.debugMode()`
 
