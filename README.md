@@ -75,6 +75,9 @@ To set a specific app version:
 To set a anonymize Ip address:
 * `window.analytics.setAnonymizeIp(true)`
 
+To enabling Advertising Features in Google Analytics allows you to take advantage of Remarketing, Demographics & Interests reports, and more:
+* `window.analytics.setAllowIDFACollection(true)`
+
 To enable verbose logging:
 * `window.analytics.debugMode()`
 
