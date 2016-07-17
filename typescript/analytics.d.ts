@@ -7,10 +7,13 @@ declare class UniversalAnalyticsPlugin {
 	/** Sets a UserId */
 	public setUserId(id:String, successCallback?:Function, errorCallback?:Function):void;
 
-  /** Sets a setAnonymizeIp */
-  public setAnonymizeIp(anonymize:Boolean, successCallback?:Function, errorCallback?:Function):void;
+	/** Sets a setAnonymizeIp */
+	public setAnonymizeIp(anonymize:Boolean, successCallback?:Function, errorCallback?:Function):void;
 
-  /** Sets a AppVersion */
+	/** Sets a setAllowIDFACollection */
+	public setAllowIDFACollection(enable:Boolean, successCallback?:Function, errorCallback?:Function):void;	
+
+	/** Sets a AppVersion */
 	public setAppVersion(version:string, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Enables verbose logging */
