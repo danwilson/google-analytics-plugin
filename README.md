@@ -36,6 +36,9 @@ If you are not using the CLI, follow the steps in the section [Installing Withou
 
 Windows Phone users have to manually add the [Google Analytics SDK for Windows 8 and Windows Phone](https://googleanalyticssdk.codeplex.com/) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK). This plugin requires v1.3.0 or higher.
 
+#Release note
+v1.0.0 -- api change from ```windows.analytics``` to ```windows.ga```
+
 #JavaScript Usage
 In your 'deviceready' handler, set up your Analytics tracker:
 * `window.ga.startTrackerWithId('UA-XXXX-YY')` where UA-XXXX-YY is your Google Analytics Mobile App property
