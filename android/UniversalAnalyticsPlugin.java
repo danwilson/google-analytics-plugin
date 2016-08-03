@@ -76,14 +76,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_METRIC.equals(action)) {
             int length = args.length();
             if (length > 0) {
-<<<<<<< HEAD
                 this.trackMetric(args.getInt(0), length > 1 ? args.getString(1) : "", callbackContext);
-=======
-                this.trackMetric(
-                        args.getInt(0),
-                        length > 1 ? args.getString(1) : "",
-                        callbackContext);
->>>>>>> upstream/master
             }
             return true;
         } else if (ADD_DIMENSION.equals(action)) {
