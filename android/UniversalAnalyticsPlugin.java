@@ -47,8 +47,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.startTracker(id, callbackContext);
             return true;
         } else if (TRACK_VIEW.equals(action)) {
+            int length = args.length();
             String screen = args.getString(0);
-            this.trackView(screen, callbackContext);
+            this.trackView(screen, length > 1 ? args.getString(1) : "", callbackContext);
             return true;
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
@@ -75,10 +76,14 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_METRIC.equals(action)) {
             int length = args.length();
             if (length > 0) {
+<<<<<<< HEAD
+                this.trackMetric(args.getInt(0), length > 1 ? args.getString(1) : "", callbackContext);
+=======
                 this.trackMetric(
                         args.getInt(0),
                         length > 1 ? args.getString(1) : "",
                         callbackContext);
+>>>>>>> upstream/master
             }
             return true;
         } else if (ADD_DIMENSION.equals(action)) {
@@ -180,8 +185,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void trackView(String screenname, CallbackContext callbackContext) {
-        if (!trackerStarted) {
+    private void trackView(String screenname, String campaignUrl, CallbackContext callbackContext) {
+        if (! trackerStarted ) {
             callbackContext.error("Tracker not started");
             return;
         }
@@ -191,6 +196,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
             HitBuilders.ScreenViewBuilder hitBuilder = new HitBuilders.ScreenViewBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
+
+            if(!campaignUrl.equals("")){
+                hitBuilder.setCampaignParamsFromUrl(campaignUrl);
+            }
 
             tracker.send(hitBuilder.build());
             callbackContext.success("Track Screen: " + screenname);

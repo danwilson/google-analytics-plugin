@@ -23,7 +23,7 @@ declare class UniversalAnalyticsPlugin {
 	public trackMetric(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Screen (PageView) */
-	public trackView(screen:String, successCallback?:Function, errorCallback?:Function):void;
+	public trackView(screen:String, campaingUrl:string, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Add a Custom Dimension */
 	public addCustomDimension(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
