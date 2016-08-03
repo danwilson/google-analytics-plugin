@@ -282,14 +282,6 @@
         if (deepLinkUrl) {
             [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
         }
-
-        // Campaign source is the only required campaign field. If previous call
-        // did not set a campaign source, use the hostname as a referrer instead.
-        if(![openParams get:kGAICampaignSource] && [url host].length !=0) {
-            // Set campaign data on the map, not the tracker.
-            [openParams set:@"referrer" forKey:kGAICampaignMedium];
-            [openParams set:[url host] forKey:kGAICampaignSource];
-        }
         
         NSDictionary *hitParamsDict = [openParams build];
 
