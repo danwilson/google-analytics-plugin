@@ -29,8 +29,12 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
   cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
 };
 
-UniversalAnalyticsPlugin.prototype.trackView = function(screen, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen]);
+UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, success, error) {
+  if (typeof campaingUrl === 'undefined' || campaingUrl === null) {
+    campaingUrl = '';
+  }
+
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaingUrl]);
 };
 
 UniversalAnalyticsPlugin.prototype.addCustomDimension = function(key, value, success, error) {

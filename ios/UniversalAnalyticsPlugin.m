@@ -275,8 +275,26 @@
 
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
         [self addCustomDimensionsToTracker:tracker];
-        [tracker set:kGAIScreenName value:screenName];
-        [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+
+        NSString* deepLinkUrl = [command.arguments objectAtIndex:1];
+        GAIDictionaryBuilder* openParams = [[GAIDictionaryBuilder alloc] init];
+    
+        if (deepLinkUrl) {
+            [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
+        }
+
+        // Campaign source is the only required campaign field. If previous call
+        // did not set a campaign source, use the hostname as a referrer instead.
+        if(![openParams get:kGAICampaignSource] && [url host].length !=0) {
+            // Set campaign data on the map, not the tracker.
+            [openParams set:@"referrer" forKey:kGAICampaignMedium];
+            [openParams set:[url host] forKey:kGAICampaignSource];
+        }
+        
+        NSDictionary *hitParamsDict = [openParams build];
+
+        [tracker set:kGAIScreenName value:screenName];        
+        [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:hitParamsDict] build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
