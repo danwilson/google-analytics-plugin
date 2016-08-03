@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-google-analytics",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Google Universal Analytics Plugin",
   "cordova": {
     "id": "cordova-plugin-google-analytics",
