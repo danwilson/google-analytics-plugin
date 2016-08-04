@@ -279,7 +279,7 @@
         NSString* deepLinkUrl = [command.arguments objectAtIndex:1];
         GAIDictionaryBuilder* openParams = [[GAIDictionaryBuilder alloc] init];
     
-        if (deepLinkUrl) {
+        if (deepLinkUrl && deepLinkUrl != (NSString *)[NSNull null]) {
             [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
         }
         
