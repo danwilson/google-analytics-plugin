@@ -162,6 +162,7 @@
     }
 
     [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
         NSNumber *key = nil;
         NSNumber *value = nil;
 
