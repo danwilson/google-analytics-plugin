@@ -17,16 +17,18 @@
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
 {
-    CDVPluginResult* pluginResult = nil;
-    NSString* accountId = [command.arguments objectAtIndex:0];
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
+        NSString* accountId = [command.arguments objectAtIndex:0];
 
-    [GAI sharedInstance].dispatchInterval = 10;
+        [GAI sharedInstance].dispatchInterval = 10;
 
-    [[GAI sharedInstance] trackerWithTrackingId:accountId];
+        [[GAI sharedInstance] trackerWithTrackingId:accountId];
 
-    _trackerStarted = true;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        _trackerStarted = true;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
     /* NSLog(@"successfully started GAI tracker"); */
 }
 
@@ -159,22 +161,24 @@
       return;
     }
 
-    NSNumber *key = nil;
-    NSNumber *value = nil;
+    [self.commandDelegate runInBackground:^{
+        NSNumber *key = nil;
+        NSNumber *value = nil;
 
-    if ([command.arguments count] > 0)
-        key = [command.arguments objectAtIndex:0];
+        if ([command.arguments count] > 0)
+            key = [command.arguments objectAtIndex:0];
 
-    if ([command.arguments count] > 1)
-        value = [command.arguments objectAtIndex:1];
+        if ([command.arguments count] > 1)
+            value = [command.arguments objectAtIndex:1];
 
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+        id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
-    [tracker set:[GAIFields customMetricForIndex:key]
-           value:[[NSNumber numberWithInt:value] stringValue]];
+        [tracker set:[GAIFields customMetricForIndex:key]
+            value:[[NSNumber numberWithInt:value] stringValue]];
 
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 
 - (void) trackEvent: (CDVInvokedUrlCommand*)command
