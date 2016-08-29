@@ -113,7 +113,7 @@ typedef enum {
 
  @param name The name of this tracker. Must not be `nil` or empty.
 
- @param trackingID The tracking ID to use for this tracker.  It should be of
+ @param trackingId The tracking ID to use for this tracker.  It should be of
  the form `UA-xxxxx-y`.
 
  @return A GAITracker associated with the specified name. The tracker
@@ -138,7 +138,7 @@ typedef enum {
  is not changed by this method. If defaultTracker is not set, it is set to the
  tracker instance returned here.
 
- @param trackingID The tracking ID to use for this tracker.  It should be of
+ @param trackingId The tracking ID to use for this tracker.  It should be of
  the form `UA-xxxxx-y`. The name of the tracker will be the same as trackingID.
 
  @return A GAITracker associated with the specified trackingID. The tracker
