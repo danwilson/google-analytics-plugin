@@ -90,7 +90,7 @@
  * Parses and translates utm campaign parameters to analytics campaign param
  * and returns them as a map.
  *
- * @param params url containing utm campaign parameters.
+ * @param urlString url containing utm campaign parameters.
  *
  * Valid campaign parameters are:
  * <ul>
