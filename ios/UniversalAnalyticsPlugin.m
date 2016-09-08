@@ -174,8 +174,8 @@
 
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
-        [tracker set:[GAIFields customMetricForIndex:key]
-            value:[[NSNumber numberWithInt:value] stringValue]];
+        [tracker set:[GAIFields customMetricForIndex:[key intValue]] value:[value stringValue]];
+
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
