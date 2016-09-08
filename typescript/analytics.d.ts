@@ -23,13 +23,13 @@ declare class UniversalAnalyticsPlugin {
 	public trackMetric(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Screen (PageView) */
-	public trackView(screen:String, campaingUrl:string, successCallback?:Function, errorCallback?:Function):void;
+	public trackView(screen:String, campaingUrl?:string, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Add a Custom Dimension */
 	public addCustomDimension(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track an Event */
-	public trackEvent(category:String, action:String, label?:String, value?:Number, successCallback?:Function, errorCallback?:Function):void;
+	public trackEvent(category:String, action:String, label?:String, value?:Number, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track an Exception
 		https://developers.google.com/analytics/devguides/collection/android/v3/exceptions */
