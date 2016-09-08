@@ -29,7 +29,7 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
   cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
 };
 
-UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, success, error) {
+UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, newSession, success, error) {
   if (typeof campaingUrl === 'undefined' || campaingUrl === null) {
     campaingUrl = '';
   }

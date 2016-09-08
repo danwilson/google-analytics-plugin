@@ -49,7 +49,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_VIEW.equals(action)) {
             int length = args.length();
             String screen = args.getString(0);
-            this.trackView(screen, length > 1 ? args.getString(1) : "", callbackContext);
+            this.trackView(screen, length > 1 ? args.getString(1) : "", length > 2 ? args.getBoolean(2) : false, callbackContext);
             return true;
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
@@ -178,7 +178,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void trackView(String screenname, String campaignUrl, CallbackContext callbackContext) {
+    private void trackView(String screenname, String campaignUrl, boolean newSession, CallbackContext callbackContext) {
         if (! trackerStarted ) {
             callbackContext.error("Tracker not started");
             return;
@@ -193,8 +193,13 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             if(!campaignUrl.equals("")){
                 hitBuilder.setCampaignParamsFromUrl(campaignUrl);
             }
-
-            tracker.send(hitBuilder.build());
+            
+            if(!newSession) {
+                tracker.send(hitBuilder.build());
+            } else {
+                tracker.send(hitBuilder.setNewSession().build());
+            }
+                    
             callbackContext.success("Track Screen: " + screenname);
         } else {
             callbackContext.error("Expected one non-empty string argument.");

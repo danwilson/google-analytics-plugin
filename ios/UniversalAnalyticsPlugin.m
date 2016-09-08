@@ -288,9 +288,14 @@
             [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
         }
         
+        bool newSession = [[command argumentAtIndex:2 withDefault:@(NO)] boolValue];
+        if(newSession){            
+            [openParams set:@"start" forKey:kGAISessionControl];
+        }        
+
         NSDictionary *hitParamsDict = [openParams build];
 
-        [tracker set:kGAIScreenName value:screenName];        
+        [tracker set:kGAIScreenName value:screenName];   
         [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:hitParamsDict] build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
