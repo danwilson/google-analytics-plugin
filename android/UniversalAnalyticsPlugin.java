@@ -59,6 +59,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                         length > 1 ? args.getString(1) : "",
                         length > 2 ? args.getString(2) : "",
                         length > 3 ? args.getLong(3) : 0,
+                        length > 4 ? args.getBoolean(4) : false,
                         callbackContext);
             }
             return true;
@@ -206,7 +207,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void trackEvent(String category, String action, String label, long value, CallbackContext callbackContext) {
+    private void trackEvent(String category, String action, String label, long value, boolean newSession, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;
@@ -216,12 +217,22 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             HitBuilders.EventBuilder hitBuilder = new HitBuilders.EventBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
 
-            tracker.send(hitBuilder
-                    .setCategory(category)
-                    .setAction(action)
-                    .setLabel(label)
-                    .setValue(value)
-                    .build()
+            if(!newSession){
+                tracker.send(hitBuilder
+                        .setCategory(category)
+                        .setAction(action)
+                        .setLabel(label)
+                        .setValue(value)
+                        .build()
+            } else {
+                tracker.send(hitBuilder
+                        .setCategory(category)
+                        .setAction(action)
+                        .setLabel(label)
+                        .setValue(value)
+                        .setNewSession()
+                        .build()                
+            }
             );
             callbackContext.success("Track Event: " + category);
         } else {
