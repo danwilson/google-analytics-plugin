@@ -37,7 +37,7 @@ If you are not using the CLI, follow the steps in the section [Installing Withou
 Windows Phone users have to manually add the [Google Analytics SDK for Windows 8 and Windows Phone](https://googleanalyticssdk.codeplex.com/) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK). This plugin requires v1.3.0 or higher.
 
 #Release note
-v1.0.0 -- api change from ```windows.analytics``` to ```windows.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
+v1.0.0 -- api change from ```window.analytics``` to ```window.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
 because in the next release we are removing the analytics.
 
 #JavaScript Usage
