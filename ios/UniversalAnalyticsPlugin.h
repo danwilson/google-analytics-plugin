@@ -16,6 +16,7 @@
 - (void) setUserId: (CDVInvokedUrlCommand*)command;
 - (void) setAppVersion: (CDVInvokedUrlCommand*)command;
 - (void) debugMode: (CDVInvokedUrlCommand*)command;
+- (void) setOptOut: (CDVInvokedUrlCommand*)command;
 - (void) enableUncaughtExceptionReporting: (CDVInvokedUrlCommand*)command;
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command;
 - (void) trackEvent: (CDVInvokedUrlCommand*)command;

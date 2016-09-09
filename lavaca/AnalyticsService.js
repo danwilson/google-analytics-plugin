@@ -51,6 +51,9 @@ define(function(require) {
     setAnonymizeIp: function() {
       throw 'setAnonymizeIp is not implemented for Lavaca';
     },
+    setOptOut: function() {
+      throw 'setOptOut is not implemented for Lavaca';
+    },
     setAppVersion: function() {
       throw 'setAppVersion is not implemented for Lavaca';
     },
