@@ -82,6 +82,9 @@ To set a specific app version:
 To set a anonymize Ip address:
 * `window.ga.setAnonymizeIp(true)`
 
+To set Opt-out:
+* `window.ga.setOptOut(true)`
+
 To enabling Advertising Features in Google Analytics allows you to take advantage of Remarketing, Demographics & Interests reports, and more:
 * `window.ga.setAllowIDFACollection(true)`
 
