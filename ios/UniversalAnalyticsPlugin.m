@@ -111,7 +111,7 @@
     return;
   }
 
-  [[GAI sharedInstance] setOptOut:optout];
+  [[GAI sharedInstance] setOptOut:[optout:boolValue]];
 
   pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
