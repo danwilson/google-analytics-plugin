@@ -211,7 +211,7 @@
         if ([command.arguments count] > 3)
             value = [command.arguments objectAtIndex:3];
 
-        bool newSession = [[command argumentAtIndex:2 withDefault:@(NO)] boolValue];           
+        bool newSession = [[command argumentAtIndex:4 withDefault:@(NO)] boolValue];           
 
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
@@ -222,7 +222,9 @@
                         action: action //required
                         label: label
                         value: value];
-        [builder set:@"start" forKey:kGAISessionControl];                        
+        if(newSession){ 
+            [builder set:@"start" forKey:kGAISessionControl];
+        }                        
         [tracker send:[builder build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
