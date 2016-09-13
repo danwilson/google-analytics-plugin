@@ -103,7 +103,7 @@
 - (void) setOptOut: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* pluginResult = nil;
-  NSString* optout = [command.arguments objectAtIndex:0];
+  bool optout = [[command.arguments objectAtIndex:0] boolValue];
 
   if ( ! _trackerStarted) {
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
@@ -111,7 +111,7 @@
     return;
   }
 
-  [[GAI sharedInstance] setOptOut:[optout:boolValue]];
+  [[GAI sharedInstance] setOptOut:optout];
 
   pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
