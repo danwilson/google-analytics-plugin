@@ -50,7 +50,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_VIEW.equals(action)) {
             int length = args.length();
             String screen = args.getString(0);
-            this.trackView(screen, length > 1 ? args.getString(1) : "", callbackContext);
+            this.trackView(screen, length > 1 ? args.getString(1) : "", length > 2 ? args.getBoolean(2) : false, callbackContext);
             return true;
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
@@ -60,6 +60,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                         length > 1 ? args.getString(1) : "",
                         length > 2 ? args.getString(2) : "",
                         length > 3 ? args.getLong(3) : 0,
+                        length > 4 ? args.getBoolean(4) : false,
                         callbackContext);
             }
             return true;
@@ -182,7 +183,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void trackView(String screenname, String campaignUrl, CallbackContext callbackContext) {
+    private void trackView(String screenname, String campaignUrl, boolean newSession, CallbackContext callbackContext) {
         if (! trackerStarted ) {
             callbackContext.error("Tracker not started");
             return;
@@ -197,15 +198,20 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             if(!campaignUrl.equals("")){
                 hitBuilder.setCampaignParamsFromUrl(campaignUrl);
             }
-
-            tracker.send(hitBuilder.build());
+            
+            if(!newSession) {
+                tracker.send(hitBuilder.build());
+            } else {
+                tracker.send(hitBuilder.setNewSession().build());
+            }
+                    
             callbackContext.success("Track Screen: " + screenname);
         } else {
             callbackContext.error("Expected one non-empty string argument.");
         }
     }
 
-    private void trackEvent(String category, String action, String label, long value, CallbackContext callbackContext) {
+    private void trackEvent(String category, String action, String label, long value, boolean newSession, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;
@@ -215,12 +221,22 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             HitBuilders.EventBuilder hitBuilder = new HitBuilders.EventBuilder();
             addCustomDimensionsToHitBuilder(hitBuilder);
 
-            tracker.send(hitBuilder
-                    .setCategory(category)
-                    .setAction(action)
-                    .setLabel(label)
-                    .setValue(value)
-                    .build()
+            if(!newSession){
+                tracker.send(hitBuilder
+                        .setCategory(category)
+                        .setAction(action)
+                        .setLabel(label)
+                        .setValue(value)
+                        .build()
+            } else {
+                tracker.send(hitBuilder
+                        .setCategory(category)
+                        .setAction(action)
+                        .setLabel(label)
+                        .setValue(value)
+                        .setNewSession()
+                        .build()                
+            }
             );
             callbackContext.success("Track Event: " + category);
         } else {

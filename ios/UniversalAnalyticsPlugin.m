@@ -228,15 +228,21 @@
         if ([command.arguments count] > 3)
             value = [command.arguments objectAtIndex:3];
 
+        bool newSession = [[command argumentAtIndex:4 withDefault:@(NO)] boolValue];           
+
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
         [self addCustomDimensionsToTracker:tracker];
 
-        [tracker send:[[GAIDictionaryBuilder
+        GAIDictionaryBuilder *builder = [GAIDictionaryBuilder
                         createEventWithCategory: category //required
                         action: action //required
                         label: label
-                        value: value] build]];
+                        value: value];
+        if(newSession){ 
+            [builder set:@"start" forKey:kGAISessionControl];
+        }                        
+        [tracker send:[builder build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -304,10 +310,15 @@
         if (deepLinkUrl && deepLinkUrl != (NSString *)[NSNull null]) {
             [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
         }
-        
+
+        bool newSession = [[command argumentAtIndex:2 withDefault:@(NO)] boolValue];
+        if(newSession){            
+            [openParams set:@"start" forKey:kGAISessionControl];
+        }        
+
         NSDictionary *hitParamsDict = [openParams build];
 
-        [tracker set:kGAIScreenName value:screenName];        
+        [tracker set:kGAIScreenName value:screenName];   
         [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:hitParamsDict] build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];

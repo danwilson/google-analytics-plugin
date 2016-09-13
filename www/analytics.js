@@ -33,19 +33,23 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
   cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
 };
 
-UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, success, error) {
+UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, newSession, success, error) {
   if (typeof campaingUrl === 'undefined' || campaingUrl === null) {
     campaingUrl = '';
   }
 
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaingUrl]);
+  if (typeof newSession === 'undefined' || newSession === null) {
+    newSession = false;
+  }  
+
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaingUrl, newSession]);
 };
 
 UniversalAnalyticsPlugin.prototype.addCustomDimension = function(key, value, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'addCustomDimension', [key, value]);
 };
 
-UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label, value, success, error) {
+UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label, value, newSession, success, error) {
   if (typeof label === 'undefined' || label === null) {
     label = '';
   }
@@ -53,7 +57,11 @@ UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label
     value = 0;
   }
 
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value]);
+  if (typeof newSession === 'undefined' || newSession === null) {
+    newSession = false;
+  }    
+
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value, newSession]);
 };
 
 /**

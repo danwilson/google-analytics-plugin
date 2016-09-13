@@ -50,6 +50,9 @@ To track a Screen (PageView):
 To track a Screen (PageView) w/ campaign details:
 * `window.ga.trackView('Screen Title', 'my-scheme://content/1111?utm_source=google&utm_campaign=my-campaign')`
 
+To track a Screen (PageView) and create a new session:
+* `window.ga.trackView('Screen Title', '', true)`
+
 To track an Event:
 * `window.ga.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
 
