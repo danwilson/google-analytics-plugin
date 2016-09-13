@@ -227,7 +227,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                         .setAction(action)
                         .setLabel(label)
                         .setValue(value)
-                        .build()
+                        .build());
             } else {
                 tracker.send(hitBuilder
                         .setCategory(category)
@@ -235,9 +235,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                         .setLabel(label)
                         .setValue(value)
                         .setNewSession()
-                        .build()                
+                        .build());                
             }
-            );
+            
             callbackContext.success("Track Event: " + category);
         } else {
             callbackContext.error("Expected non-empty string arguments.");
