@@ -16,6 +16,10 @@ UniversalAnalyticsPlugin.prototype.setAnonymizeIp = function(anonymize, success,
   cordova.exec(success, error, 'UniversalAnalytics', 'setAnonymizeIp', [anonymize]);
 };
 
+UniversalAnalyticsPlugin.prototype.setOptOut = function(optout, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'setOptOut', [optout]);
+};
+
 UniversalAnalyticsPlugin.prototype.setAppVersion = function(version, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'setAppVersion', [version]);
 };

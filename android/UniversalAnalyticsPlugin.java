@@ -30,6 +30,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String SET_ALLOW_IDFA_COLLECTION = "setAllowIDFACollection";
     public static final String SET_USER_ID = "setUserId";
     public static final String SET_ANONYMIZE_IP = "setAnonymizeIp";
+    public static final String SET_OPT_OUT = "setOptOut";
     public static final String SET_APP_VERSION = "setAppVersion";
     public static final String DEBUG_MODE = "debugMode";
     public static final String ENABLE_UNCAUGHT_EXCEPTION_REPORTING = "enableUncaughtExceptionReporting";
@@ -119,6 +120,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (SET_ANONYMIZE_IP.equals(action)) {
             boolean anonymize = args.getBoolean(0);
             this.setAnonymizeIp(anonymize, callbackContext);
+        } else if (SET_OPT_OUT.equals(action)) {
+            boolean optout = args.getBoolean(0);
+            this.setOptOut(optout, callbackContext);
         } else if (SET_APP_VERSION.equals(action)) {
             String version = args.getString(0);
             this.setAppVersion(version, callbackContext);
@@ -361,6 +365,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
         tracker.setAnonymizeIp(anonymize);
         callbackContext.success("Set AnonymizeIp " + anonymize);
+    }
+
+    private void setOptOut(boolean optout, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        GoogleAnalytics.getInstance(this.cordova.getActivity()).setAppOptOut(optout);
+        callbackContext.success("Set Opt-Out " + optout);
     }
 
     private void setUserId(String userId, CallbackContext callbackContext) {

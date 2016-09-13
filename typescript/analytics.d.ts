@@ -10,6 +10,9 @@ declare class UniversalAnalyticsPlugin {
 	/** Sets a setAnonymizeIp */
 	public setAnonymizeIp(anonymize:Boolean, successCallback?:Function, errorCallback?:Function):void;
 
+        /** Sets a setOptOut */
+        public setOptOut(optout:Boolean, successCallback?:Function, errorCallback?:Function): void;
+
 	/** Sets a setAllowIDFACollection */
 	public setAllowIDFACollection(enable:Boolean, successCallback?:Function, errorCallback?:Function):void;	
 
