@@ -50,7 +50,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_VIEW.equals(action)) {
             int length = args.length();
             String screen = args.getString(0);
-            this.trackView(screen, length > 1 ? args.getString(1) : "", length > 2 ? args.getBoolean(2) : false, callbackContext);
+            this.trackView(screen, length > 1 && !args.isNull(1) ? args.getString(1) : "", length > 2 && !args.isNull(2) ? args.getBoolean(2) : false, callbackContext);
             return true;
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
