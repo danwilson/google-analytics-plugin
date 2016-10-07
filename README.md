@@ -1,4 +1,4 @@
-google-analytics-plugin 
+google-analytics-plugin
 =======================
 [![npm](https://img.shields.io/npm/v/cordova-plugin-google-analytics.svg)](https://www.npmjs.com/package/cordova-plugin-google-analytics)
 [![npm](https://img.shields.io/npm/dt/cordova-plugin-google-analytics.svg?label=npm%20downloads)](https://www.npmjs.com/package/cordova-plugin-google-analytics)
@@ -74,7 +74,7 @@ To add a Transaction Item (Ecommerce)
 To add a Custom Dimension
 * `window.ga.addCustomDimension('Key', 'Value', success, error)`
 * Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking.
-* e.g. `window.analytics.addCustomDimension(1, 'Value', success, error)`
+* e.g. `window.ga.addCustomDimension(1, 'Value', success, error)`
 
 To set a UserId:
 * `window.ga.setUserId('my-user-id')`
