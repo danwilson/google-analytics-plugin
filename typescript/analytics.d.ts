@@ -14,7 +14,7 @@ declare class UniversalAnalyticsPlugin {
         public setOptOut(optout:Boolean, successCallback?:Function, errorCallback?:Function): void;
 
 	/** Sets a setAllowIDFACollection */
-	public setAllowIDFACollection(enable:Boolean, successCallback?:Function, errorCallback?:Function):void;	
+	public setAllowIDFACollection(enable:Boolean, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Sets a AppVersion */
 	public setAppVersion(version:string, successCallback?:Function, errorCallback?:Function):void;
@@ -23,13 +23,13 @@ declare class UniversalAnalyticsPlugin {
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Custom Metric */
-	public trackMetric(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
+	public trackMetric(key:number, value:String, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Screen (PageView) */
 	public trackView(screen:String, campaingUrl?:string, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Add a Custom Dimension */
-	public addCustomDimension(key:String, value:String, successCallback?:Function, errorCallback?:Function):void;
+	public addCustomDimension(key:number, value:String, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track an Event */
 	public trackEvent(category:String, action:String, label?:String, value?:Number, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
