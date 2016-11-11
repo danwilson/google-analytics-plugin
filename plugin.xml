@@ -15,6 +15,12 @@
     <clobbers target="ga" />
   </js-module>
 
+  <platform name="browser">
+    <js-module src="browser/UniversalAnalyticsProxy.js" name="UniversalAnalyticsProxy">
+      <runs />
+    </js-module>
+  </platform>
+
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="UniversalAnalytics">
