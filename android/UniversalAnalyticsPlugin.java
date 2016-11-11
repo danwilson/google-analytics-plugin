@@ -45,7 +45,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (START_TRACKER.equals(action)) {
             String id = args.getString(0);
-            this.startTracker(id, callbackContext);
+            int dispatchPeriod = args.length() > 1 ? args.getInt(1) : 30;
+            this.startTracker(id, dispatchPeriod, callbackContext);
             return true;
         } else if (TRACK_VIEW.equals(action)) {
             int length = args.length();
@@ -136,12 +137,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         return false;
     }
 
-    private void startTracker(String id, CallbackContext callbackContext) {
+    private void startTracker(String id, int dispatchPeriod, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
             tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
             trackerStarted = true;
-            GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(30);
+            GoogleAnalytics.getInstance(this.cordova.getActivity()).setLocalDispatchPeriod(dispatchPeriod);
         } else {
             callbackContext.error("tracker id is not valid");
         }
