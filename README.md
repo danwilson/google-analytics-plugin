@@ -42,7 +42,7 @@ because in the next release we are removing the analytics.
 
 #JavaScript Usage
 In your 'deviceready' handler, set up your Analytics tracker:
-* `window.ga.startTrackerWithId('UA-XXXX-YY')` where UA-XXXX-YY is your Google Analytics Mobile App property
+* `window.ga.startTrackerWithId('UA-XXXX-YY', 30)` where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
 
 To track a Screen (PageView):
 * `window.ga.trackView('Screen Title')`

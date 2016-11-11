@@ -20,8 +20,12 @@
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* pluginResult = nil;
         NSString* accountId = [command.arguments objectAtIndex:0];
+        NSNumber* dispatchPeriod = [command.arguments objectAtIndex:1];
 
-        [GAI sharedInstance].dispatchInterval = 10;
+        if ([command.arguments count] > 1)
+            [GAI sharedInstance].dispatchInterval = [dispatchPeriod intValue];
+        else 
+            [GAI sharedInstance].dispatchInterval = 30;
 
         [[GAI sharedInstance] trackerWithTrackingId:accountId];
 
