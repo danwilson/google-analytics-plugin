@@ -22,8 +22,8 @@
         NSString* accountId = [command.arguments objectAtIndex:0];
         NSNumber* dispatchPeriod = [command.arguments objectAtIndex:1];
 
-        if ([command.arguments count] > 1)
-            [GAI sharedInstance].dispatchInterval = [dispatchPeriod intValue];
+        if ([dispatchPeriod isKindOfClass:[NSNumber class]])
+            [GAI sharedInstance].dispatchInterval = [dispatchPeriod doubleValue];
         else 
             [GAI sharedInstance].dispatchInterval = 30;
 
