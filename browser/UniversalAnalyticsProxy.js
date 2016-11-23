@@ -1,33 +1,48 @@
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
 function UniversalAnalyticsProxy() {
   this._isDebug = false;
   this._isEcommerceRequired = false;
   this._trackingId = null;
+  this._nativeGa = loadGoogleAnalytics(window['GoogleAnalyticsObject'] || 'nativeGa');
 
-  this._uncaughtExceptionHandler = this._uncaughtExceptionHandler.bind(this);
+  bindAll(this, [
+    '_ensureEcommerce',
+    '_uncaughtExceptionHandler',
+    'addCustomDimension',
+    'addTransaction',
+    'addTransactionItem',
+    'debugMode',
+    'enableUncaughtExceptionReporting',
+    'setAllowIDFACollection',
+    'setAnonymizeIp',
+    'setAppVersion',
+    'setOptOut',
+    'setUserId',
+    'startTrackerWithId',
+    'trackEvent',
+    'trackException',
+    'trackMetric',
+    'trackTiming',
+    'trackView'
+  ]);
 }
 
 UniversalAnalyticsProxy.prototype = {
   startTrackerWithId: wrap(function (trackingId) {
     this._trackingId = trackingId;
 
-    ga('create', {
+    this._ga('create', {
       trackingId: trackingId,
       cookieDomain: 'auto'
     });
-    ga('set', 'appName', document.title);
+    this._ga('set', 'appName', document.title);
   }),
 
   setUserId: wrap(function (userId) {
-    ga('set', 'userId', userId);
+    this._ga('set', 'userId', userId);
   }),
 
   setAnonymizeIp: wrap(function (anonymize) {
-    ga('set', 'anonymizeIp', anonymize);
+    this._ga('set', 'anonymizeIp', anonymize);
   }),
 
   setOptOut: wrap(function (optout) {
@@ -38,7 +53,7 @@ UniversalAnalyticsProxy.prototype = {
   }),
 
   setAppVersion: wrap(function (version) {
-    ga('set', 'appVersion', version);
+    this._ga('set', 'appVersion', version);
   }),
 
   setAllowIDFACollection: wrap(function (enable) {
@@ -50,11 +65,11 @@ UniversalAnalyticsProxy.prototype = {
   }),
 
   addCustomDimension: wrap(function (key, value) {
-    ga('set', 'dimension' + key, value);
+    this._ga('set', 'dimension' + key, value);
   }),
 
   trackMetric: wrap(function (key, value) {
-    ga('set', 'metric' + key, value);
+    this._ga('set', 'metric' + key, value);
   }),
 
   trackEvent: send(function (category, action, label, value, newSession) {
@@ -94,7 +109,7 @@ UniversalAnalyticsProxy.prototype = {
 
   addTransaction: wrap(function (transactionId, affiliation, revenue, tax, shipping, currencyCode) {
     this._ensureEcommerce();
-    ga('ecommerce:addTransaction', {
+    this._ga('ecommerce:addTransaction', {
       id: transactionId,
       affiliation: affiliation,
       revenue: String(revenue),
@@ -106,7 +121,7 @@ UniversalAnalyticsProxy.prototype = {
 
   addTransactionItem: wrap(function (transactionId, name, sku, category, price, quantity, currencyCode) {
     this._ensureEcommerce();
-    ga('ecommerce:addItem', {
+    this._ga('ecommerce:addItem', {
       id: transactionId,
       name: name,
       sku: sku,
@@ -125,8 +140,16 @@ UniversalAnalyticsProxy.prototype = {
     }
   }),
 
+  _ga: function () {
+    var args = Array.prototype.slice.call(arguments);
+    if (this._isDebug) {
+      console.debug('UniversalAnalyticsProxy', args);
+    }
+    this._nativeGa.apply(this._nativeGa, args);
+  },
+
   _uncaughtExceptionHandler: function (err) {
-    ga('send', {
+    this._ga('send', {
       hitType: 'exception',
       exDescription: err.message,
       exFatal: true
@@ -135,7 +158,7 @@ UniversalAnalyticsProxy.prototype = {
 
   _ensureEcommerce() {
     if (this._isEcommerceRequired) return;
-    ga('require', 'ecommerce');
+    this._ga('require', 'ecommerce');
     this._isEcommerceRequired = true;
   }
 };
@@ -153,7 +176,7 @@ function send(fn) {
     };
 
     try {
-      ga('send', command);
+      this._ga('send', command);
     } catch (err) {
       clearTimeout(timeout);
       defer(error, err);
@@ -161,12 +184,30 @@ function send(fn) {
   };
 }
 
+function bindAll(that, names) {
+  names.forEach((name) => {
+    if (typeof that[name] === 'function') {
+      that[name] = that[name].bind(that);
+    }
+  });
+}
+
+function loadGoogleAnalytics(name) {
+  window['GoogleAnalyticsObject'] = name;
+  window[name] = window[name] || function () {
+    console.log(arguments);
+    (window[name].q = window[name].q || []).push(arguments)
+  };
+  var script = document.createElement('script');
+  var scripts = document.getElementsByTagName('script')[0];
+  script.src = 'https://www.google-analytics.com/analytics.js';
+  script.async = 1;
+  scripts.parentNode.insertBefore(script, scripts);
+  return window[name];
+}
+
 function wrap(fn) {
   return function (success, error, args) {
-    if (this._isDebug) {
-      console.debug('UniversalAnalytics', arguments.callee.name, args);
-    }
-
     try {
       fn.apply(this, args);
       setTimeout(success, 0);
