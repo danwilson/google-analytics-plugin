@@ -185,7 +185,7 @@
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* pluginResult = nil;
         NSNumber *key = nil;
-        NSNumber *value = nil;
+        NSString *value = nil;
 
         if ([command.arguments count] > 0)
             key = [command.arguments objectAtIndex:0];
