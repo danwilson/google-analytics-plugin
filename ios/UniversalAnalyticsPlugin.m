@@ -195,7 +195,7 @@
 
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
-        [tracker set:[GAIFields customMetricForIndex:[key intValue]] value:[value stringValue]];
+        [tracker set:[GAIFields customMetricForIndex:[key intValue]] value:value];
 
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
