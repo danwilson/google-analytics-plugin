@@ -56,7 +56,7 @@
         NSString *value = [_customDimensions objectForKey:key];
 
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
-        [tracker set:[GAIFields customDimensionForIndex:[key.intValue]]
+        [tracker set:[GAIFields customDimensionForIndex:[NSNumber key.intValue]]
         value:value];
       }
     }
