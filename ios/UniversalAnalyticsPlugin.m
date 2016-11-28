@@ -52,11 +52,11 @@
 - (void) addCustomDimensionsToTracker: (id<GAITracker>)tracker
 {
     if (_customDimensions) {
-      for (NSNumber *key in _customDimensions) {
+      for (NSString *key in _customDimensions) {
         NSString *value = [_customDimensions objectForKey:key];
 
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
-        [tracker set:[GAIFields customDimensionForIndex:[key intValue]]
+        [tracker set:[GAIFields customDimensionForIndex:[key.intValue]]
         value:value];
       }
     }
@@ -166,7 +166,7 @@
       _customDimensions = [[NSMutableDictionary alloc] init];
     }
 
-    _customDimensions[key] = value;
+    _customDimensions[key.stringValue] = value;
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
