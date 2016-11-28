@@ -55,8 +55,12 @@
       for (NSString *key in _customDimensions) {
         NSString *value = [_customDimensions objectForKey:key];
 
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *myKey = [f numberFromString:@"42"];
+
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
-        [tracker set:[GAIFields customDimensionForIndex:[NSNumber key.intValue]]
+        [tracker set:[GAIFields customDimensionForIndex:myKey]
         value:value];
       }
     }
