@@ -159,7 +159,7 @@
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
-    NSString* key = [command.arguments objectAtIndex:0];
+    NSNumber* key = [command.arguments objectAtIndex:0];
     NSString* value = [command.arguments objectAtIndex:1];
 
     if ( ! _customDimensions) {
