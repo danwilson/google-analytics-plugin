@@ -46,6 +46,7 @@ UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, new
 };
 
 UniversalAnalyticsPlugin.prototype.addCustomDimension = function(key, value, success, error) {
+    console.log('[addCustomDimension]', typeof key, key, typeof values, value, );
   if (typeof key !== "number") {
     throw Error("key must be a valid integer");
   }
