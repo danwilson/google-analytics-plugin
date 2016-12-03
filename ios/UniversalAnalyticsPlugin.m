@@ -52,7 +52,7 @@
 - (void) addCustomDimensionsToTracker: (id<GAITracker>)tracker
 {
     if (_customDimensions) {
-      for (NSString *key in _customDimensions) {
+      for (NSString *key in _customDimensions.allKeys) {
         NSString *value = [_customDimensions objectForKey:key];
 
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
