@@ -60,7 +60,7 @@
         NSNumber *myKey = [f numberFromString:@"42"];
 
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
-        [tracker set:[GAIFields customDimensionForIndex:myKey]
+        [tracker set:[GAIFields customDimensionForIndex:myKey.unsignedIntegerValue]
         value:value];
       }
     }
