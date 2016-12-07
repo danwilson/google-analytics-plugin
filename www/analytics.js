@@ -46,6 +46,9 @@ UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, new
 };
 
 UniversalAnalyticsPlugin.prototype.addCustomDimension = function(key, value, success, error) {
+  if (typeof key !== "number") {
+    throw Error("key must be a valid integer not '" + typeof key + "'");
+  }
   cordova.exec(success, error, 'UniversalAnalytics', 'addCustomDimension', [key, value]);
 };
 
