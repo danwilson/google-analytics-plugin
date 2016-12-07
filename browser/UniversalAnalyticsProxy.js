@@ -156,7 +156,7 @@ UniversalAnalyticsProxy.prototype = {
     });
   },
 
-  _ensureEcommerce() {
+  _ensureEcommerce: function() {
     if (this._isEcommerceRequired) return;
     this._ga('require', 'ecommerce');
     this._isEcommerceRequired = true;
@@ -185,7 +185,7 @@ function send(fn) {
 }
 
 function bindAll(that, names) {
-  names.forEach((name) => {
+  names.forEach(function(name) {
     if (typeof that[name] === 'function') {
       that[name] = that[name].bind(that);
     }
@@ -195,7 +195,6 @@ function bindAll(that, names) {
 function loadGoogleAnalytics(name) {
   window['GoogleAnalyticsObject'] = name;
   window[name] = window[name] || function () {
-    console.log(arguments);
     (window[name].q = window[name].q || []).push(arguments)
   };
   var script = document.createElement('script');
