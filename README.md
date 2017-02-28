@@ -40,6 +40,11 @@ Windows Phone users have to manually add the [Google Analytics SDK for Windows 8
 v1.0.0 -- api change from ```window.analytics``` to ```window.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
 because in the next release we are removing the analytics.
 
+v1.7.x -- since this version there are new parameters in some of the old methods like `startTrackerWithId('UA-XXXX-YY', 30)` 
+and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova); 
+these wrapper interface doesn't have the new parameter at the time we did the change; so please update you ionic inteface to the lastest version.
+
+
 #JavaScript Usage
 In your 'deviceready' handler, set up your Analytics tracker:
 * `window.ga.startTrackerWithId('UA-XXXX-YY', 30)` where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
@@ -96,6 +101,26 @@ To enable verbose logging:
 
 To enable/disable automatic reporting of uncaught exceptions
 * `window.ga.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
+
+#example use ionic 2
+```javascript
+  initializeApp() {
+    this.platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+      StatusBar.styleDefault();
+      Splashscreen.hide();
+      
+      GoogleAnalytics.startTrackerWithId('UA-00000000-0')
+        .then(() => {
+          console.log('Google analytics is ready now');
+          //the component is ready and you can call any method here
+          GoogleAnalytics.setAllowIDFACollection(true);
+        })
+        .catch(e => console.log('Error starting GoogleAnalytics', e));      
+    });
+  }
+```
 
 #Installing Without the CLI <a name="nocli"></a>
 Copy the files manually into your project and add the following to your config.xml files:
