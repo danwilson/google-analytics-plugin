@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-google-analytics"
-    version="1.7.4">
+    version="1.7.5">
   <engines>
     <engine name="cordova" version=">=3.0.0" />
   </engines>
@@ -51,8 +51,7 @@
   </platform>
 
   <platform name="android">
-    <framework src="com.google.android.gms:play-services-analytics:+" />
-
+    <framework src="com.google.android.gms:play-services-analytics:10.2+" />
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
