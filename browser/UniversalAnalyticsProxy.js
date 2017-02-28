@@ -2,7 +2,9 @@ function UniversalAnalyticsProxy() {
   this._isDebug = false;
   this._isEcommerceRequired = false;
   this._trackingId = null;
-  this._nativeGa = loadGoogleAnalytics(window['GoogleAnalyticsObject'] || 'nativeGa');
+
+  var namespace = window.GoogleAnalyticsObject || 'nativeGa';
+  loadGoogleAnalytics.call(this, namespace);
 
   bindAll(this, [
     '_ensureEcommerce',
@@ -192,17 +194,30 @@ function bindAll(that, names) {
   });
 }
 
+/**
+ * Proceed to the asynchronous loading of Google's analytics.js.
+ * Initialize `this._nativeGa` once the script is loaded, using
+ * the `onload` callback of the `script` DOM node.
+ *
+ * @param {string} name Reference (global namespace) of the GA object.
+ */
 function loadGoogleAnalytics(name) {
-  window['GoogleAnalyticsObject'] = name;
+  window.GoogleAnalyticsObject = name;
+
   window[name] = window[name] || function () {
-    (window[name].q = window[name].q || []).push(arguments)
+    (window[name].q = window[name].q || []).push(arguments);
   };
+  window[name].l = 1 * new Date();
+  this._nativeGa = window[name];
+
   var script = document.createElement('script');
   var scripts = document.getElementsByTagName('script')[0];
   script.src = 'https://www.google-analytics.com/analytics.js';
   script.async = 1;
   scripts.parentNode.insertBefore(script, scripts);
-  return window[name];
+
+  // analytics.js creates a new object once initialized, update our reference
+  script.onload = (function() { this._nativeGa = window[name]; }).bind(this);
 }
 
 function wrap(fn) {

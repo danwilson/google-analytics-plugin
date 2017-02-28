@@ -57,7 +57,7 @@
 
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
-        NSNumber *myKey = [f numberFromString:@"42"];
+        NSNumber *myKey = [f numberFromString:key];
 
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
         [tracker set:[GAIFields customDimensionForIndex:myKey.unsignedIntegerValue]
@@ -171,7 +171,7 @@
     }
 
     _customDimensions[key.stringValue] = value;
-
+    
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
