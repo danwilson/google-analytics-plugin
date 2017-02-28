@@ -42,7 +42,7 @@ because in the next release we are removing the analytics.
 
 v1.7.x -- since this version there are new parameters in some of the old methods like `startTrackerWithId('UA-XXXX-YY', 30)` 
 and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova); 
-these wrapper interface doesn't have the new parameter at the time we did the change; so please update you ionic inteface to the lastest version.
+these wrapper interfaces don't have the new parameters at the time we did the changes; so please update you ionic framework to the lastest version.
 
 
 #JavaScript Usage
