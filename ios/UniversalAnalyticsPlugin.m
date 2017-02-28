@@ -52,11 +52,15 @@
 - (void) addCustomDimensionsToTracker: (id<GAITracker>)tracker
 {
     if (_customDimensions) {
-      for (NSNumber *key in _customDimensions) {
+      for (NSString *key in _customDimensions.allKeys) {
         NSString *value = [_customDimensions objectForKey:key];
 
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *myKey = [f numberFromString:key];
+
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
-        [tracker set:[GAIFields customDimensionForIndex:[key intValue]]
+        [tracker set:[GAIFields customDimensionForIndex:myKey.unsignedIntegerValue]
         value:value];
       }
     }
@@ -159,15 +163,15 @@
 - (void) addCustomDimension: (CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
-    NSString* key = [command.arguments objectAtIndex:0];
+    NSNumber* key = [command.arguments objectAtIndex:0];
     NSString* value = [command.arguments objectAtIndex:1];
 
     if ( ! _customDimensions) {
       _customDimensions = [[NSMutableDictionary alloc] init];
     }
 
-    _customDimensions[key] = value;
-
+    _customDimensions[key.stringValue] = value;
+    
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
