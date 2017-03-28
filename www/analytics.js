@@ -36,16 +36,16 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
   cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
 };
 
-UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, newSession, success, error) {
-  if (typeof campaingUrl === 'undefined' || campaingUrl === null) {
-    campaingUrl = '';
+UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaignUrl, newSession, success, error) {
+  if (typeof campaignUrl === 'undefined' || campaignUrl === null) {
+    campaignUrl = '';
   }
 
   if (typeof newSession === 'undefined' || newSession === null) {
     newSession = false;
   }  
 
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaingUrl, newSession]);
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaignUrl, newSession]);
 };
 
 UniversalAnalyticsPlugin.prototype.addCustomDimension = function(key, value, success, error) {
