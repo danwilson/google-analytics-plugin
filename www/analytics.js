@@ -3,7 +3,7 @@ function UniversalAnalyticsPlugin() {}
 UniversalAnalyticsPlugin.prototype.startTrackerWithId = function(id, dispatchPeriod, success, error) {
   if (typeof dispatchPeriod === 'undefined' || dispatchPeriod === null) {
     dispatchPeriod = 30;
-  }  
+  }
   cordova.exec(success, error, 'UniversalAnalytics', 'startTrackerWithId', [id, dispatchPeriod]);
 };
 
@@ -43,7 +43,7 @@ UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, new
 
   if (typeof newSession === 'undefined' || newSession === null) {
     newSession = false;
-  }  
+  }
 
   cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaingUrl, newSession]);
 };
@@ -65,7 +65,7 @@ UniversalAnalyticsPlugin.prototype.trackEvent = function(category, action, label
 
   if (typeof newSession === 'undefined' || newSession === null) {
     newSession = false;
-  }    
+  }
 
   cordova.exec(success, error, 'UniversalAnalytics', 'trackEvent', [category, action, label, value, newSession]);
 };
@@ -104,6 +104,10 @@ UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, 
 /* automatic uncaught exception tracking */
 UniversalAnalyticsPlugin.prototype.enableUncaughtExceptionReporting = function (enable, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'enableUncaughtExceptionReporting', [enable]);
+};
+
+UniversalAnalyticsPlugin.prototype.setCampaignData = function(campaignData, success) {
+  cordova.exec(success, function () {}, "UniversalAnalytics", "setCampaignData", [campaignData]);
 };
 
 module.exports = new UniversalAnalyticsPlugin();

@@ -1,5 +1,7 @@
 package com.danielcwilson.plugins.analytics;
 
+import android.net.Uri;
+
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.analytics.HitBuilders;
@@ -10,9 +12,11 @@ import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -28,6 +32,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String ADD_TRANSACTION_ITEM = "addTransactionItem";
 
     public static final String SET_ALLOW_IDFA_COLLECTION = "setAllowIDFACollection";
+    public static final String SET_CAMPAIGN_DATA = "setCampaignData";
     public static final String SET_USER_ID = "setUserId";
     public static final String SET_ANONYMIZE_IP = "setAnonymizeIp";
     public static final String SET_OPT_OUT = "setOptOut";
@@ -40,6 +45,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public HashMap<Integer, String> customDimensions = new HashMap<Integer, String>();
 
     public Tracker tracker;
+    public String campaignData = null;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -130,6 +136,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.setAppVersion(version, callbackContext);
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
+        } else if (SET_CAMPAIGN_DATA.equals(action)) {
+            this.setCampaignData(args.getJSONObject(0), callbackContext);
+            return true;
         } else if (ENABLE_UNCAUGHT_EXCEPTION_REPORTING.equals(action)) {
             Boolean enable = args.getBoolean(0);
             this.enableUncaughtExceptionReporting(enable, callbackContext);
@@ -137,7 +146,52 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         return false;
     }
 
-    private void startTracker(String id, int dispatchPeriod, CallbackContext callbackContext) {
+    private void _setCampaignParamsOnNextHit() {
+        if (tracker != null) {
+            if (campaignData != null && campaignData.length() > 0) {
+                tracker.setCampaignParamsOnNextHit(Uri.parse(campaignData));
+            }
+        }
+    }
+
+    private void setCampaignData(JSONObject options, CallbackContext callbackContext) throws JSONException {
+        ArrayList<String> queryParams = new ArrayList<String>();
+
+        if (options.has("utm_id")) {
+            queryParams.add("utm_id%3D" + options.getString("utm_id")); //%3D is url-encoded =
+        }
+        if (options.has("utm_campaign")) {
+            queryParams.add("utm_campaign%3D" + options.getString("utm_campaign")); //%3D is url-encoded =
+        }
+        if (options.has("utm_content")) {
+            queryParams.add("utm_content%3D" + options.getString("utm_content")); //%3D is url-encoded =
+        }
+        if (options.has("utm_medium")) {
+            queryParams.add("utm_medium%3D" + options.getString("utm_medium")); //%3D is url-encoded =
+        }
+        if (options.has("utm_source")) {
+            queryParams.add("utm_source%3D" + options.getString("utm_source")); //%3D is url-encoded =
+        }
+        if (options.has("utm_term")) {
+            queryParams.add("utm_term%3D" + options.getString("utm_term")); //%3D is url-encoded =
+        }
+
+        StringBuilder uri = new StringBuilder();
+        uri.append("http://www.hurdlr.com/campaign/"); // an arbitrary url we'll pass into Google's helper method.
+        if (queryParams.size() > 0) {
+            uri.append("?referrer=");
+            for (String param : queryParams) {
+                uri.append(param + "%26"); //%26 is "&"
+            }
+            campaignData = uri.toString();
+        } else {
+            campaignData = null;
+        }
+
+        callbackContext.success("Saved campaign data");
+    }
+
+    private void startTracker(String id, CallbackContext callbackContext) {
         if (null != id && id.length() > 0) {
             tracker = GoogleAnalytics.getInstance(this.cordova.getActivity()).newTracker(id);
             callbackContext.success("tracker started");
@@ -164,6 +218,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }
 
     private <T> void addCustomDimensionsToHitBuilder(T builder) {
+        _setCampaignParamsOnNextHit();
+
         //unfortunately the base HitBuilders.HitBuilder class is not public, therefore have to use reflection to use
         //the common setCustomDimension (int index, String dimension) method
         try {
@@ -199,13 +255,13 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             if(!campaignUrl.equals("")){
                 hitBuilder.setCampaignParamsFromUrl(campaignUrl);
             }
-            
+
             if(!newSession) {
                 tracker.send(hitBuilder.build());
             } else {
                 tracker.send(hitBuilder.setNewSession().build());
             }
-                    
+
             callbackContext.success("Track Screen: " + screenname);
         } else {
             callbackContext.error("Expected one non-empty string argument.");
@@ -236,9 +292,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
                         .setLabel(label)
                         .setValue(value)
                         .setNewSession()
-                        .build());                
+                        .build());
             }
-            
+
             callbackContext.success("Track Event: " + category);
         } else {
             callbackContext.error("Expected non-empty string arguments.");

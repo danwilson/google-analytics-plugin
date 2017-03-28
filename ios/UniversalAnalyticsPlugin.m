@@ -13,6 +13,7 @@
     _debugMode = false;
     _trackerStarted = false;
     _customDimensions = nil;
+    _campaignData = [NSMutableDictionary dictionary];
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
@@ -24,7 +25,7 @@
 
         if ([dispatchPeriod isKindOfClass:[NSNumber class]])
             [GAI sharedInstance].dispatchInterval = [dispatchPeriod doubleValue];
-        else 
+        else
             [GAI sharedInstance].dispatchInterval = 30;
 
         [[GAI sharedInstance] trackerWithTrackingId:accountId];
@@ -44,7 +45,7 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
-    
+
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     tracker.allowIDFACollection = [[command argumentAtIndex:0 withDefault:@(NO)] boolValue];
 }
@@ -171,7 +172,7 @@
     }
 
     _customDimensions[key.stringValue] = value;
-    
+
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -236,20 +237,20 @@
         if ([command.arguments count] > 3)
             value = [command.arguments objectAtIndex:3];
 
-        bool newSession = [[command argumentAtIndex:4 withDefault:@(NO)] boolValue];           
+        bool newSession = [[command argumentAtIndex:4 withDefault:@(NO)] boolValue];
 
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
         [self addCustomDimensionsToTracker:tracker];
 
-        GAIDictionaryBuilder *builder = [GAIDictionaryBuilder
+        GAIDictionaryBuilder *builder = [[GAIDictionaryBuilder
                         createEventWithCategory: category //required
                         action: action //required
                         label: label
-                        value: value];
-        if(newSession){ 
+                        value: value] setAll:_campaignData];
+        if(newSession){
             [builder set:@"start" forKey:kGAISessionControl];
-        }                        
+        }
         [tracker send:[builder build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -286,13 +287,54 @@
 
         [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 
-        [tracker send:[[GAIDictionaryBuilder
+        [tracker send:[[[GAIDictionaryBuilder
                         createExceptionWithDescription: description
-                        withFatal: fatal] build]];
+                        withFatal: fatal] setAll:_campaignData] build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
+}
+
+- (void) setCampaignData: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = nil;
+
+    NSDictionary* campaignData = [command.arguments objectAtIndex:0];
+    NSString* utm_id = [campaignData valueForKey:@"utm_id"];
+    NSString* utm_campaign = [campaignData valueForKey:@"utm_campaign"];
+    NSString* utm_content = [campaignData valueForKey:@"utm_content"];
+    NSString* utm_source = [campaignData valueForKey:@"utm_source"];
+    NSString* utm_term = [campaignData valueForKey:@"utm_term"];
+    NSString* utm_medium = [campaignData valueForKey:@"utm_medium"];
+
+    if (utm_id != nil) {
+        [_campaignData setObject:utm_id forKey:kGAICampaignId];
+    }
+
+    if (utm_campaign != nil) {
+        [_campaignData setObject:utm_campaign forKey:kGAICampaignName];
+    }
+
+    if (utm_content != nil) {
+        [_campaignData setObject:utm_content  forKey:kGAICampaignContent];
+    }
+
+    if (utm_medium != nil) {
+        [_campaignData setObject:utm_medium forKey:kGAICampaignMedium];
+    }
+
+    if (utm_source != nil) {
+        [_campaignData setObject:utm_source forKey:kGAICampaignSource];
+    }
+
+    if (utm_term != nil) {
+        [_campaignData setObject:utm_term forKey:kGAICampaignKeyword];
+    }
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void) trackView: (CDVInvokedUrlCommand*)command
@@ -314,20 +356,20 @@
 
         NSString* deepLinkUrl = [command.arguments objectAtIndex:1];
         GAIDictionaryBuilder* openParams = [[GAIDictionaryBuilder alloc] init];
-    
+
         if (deepLinkUrl && deepLinkUrl != (NSString *)[NSNull null]) {
             [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
         }
 
         bool newSession = [[command argumentAtIndex:2 withDefault:@(NO)] boolValue];
-        if(newSession){            
+        if(newSession){
             [openParams set:@"start" forKey:kGAISessionControl];
-        }        
+        }
 
         NSDictionary *hitParamsDict = [openParams build];
 
-        [tracker set:kGAIScreenName value:screenName];   
-        [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:hitParamsDict] build]];
+        [tracker set:kGAIScreenName value:screenName];
+        [tracker send:[[[[GAIDictionaryBuilder createScreenView] setAll:hitParamsDict] setAll:_campaignData] build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -368,11 +410,11 @@
 
       [self addCustomDimensionsToTracker:tracker];
 
-      [tracker send:[[GAIDictionaryBuilder
+      [tracker send:[[[GAIDictionaryBuilder
                       createTimingWithCategory: category //required
                       interval: intervalInMilliseconds //required
                       name: name
-                      label: label] build]];
+                      label: label] setAll:_campaignData] build]];
 
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -421,12 +463,12 @@
       id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
 
-      [tracker send:[[GAIDictionaryBuilder createTransactionWithId:transactionId             // (NSString) Transaction ID
+      [tracker send:[[[GAIDictionaryBuilder createTransactionWithId:transactionId             // (NSString) Transaction ID
                                                        affiliation:affiliation         // (NSString) Affiliation
                                                            revenue:revenue                  // (NSNumber) Order revenue (including tax and shipping)
                                                                tax:tax                  // (NSNumber) Tax
                                                           shipping:shipping                      // (NSNumber) Shipping
-                                                      currencyCode:currencyCode] build]];        // (NSString) Currency code
+                                                      currencyCode:currencyCode]  setAll:_campaignData] build]];        // (NSString) Currency code
 
 
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -482,13 +524,13 @@
       id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
 
-      [tracker send:[[GAIDictionaryBuilder createItemWithTransactionId:transactionId         // (NSString) Transaction ID
+      [tracker send:[[[GAIDictionaryBuilder createItemWithTransactionId:transactionId         // (NSString) Transaction ID
                                                                   name:name  // (NSString) Product Name
                                                                    sku:sku           // (NSString) Product SKU
                                                               category:category  // (NSString) Product category
                                                                  price:price               // (NSNumber)  Product price
                                                               quantity:quantity                 // (NSNumber)  Product quantity
-                                                          currencyCode:currencyCode] build]];    // (NSString) Currency code
+                                                          currencyCode:currencyCode] setAll:_campaignData] build]];    // (NSString) Currency code
 
 
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];

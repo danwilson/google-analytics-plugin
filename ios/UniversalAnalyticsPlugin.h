@@ -8,13 +8,15 @@
 @interface UniversalAnalyticsPlugin : CDVPlugin {
     bool _trackerStarted;
     bool _debugMode;
-	NSMutableDictionary *_customDimensions;
+    NSMutableDictionary *_customDimensions;
+    NSMutableDictionary *_campaignData;
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command;
 - (void) setAllowIDFACollection: (CDVInvokedUrlCommand*) command;
 - (void) setUserId: (CDVInvokedUrlCommand*)command;
 - (void) setAppVersion: (CDVInvokedUrlCommand*)command;
+- (void) setCampaignData: (CDVInvokedUrlCommand*)command;
 - (void) debugMode: (CDVInvokedUrlCommand*)command;
 - (void) setOptOut: (CDVInvokedUrlCommand*)command;
 - (void) enableUncaughtExceptionReporting: (CDVInvokedUrlCommand*)command;
