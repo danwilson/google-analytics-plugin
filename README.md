@@ -48,7 +48,7 @@ these wrapper interfaces don't have the new parameters at the time we did the ch
 
 # JavaScript Usage
 
-**All the following methods accept optional success and error callbacks after all other available parameters, and also return a Promise object.**
+**All the following methods accept optional success and error callbacks after all other available parameters.**
 
 In your 'deviceready' handler, set up your Analytics tracker:
 * `window.ga.startTrackerWithId('UA-XXXX-YY', 30)` where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
