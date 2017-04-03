@@ -19,6 +19,7 @@ function UniversalAnalyticsProxy() {
     'setAppVersion',
     'setOptOut',
     'setUserId',
+    'getVar',
     'startTrackerWithId',
     'trackEvent',
     'trackException',
@@ -60,6 +61,10 @@ UniversalAnalyticsProxy.prototype = {
 
   setAllowIDFACollection: wrap(function (enable) {
     // Not supported by browser platofrm
+  }),
+
+  getVar: wrap(function(param){
+    this._ga('get', param);
   }),
 
   debugMode: wrap(function () {
