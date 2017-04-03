@@ -130,7 +130,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             String version = args.getString(0);
             this.setAppVersion(version, callbackContext);
         } else if (GET_VAR.equals(action)) {
-            this.getVar(callbackContext);            
+            String variable = args.getString(0);
+            this.getVar(variable, callbackContext);            
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
         } else if (ENABLE_UNCAUGHT_EXCEPTION_REPORTING.equals(action)) {
