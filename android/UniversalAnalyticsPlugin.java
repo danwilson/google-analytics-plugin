@@ -370,7 +370,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("Enable Advertising Id Collection: " + enable);
     }
 
-    private String getVar(String variable, CallbackContext callbackContext) {
+    private void getVar(String variable, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;
