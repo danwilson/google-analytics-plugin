@@ -11,7 +11,7 @@ Prerequisites:
 * A Mobile App property through the Google Analytics Admin Console
 * (Android) Google Play Services SDK installed via [Android SDK Manager](https://developer.android.com/sdk/installing/adding-packages.html)
 
-#Installing
+# Installing
 
 This plugin follows the Cordova 3.0+ plugin spec, so it can be installed through the Cordova CLI in your existing Cordova project:
 ```bash
@@ -36,7 +36,8 @@ If you are not using the CLI, follow the steps in the section [Installing Withou
 
 Windows Phone users have to manually add the [Google Analytics SDK for Windows 8 and Windows Phone](https://googleanalyticssdk.codeplex.com/) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK). This plugin requires v1.3.0 or higher.
 
-#Release note
+# Release note
+
 v1.0.0 -- api change from ```window.analytics``` to ```window.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
 because in the next release we are removing the analytics.
 
@@ -45,7 +46,10 @@ and this is causing errors for those who are using the ionic 2(ionic-native) or 
 these wrapper interfaces don't have the new parameters at the time we did the changes; so please update you ionic framework to the lastest version.
 
 
-#JavaScript Usage
+# JavaScript Usage
+
+**All the following methods accept optional success and error callbacks after all other available parameters.**
+
 In your 'deviceready' handler, set up your Analytics tracker:
 * `window.ga.startTrackerWithId('UA-XXXX-YY', 30)` where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
 
@@ -60,6 +64,9 @@ To track a Screen (PageView) and create a new session:
 
 To track an Event:
 * `window.ga.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
+
+To track an Event and create a new session:
+* `window.ga.trackEvent('Category', 'Action', 'Label', Value, true)` Label, Value and newSession are optional, Value is numeric, newSession is true/false
 
 To track custom metrics:
 * `window.ga.trackMetric('key', Value)` Value is optional
@@ -106,7 +113,8 @@ To enable verbose logging:
 To enable/disable automatic reporting of uncaught exceptions
 * `window.ga.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
 
-#example use ionic 2
+# Example use ionic 2
+
 ```javascript
   initializeApp() {
     this.platform.ready().then(() => {
@@ -127,7 +135,8 @@ To enable/disable automatic reporting of uncaught exceptions
   }
 ```
 
-#Installing Without the CLI <a name="nocli"></a>
+# Installing Without the CLI <a name="nocli"></a>
+
 Copy the files manually into your project and add the following to your config.xml files:
 ```xml
 <feature name="UniversalAnalytics">
@@ -151,7 +160,8 @@ You also will need to manually add the Google Analytics SDK files:
 * For Android, add `libGoogleAnalyticsServices.jar` to your Cordova Android project's `/libs` directory and build path
 * For Windows Phone, add the [GoogleAnalyticsSDK package via NuGet](http://nuget.org/packages/GoogleAnalyticsSDK)
 
-#Integrating with Lavaca
+# Integrating with Lavaca
+
 The `lavaca` directory includes a component that can be added to a <a href="http://getlavaca.com">Lavaca</a> project.  It offers a way to use the web `analytics.js` when the app is running in the browser and not packaged as Cordova.
 
 * Copy `AnalyticsService.js` to your Lavaca project (I create a directory under `js/app` called `data`).
@@ -164,7 +174,7 @@ var analyticsService = require('app/data/AnalyticsService');
 analyticsService.trackView('Home');
 ```
 
-#Browser (PWA)
+# Browser (PWA)
 
 For browser (PWA), people who want to use the plugin in a website that has already integrated google analytics needs 
 to make sure that they remove the google analytics snippet from the head section of the page and change the global `ga` 
