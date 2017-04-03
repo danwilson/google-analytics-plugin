@@ -48,6 +48,8 @@ these wrapper interfaces don't have the new parameters at the time we did the ch
 
 # JavaScript Usage
 
+**All the following methods accept optional success and error callbacks after all other available parameters.**
+
 In your 'deviceready' handler, set up your Analytics tracker:
 * `window.ga.startTrackerWithId('UA-XXXX-YY', 30)` where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
 
@@ -62,6 +64,9 @@ To track a Screen (PageView) and create a new session:
 
 To track an Event:
 * `window.ga.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
+
+To track an Event and create a new session:
+* `window.ga.trackEvent('Category', 'Action', 'Label', Value, true)` Label, Value and newSession are optional, Value is numeric, newSession is true/false
 
 To track custom metrics:
 * `window.ga.trackMetric('key', Value)` Value is optional
