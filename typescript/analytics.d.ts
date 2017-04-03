@@ -20,6 +20,9 @@ declare class UniversalAnalyticsPlugin {
 	public setAppVersion(version:string, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Enables verbose logging */
+	public getVar(variable:string, successCallback?:Function, errorCallback?:Function):void;
+
+	/** Enables verbose logging */
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Custom Metric */

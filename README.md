@@ -94,6 +94,10 @@ To set a UserId:
 To set a specific app version:
 * `window.ga.setAppVersion('1.33.7')`
 
+To get a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
+for example to get campaign name:
+* `window.ga.getVar('cn', function(result){ console.log(result);})`
+
 To set a anonymize Ip address:
 * `window.ga.setAnonymizeIp(true)`
 
@@ -123,6 +127,7 @@ To enable/disable automatic reporting of uncaught exceptions
         .then(() => {
           console.log('Google analytics is ready now');
           //the component is ready and you can call any method here
+          GoogleAnalytics.debugMode();
           GoogleAnalytics.setAllowIDFACollection(true);
         })
         .catch(e => console.log('Error starting GoogleAnalytics', e));      

@@ -32,6 +32,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String SET_ANONYMIZE_IP = "setAnonymizeIp";
     public static final String SET_OPT_OUT = "setOptOut";
     public static final String SET_APP_VERSION = "setAppVersion";
+    public static final String GET_VAR = "getVar";
     public static final String DEBUG_MODE = "debugMode";
     public static final String ENABLE_UNCAUGHT_EXCEPTION_REPORTING = "enableUncaughtExceptionReporting";
 
@@ -128,6 +129,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (SET_APP_VERSION.equals(action)) {
             String version = args.getString(0);
             this.setAppVersion(version, callbackContext);
+        } else if (GET_VAR.equals(action)) {
+            this.getVar(callbackContext);            
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
         } else if (ENABLE_UNCAUGHT_EXCEPTION_REPORTING.equals(action)) {
@@ -366,6 +369,16 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         tracker.enableAdvertisingIdCollection(enable);
         callbackContext.success("Enable Advertising Id Collection: " + enable);
     }
+
+    private String getVar(String variable, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        String result = tracker.get(variable);
+        callbackContext.success(result);
+    }    
 
     private void debugMode(CallbackContext callbackContext) {
         GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
