@@ -3,6 +3,12 @@ function UniversalAnalyticsPlugin() {}
 UniversalAnalyticsPlugin.prototype.startTrackerWithId = function(id, dispatchPeriod, success, error) {
   if (typeof dispatchPeriod === 'undefined' || dispatchPeriod === null) {
     dispatchPeriod = 30;
+  } else if (typeof dispatchPeriod === 'function' && typeof error === 'undefined') {
+    // Called without dispatchPeriod but with a callback.
+    // Looks like the original API was used so shift parameters over to remain compatible.
+    error = success;
+    success = dispatchPeriod;
+    dispatchPeriod = 30;
   }  
   cordova.exec(success, error, 'UniversalAnalytics', 'startTrackerWithId', [id, dispatchPeriod]);
 };
