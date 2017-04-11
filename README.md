@@ -45,6 +45,8 @@ v1.7.x -- since this version there are new parameters in some of the old methods
 and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova); 
 these wrapper interfaces don't have the new parameters at the time we did the changes; so please update you ionic framework to the lastest version.
 
+v1.7.11 -- since this version there is back compatibility with the new and old parameters in the method `startTrackerWithId('UA-XXXX-YY', 30)` to avoid loading issues reported.
+
 
 # JavaScript Usage
 
