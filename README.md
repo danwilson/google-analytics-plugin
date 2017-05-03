@@ -115,22 +115,26 @@ To enable verbose logging:
 To enable/disable automatic reporting of uncaught exceptions
 * `window.ga.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
 
-# Example use ionic 2
-
+# Example use ionic 2 (Ionic Native)
+```shell
+npm i --save @ionic-native/google-analytics
+```
 ```javascript
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { Platform } from 'ionic-angular';
+
+...
+
+  constructor(private ga: GoogleAnalytics, private platform: Platform) { }
+  
   initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-      Splashscreen.hide();
-      
-      GoogleAnalytics.startTrackerWithId('UA-00000000-0')
+      this.ga.startTrackerWithId('UA-00000000-0')
         .then(() => {
           console.log('Google analytics is ready now');
           //the component is ready and you can call any method here
-          GoogleAnalytics.debugMode();
-          GoogleAnalytics.setAllowIDFACollection(true);
+          this.ga.debugMode();
+          this.ga.setAllowIDFACollection(true);
         })
         .catch(e => console.log('Error starting GoogleAnalytics', e));      
     });
