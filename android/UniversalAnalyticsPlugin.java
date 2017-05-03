@@ -387,7 +387,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        String result = tracker.set(variable, value);
+        tracker.set(variable, value);
         callbackContext.success("Set variable " + variable + "to " + value);
     }  
     private void dispatch(CallbackContext callbackContext) {
