@@ -45,6 +45,8 @@ v1.7.x -- since this version there are new parameters in some of the old methods
 and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova); 
 these wrapper interfaces don't have the new parameters at the time we did the changes; so please update you ionic framework to the lastest version.
 
+v1.7.11 -- since this version there is back compatibility with the new and old parameters in the method `startTrackerWithId('UA-XXXX-YY', 30)` to avoid loading issues reported.
+
 
 # JavaScript Usage
 
@@ -97,6 +99,13 @@ To set a specific app version:
 To get a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
 for example to get campaign name:
 * `window.ga.getVar('cn', function(result){ console.log(result);})`
+
+To set a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
+for example to set session control:
+* `window.ga.setVar('sc', 'end', function(result){ console.log(result);})`
+
+To manually dispatch any data (this is not implemented in browser platform):
+* `window.ga.dispatch()`
 
 To set a anonymize Ip address:
 * `window.ga.setAnonymizeIp(true)`

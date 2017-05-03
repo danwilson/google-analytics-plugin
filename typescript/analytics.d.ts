@@ -19,8 +19,14 @@ declare class UniversalAnalyticsPlugin {
 	/** Sets a AppVersion */
 	public setAppVersion(version:string, successCallback?:Function, errorCallback?:Function):void;
 
-	/** Enables verbose logging */
+	/** Gets a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters */
 	public getVar(variable:string, successCallback?:Function, errorCallback?:Function):void;
+
+	/** Sets a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters */
+	public setVar(variable:string, value:string, successCallback?:Function, errorCallback?:Function):void;
+
+	/** To manually dispatch any data */
+	public dispatch(successCallback?:Function, errorCallback?:Function);
 
 	/** Enables verbose logging */
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;

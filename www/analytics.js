@@ -34,7 +34,15 @@ UniversalAnalyticsPlugin.prototype.setAppVersion = function(version, success, er
 };
 
 UniversalAnalyticsPlugin.prototype.getVar = function(variable, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'get', [variable]);
+  cordova.exec(success, error, 'UniversalAnalytics', 'getVar', [variable]);
+};
+
+UniversalAnalyticsPlugin.prototype.setVar = function(variable, value, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'setVar', [variable, value]);
+};
+
+UniversalAnalyticsPlugin.prototype.dispatch = function(success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'dispatch', []);
 };
 
 /* enables verbose logging */
