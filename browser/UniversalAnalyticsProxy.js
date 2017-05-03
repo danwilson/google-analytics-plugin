@@ -20,6 +20,7 @@ function UniversalAnalyticsProxy() {
     'setOptOut',
     'setUserId',
     'getVar',
+    'setVar',
     'startTrackerWithId',
     'trackEvent',
     'trackException',
@@ -66,6 +67,10 @@ UniversalAnalyticsProxy.prototype = {
   getVar: wrap(function(param){
     this._ga('get', param);
   }),
+
+  setVar: wrap(function(param, value){
+    this._ga('set', param, value);
+  }),  
 
   debugMode: wrap(function () {
     this._isDebug = true;

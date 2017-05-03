@@ -85,6 +85,31 @@
     }];
 }
 
+- (void) setVar: (CDVInvokedUrlCommand*) command
+{
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
+        if ( ! _trackerStarted) {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            return;
+        }
+        
+        id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+        NSString* parameterName = [command.arguments objectAtIndex:0];        
+        NSString* parameter = [command.arguments objectAtIndex:1];
+        NSString* result = [tracker set:parameterName value:parameter]; 
+
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];             
+    }];
+}
+
+- (void) dispatch: (CDVInvokedUrlCommand*) command
+{
+  [[GAI sharedInstance] dispatch];
+}
+
 - (void) debugMode: (CDVInvokedUrlCommand*) command
 {
   _debugMode = true;

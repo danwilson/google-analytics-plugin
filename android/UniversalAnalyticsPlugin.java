@@ -33,6 +33,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String SET_OPT_OUT = "setOptOut";
     public static final String SET_APP_VERSION = "setAppVersion";
     public static final String GET_VAR = "getVar";
+    public static final String SET_VAR = "setVar";
+    public static final String DISPATCH = "dispatch";
     public static final String DEBUG_MODE = "debugMode";
     public static final String ENABLE_UNCAUGHT_EXCEPTION_REPORTING = "enableUncaughtExceptionReporting";
 
@@ -131,7 +133,15 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.setAppVersion(version, callbackContext);
         } else if (GET_VAR.equals(action)) {
             String variable = args.getString(0);
-            this.getVar(variable, callbackContext);            
+            this.getVar(variable, callbackContext);           
+        } else if (SET_VAR.equals(action)) {
+            String variable = args.getString(0);
+            String value = args.getString(1);
+            this.setVar(variable, value, callbackContext);               
+            return true;
+        } else if (DISPATCH.equals(action)) {
+            this.dispatch(callbackContext);               
+            return true;            
         } else if (DEBUG_MODE.equals(action)) {
             this.debugMode(callbackContext);
         } else if (ENABLE_UNCAUGHT_EXCEPTION_REPORTING.equals(action)) {
@@ -370,6 +380,25 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         tracker.enableAdvertisingIdCollection(enable);
         callbackContext.success("Enable Advertising Id Collection: " + enable);
     }
+
+    private void setVar(String variable, String value, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        String result = tracker.set(variable, value);
+        callbackContext.success("Set variable " + variable + "to " + value);
+    }  
+    private void dispatch(CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        GoogleAnalytics.getInstance(this.cordova.getActivity()).dispatchLocalHits();
+        callbackContext.success("dispatch sent");
+    }     
 
     private void getVar(String variable, CallbackContext callbackContext) {
         if (!trackerStarted) {

@@ -100,6 +100,13 @@ To get a specific variable using this key list https://developers.google.com/ana
 for example to get campaign name:
 * `window.ga.getVar('cn', function(result){ console.log(result);})`
 
+To set a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
+for example to set session control:
+* `window.ga.setVar('sc', 'end', function(result){ console.log(result);})`
+
+To manually dispatch any data (this is not implemented in browser platform):
+* `window.ga.dispatch()`
+
 To set a anonymize Ip address:
 * `window.ga.setAnonymizeIp(true)`
 
