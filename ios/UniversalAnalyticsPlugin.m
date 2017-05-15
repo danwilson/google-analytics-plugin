@@ -13,6 +13,15 @@
     _debugMode = false;
     _trackerStarted = false;
     _customDimensions = nil;
+
+    NSString* setting;
+    setting = @"GoogleAnalyticsTrackUncaughtExceptions";
+    if ([self settingForKey:setting]) {
+        BOOL trackUncaught = [(NSNumber*)[self settingForKey:setting] boolValue];
+        if (trackUncaught) {
+            [[GAI sharedInstance] setTrackUncaughtExceptions:YES];
+        }
+    }
 }
 
 - (void) startTrackerWithId: (CDVInvokedUrlCommand*)command
@@ -541,6 +550,11 @@
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
       [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
+}
+
+- (id) settingForKey: (NSString*)key
+{
+    return [self.commandDelegate.settings objectForKey:[key lowercaseString]];
 }
 
 @end
