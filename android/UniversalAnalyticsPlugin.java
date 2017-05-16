@@ -48,7 +48,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (START_TRACKER.equals(action)) {
             String id = args.getString(0);
-            int dispatchPeriod = args.length() > 1 ? args.getInt(1) : 30;
+            int dispatchPeriod = args.length() > 1 && !args.isNull(1) ? args.getInt(1) : 30;
             this.startTracker(id, dispatchPeriod, callbackContext);
             return true;
         } else if (TRACK_VIEW.equals(action)) {
