@@ -15,6 +15,8 @@
     <clobbers target="ga" />
   </js-module>
 
+  <dependency id="cordova-plugin-cocoapod-support"/>
+
   <platform name="browser">
     <js-module src="browser/UniversalAnalyticsProxy.js" name="UniversalAnalyticsProxy">
       <runs />
@@ -30,9 +32,13 @@
 
     <header-file src="ios/UniversalAnalyticsPlugin.h" />
     <source-file src="ios/UniversalAnalyticsPlugin.m" />
-    <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
-    <source-file src="ios/libAdIdAccess.a" framework="true" />
-    <header-file src="ios/GAIDictionaryBuilder.h" />
+
+    <pop name="Google/Analytics"/>
+    <pop name="GoogleIDFASupport"/>
+    
+    <!--<source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
+    <source-file src="ios/libAdIdAccess.a" framework="true" />-->
+    <!--<header-file src="ios/GAIDictionaryBuilder.h" />
     <header-file src="ios/GAIFields.h" />
     <header-file src="ios/GAILogger.h" />
     <header-file src="ios/GAITrackedViewController.h" />
@@ -41,7 +47,7 @@
     <header-file src="ios/GAIEcommerceFields.h" />
     <header-file src="ios/GAIEcommerceProduct.h" />
     <header-file src="ios/GAIEcommerceProductAction.h" />
-    <header-file src="ios/GAIEcommercePromotion.h" />
+    <header-file src="ios/GAIEcommercePromotion.h" />-->
 
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
