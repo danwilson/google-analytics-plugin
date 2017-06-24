@@ -77,8 +77,8 @@
         }
         
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-        NSString* parameter = [command.arguments objectAtIndex:0];
-        NSString* result = [tracker get:parameter];   
+        NSString* parameterName = [command.arguments objectAtIndex:0];
+        NSString* result = [tracker get:parameterName];   
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];             
