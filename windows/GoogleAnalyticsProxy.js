@@ -211,6 +211,7 @@ module.exports = {
         }
 
         _customDimensions[args[0]] = args[1];
+        win();
     },
 
     addTransaction: function(win, fail, args) {
