@@ -61,6 +61,26 @@ function parseHit(hit) {
     return result;
 }
 
+function uncaughtExceptionHandler(err) {
+    console.error(err);
+    try {
+        var hit = GoogleAnalytics.HitBuilder.createException(err.message, true);
+
+        // add previously added custom dimensions
+        for (var key in _customDimensions) {
+            if (_customDimensions.hasOwnProperty(key)) {
+                hit = hit.setCustomDimension(key, _customDimensions[key]);
+            }
+        }
+
+        const data = hit.build();
+        getTracker().send(data);
+    } catch (ex) {
+        console.error(ex);
+    }
+    return true;
+}
+
 module.exports = {
 
     setOptOut: function(win, fail, args) {
@@ -79,7 +99,18 @@ module.exports = {
             return;
         }
 
+        // set analytics property
         getAnalyticsManager().reportUncaughtExceptions = args[0];
+
+        // hook global javascript error handler
+        if (WinJS && WinJS.Application && typeof WinJS.Application.addEventListener === "function") {
+            if (args[0]) {
+                WinJS.Application.addEventListener('error', uncaughtExceptionHandler);
+            } else {
+                WinJS.Application.removeEventListener('error', uncaughtExceptionHandler);
+            }
+        }
+
         win();
     },
 
@@ -184,17 +215,26 @@ module.exports = {
     },
 
     trackMetric: function(win, fail, args) {
-        if (!args || args.length === 0 || !Number.isInteger(args[0]) || args[0] < 0) {
+        if (!args || args.length === 0) {
+            fail("Expected positive numeric integer argument");
+            return;
+        }
+        const key = Number.parseInt(args[0]);
+        if (Number.isNaN(key) || key < 0) {
             fail("Expected positive numeric integer argument");
             return;
         }
 
-        if (args.length < 2 || !Number.isInteger(args[1])) {
+        var metric = Number.NaN;
+        if (args.length >= 2) {
+            metric = Number.parseFloat(String(args[1]));
+        }
+        if (Number.isNaN(metric)) {
             fail("Expected numeric integer argument");
             return;
         }
 
-        const data = GoogleAnalytics.HitBuilder.createScreenView().setCustomMetric(args[0], args[1]).build();
+        const data = GoogleAnalytics.HitBuilder.createScreenView().setCustomMetric(key, metric).build();
         getTracker().send(data);
         win();
     },
@@ -230,7 +270,7 @@ module.exports = {
             return;
         }
 
-        let hit = GoogleAnalytics.HitBuilder.createScreenView(args[0]);
+        var hit = GoogleAnalytics.HitBuilder.createScreenView(args[0]);
         
         // add previously added custom dimensions
         for (var key in _customDimensions) {
@@ -263,7 +303,7 @@ module.exports = {
             return;
         }
 
-        let hit = GoogleAnalytics.HitBuilder.createCustomEvent(args[0], args[1], args[2] || null, args[3] || 0);
+        var hit = GoogleAnalytics.HitBuilder.createCustomEvent(args[0], args[1], args[2] || null, args[3] || 0);
 
         // add previously added custom dimensions
         for (var key in _customDimensions) {
@@ -284,7 +324,7 @@ module.exports = {
         }
 
         const fatal = ((args[1] || false) === true);
-        let hit = GoogleAnalytics.HitBuilder.createException(args[0], fatal);
+        var hit = GoogleAnalytics.HitBuilder.createException(args[0], fatal);
 
         // add previously added custom dimensions
         for (var key in _customDimensions) {
@@ -314,7 +354,7 @@ module.exports = {
             return;
         }
 
-        let hit = GoogleAnalytics.HitBuilder.createTiming(args[0], args[2] || null, 
+        var hit = GoogleAnalytics.HitBuilder.createTiming(args[0], args[2] || null, 
                         args[1] || 0, args[3] || null);
 
         // add previously added custom dimensions
