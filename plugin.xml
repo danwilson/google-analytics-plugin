@@ -96,4 +96,26 @@
     <source-file src="wp8/PhoneNameResolver.cs" />
     <source-file src="wp8/PlatformInfoProvider.WP.cs" />
   </platform>
+
+  <!-- windows -->
+  <platform name="windows">
+    <js-module src="windows/GoogleAnalyticsProxy.js" name="UniversalAnalyticsPlugin">
+        <runs />
+    </js-module>
+
+    <config-file target="package.windows10.appxmanifest" parent="/Package/Capabilities" versions=">=10.0" device-target="win">
+        <Capability Name="internetClient" />
+    </config-file>
+    <config-file target="package.windows.appxmanifest" parent="/Package/Capabilities" versions=">=8.1.0" device-target="win">
+        <Capability Name="internetClient" />
+    </config-file>
+    <config-file target="package.phone.appxmanifest" parent="/Package/Capabilities" versions=">=8.1.0" device-target="phone">
+        <Capability Name="internetClientServer" />
+    </config-file>
+
+    <info>
+      You need to install Windows SDK for Google Analytics™ (UWP.SDKforGoogleAnalytics.Native) via nuget package manager
+      and set target to either x86 or x64!
+    </info>
+  </platform>
 </plugin>
