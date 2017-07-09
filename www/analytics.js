@@ -51,7 +51,16 @@ UniversalAnalyticsPlugin.prototype.debugMode = function(success, error) {
 };
 
 UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
+  // as key was formerly documented to be of type string, 
+  // we need to at least accept string formatted numbers and pass the converted number
+  var numberKey = key;
+  if (typeof key === "string") {
+    numberKey = Number.parseInt(key);
+    if (isNaN(numberKey)) {
+      throw Error("key must be a valid integer or string formatted integer");
+    }
+  }
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [numberKey, value]);
 };
 
 UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaignUrl, newSession, success, error) {

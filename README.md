@@ -73,7 +73,18 @@ To track an Event and create a new session:
 * `window.ga.trackEvent('Category', 'Action', 'Label', Value, true)` Label, Value and newSession are optional, Value is numeric, newSession is true/false
 
 To track custom metrics:
-* `window.ga.trackMetric('key', Value)` Value is optional
+* `window.ga.trackMetric(Key, 'Value')`
+* Key should be integer index of the dimension i.e. send `1` instead of `metric1` for the first custom metric you are tracking,
+* Value will be parsed as an integer, or a fixed point decimal value, if the metric is configured to a currency type in the analytics backend.
+* e.g. `window.ga.trackMetric(1, 'Value', success, error)`
+* trackMetric doesn't actually send a hit, it's behaving more like an addCustomMetric method (see `addCustomDimension()`).
+* The metric is then added to every hit (view, event, error, etc...) sent, but the defined scope of the custom metric in analytics backend
+(hit or product) will determine, at processing time, which hits are associated with the metric value.
+* **Issue for Ionic 2** users: currently `@ionic-native/google-analytics` defines the typescript signature with `trackMetric(key: string, value?: any)`.
+So be aware to pass the metric index as a string formatted integer and a non empty string as a value, like `window.ga.trackMetric('1', 'Value', success, error)`!
+* **Issue for Windows platform**: there is currently a bug in version 1.5.2 of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native),
+that for metrics the wrong data specifier `cd` is taken, whereas `cm` should be the correct specifier.
+So as long as this bug is not fixed, trackMetrics will overwrite previous addCustomDimension with same index!!
 
 To track an Exception:
 * `window.ga.trackException('Description', Fatal)` where Fatal is boolean
@@ -88,9 +99,11 @@ To add a Transaction Item (Ecommerce)
 * `window.ga.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')` where Price and Quantity are numeric
 
 To add a Custom Dimension
-* `window.ga.addCustomDimension('Key', 'Value', success, error)`
-* Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking.
-* e.g. `window.ga.addCustomDimension(1, 'Value', success, error)`
+* `window.ga.addCustomDimension(Key, 'Value', success, error)`
+* Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking,
+e.g. `window.ga.addCustomDimension(1, 'Value', success, error)`.
+* The dimension is then added to every hit (view, event, error, etc...) sent, but the defined scope of the custom dimension in analytics backend
+(hit or product) will determine, at processing time, which hits are associated with the dimension value.
 
 To set a UserId:
 * `window.ga.setUserId('my-user-id')`
