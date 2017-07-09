@@ -411,7 +411,12 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     }    
 
     private void debugMode(CallbackContext callbackContext) {
-        GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
+        // GAv4 Logger is deprecated!
+        // GoogleAnalytics.getInstance(this.cordova.getActivity()).getLogger().setLogLevel(LogLevel.VERBOSE);
+        
+        // To enable verbose logging execute "adb shell setprop log.tag.GAv4 DEBUG"
+        // and then "adb logcat -v time -s GAv4" to inspect log entries.
+        GoogleAnalytics.getInstance(this.cordova.getActivity()).setDryRun(true);
 
         this.debugModeEnabled = true;
         callbackContext.success("debugMode enabled");
