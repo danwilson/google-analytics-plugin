@@ -60,7 +60,16 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
       throw Error("key must be a valid integer or string formatted integer");
     }
   }
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [numberKey, value]);
+
+  // as google analytics sdk expects value of type string and internally converts it to type number,
+  // this plugin expects a number as value.
+  // all platform implementations expect value of type string,
+  // so value has to be casted to string type before calling the platform plugin.
+  var stringValue = value;
+  if (typeof value !== "string") {
+    stringValue = String(value);
+  }
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [numberKey, stringValue]);
 };
 
 UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaignUrl, newSession, success, error) {
