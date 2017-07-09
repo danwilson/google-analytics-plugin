@@ -32,7 +32,7 @@ declare class UniversalAnalyticsPlugin {
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Custom Metric */
-	public trackMetric(key:number, value:String, successCallback?:Function, errorCallback?:Function):void;
+	public trackMetric(key:number, value:number, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Screen (PageView) */
 	public trackView(screen:String, campaignUrl?:string, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
