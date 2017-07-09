@@ -120,8 +120,12 @@ window.ga.setOptOut(true)
 //To enabling Advertising Features in Google Analytics allows you to take advantage of Remarketing, Demographics & Interests reports, and more:
 window.ga.setAllowIDFACollection(true)
 
-//To enable verbose logging:
-window.ga.debugMode()
+To enable verbose logging:
+* `window.ga.debugMode()`
+* set's dry run mode on Android and Windows platform, so that all hits are only echoed back by the google analytics service and no actual hit is getting tracked!
+* **Android quirk**: verbose logging within javascript console is not supported. To see debug responses from analytics execute 
+`adb shell setprop log.tag.GAv4 DEBUG` and then `adb logcat -v time -s GAv4` to list messages 
+(see [Android SDK Documentation on deprected Logger class](https://developers.google.com/android/reference/com/google/android/gms/analytics/Logger))
 
 //To enable/disable automatic reporting of uncaught exceptions
 window.ga.enableUncaughtExceptionReporting(Enable, success, error)// where Enable is boolean
