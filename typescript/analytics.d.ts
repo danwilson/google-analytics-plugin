@@ -32,7 +32,7 @@ declare class UniversalAnalyticsPlugin {
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Custom Metric */
-	public trackMetric(key:number, value:String, successCallback?:Function, errorCallback?:Function):void;
+	public trackMetric(key:number, value:number, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Screen (PageView) */
 	public trackView(screen:String, campaignUrl?:string, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
@@ -47,16 +47,19 @@ declare class UniversalAnalyticsPlugin {
 		https://developers.google.com/analytics/devguides/collection/android/v3/exceptions */
 	public trackException(description:String, fatal:Boolean, successCallback?:Function, errorCallback?:Function):void;
 
+	/** Enable/disable automatic reporting of uncaught exceptions */
+	public enableUncaughtExceptionReporting(enable:Boolean, successCallback?:Function, errorCallback?:Function):void;
+
 	/** Track User Timing (App Speed) */
 	public trackTiming(category:String, intervalInMilliseconds?:Number, name?:String, label?:String, successCallback?:Function, errorCallback?:Function):void;
 
+	// Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
 	/** Add a Transaction (Google Analytics e-Ccommerce Tracking)
 		https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce */
 	public addTransaction(transactionId:String, affiliation:String, revenue:Number, tax:Number, shipping:Number, currencyCode:String, successCallback?:Function, errorCallback?:Function):void;
 
+	// Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
 	/** Add a Transaction Item (Ecommerce) */
 	public addTransactionItem(transactionId:String, name:String, sku:String, category:String, price:Number, quantity:Number, currencyCode:String, successCallback?:Function, errorCallback?:Function):void;
 
-	/** Enable/disable automatic reporting of uncaught exceptions */
-	public enableUncaughtExceptionReporting(enable:Boolean, successCallback?:Function, errorCallback?:Function):void;
 }

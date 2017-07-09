@@ -49,93 +49,92 @@ these wrapper interfaces don't have the new parameters at the time we did the ch
 
 v1.7.11 -- since this version there is back compatibility with the new and old parameters in the method `startTrackerWithId('UA-XXXX-YY', 30)` to avoid loading issues reported.
 
+v1.9.0 -- since this version the windows platform is supported.
 
 # JavaScript Usage
 
 **All the following methods accept optional success and error callbacks after all other available parameters.**
 
-In your 'deviceready' handler, set up your Analytics tracker:
-* `window.ga.startTrackerWithId('UA-XXXX-YY', 30)` where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
+```js
+//In your 'deviceready' handler, set up your Analytics tracker:
+window.ga.startTrackerWithId('UA-XXXX-YY', 30)
+//where UA-XXXX-YY is your Google Analytics Mobile App property and 30 is the dispatch period (optional)
 
-To track a Screen (PageView):
-* `window.ga.trackView('Screen Title')`
+//To track a Screen (PageView):
+window.ga.trackView('Screen Title')
 
-To track a Screen (PageView) w/ campaign details:
-* `window.ga.trackView('Screen Title', 'my-scheme://content/1111?utm_source=google&utm_campaign=my-campaign')`
+//To track a Screen (PageView) w/ campaign details:
+window.ga.trackView('Screen Title', 'my-scheme://content/1111?utm_source=google&utm_campaign=my-campaign')
 
-To track a Screen (PageView) and create a new session:
-* `window.ga.trackView('Screen Title', '', true)`
+//To track a Screen (PageView) and create a new session:
+window.ga.trackView('Screen Title', '', true)
 
-To track an Event:
-* `window.ga.trackEvent('Category', 'Action', 'Label', Value)` Label and Value are optional, Value is numeric
+//To track an Event:
+window.ga.trackEvent('Category', 'Action', 'Label', Value)// Label and Value are optional, Value is numeric
 
-To track an Event and create a new session:
-* `window.ga.trackEvent('Category', 'Action', 'Label', Value, true)` Label, Value and newSession are optional, Value is numeric, newSession is true/false
+//To track an Event and create a new session:
+window.ga.trackEvent('Category', 'Action', 'Label', Value, true)// Label, Value and newSession are optional, Value is numeric, newSession is true/false
 
-To track custom metrics:
-* `window.ga.trackMetric(Key, 'Value')`
-* Key should be integer index of the dimension i.e. send `1` instead of `metric1` for the first custom metric you are tracking,
-* Value will be parsed as an integer, or a fixed point decimal value, if the metric is configured to a currency type in the analytics backend.
-* e.g. `window.ga.trackMetric(1, 'Value', success, error)`
-* trackMetric doesn't actually send a hit, it's behaving more like an addCustomMetric method (see `addCustomDimension()`).
-* The metric is then added to every hit (view, event, error, etc...) sent, but the defined scope of the custom metric in analytics backend
-(hit or product) will determine, at processing time, which hits are associated with the metric value.
-* **Issue for Ionic 2** users: currently `@ionic-native/google-analytics` defines the typescript signature with `trackMetric(key: string, value?: any)`.
-So be aware to pass the metric index as a string formatted integer and a non empty string as a value, like `window.ga.trackMetric('1', 'Value', success, error)`!
-* **Issue for Windows platform**: there is currently a bug in version 1.5.2 of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native),
-that for metrics the wrong data specifier `cd` is taken, whereas `cm` should be the correct specifier.
-So as long as this bug is not fixed, trackMetrics will overwrite previous addCustomDimension with same index!!
+//To track custom metrics:
+//(trackMetric doesn't actually send a hit, it's behaving more like the addCustomDimension() method.
+// The metric is afterwards added to every hit (view, event, error, etc...) sent, but the defined scope of the custom metric in analytics backend
+//   (hit or product) will determine, at processing time, which hits are associated with the metric value.)
+window.ga.trackMetric(key, Value)// Key and value are numeric type, Value is optional
 
-To track an Exception:
-* `window.ga.trackException('Description', Fatal)` where Fatal is boolean
+//To track an Exception:
+window.ga.trackException('Description', Fatal)//where Fatal is boolean
 
-To track User Timing (App Speed):
-* `window.ga.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label')` where IntervalInMilliseconds is numeric
+//To track User Timing (App Speed):
+window.ga.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label') // where IntervalInMilliseconds is numeric
 
-To add a Transaction (Ecommerce)
-* `window.ga.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')` where Revenue, Tax, and Shipping are numeric
+//To add a Transaction (Ecommerce) -- Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
+window.ga.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')// where Revenue, Tax, and Shipping are numeric
 
-To add a Transaction Item (Ecommerce)
-* `window.ga.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')` where Price and Quantity are numeric
+//To add a Transaction Item (Ecommerce) -- Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
+window.ga.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')// where Price and Quantity are numeric
 
-To add a Custom Dimension
-* `window.ga.addCustomDimension(Key, 'Value', success, error)`
-* Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking,
-e.g. `window.ga.addCustomDimension(1, 'Value', success, error)`.
-* The dimension is then added to every hit (view, event, error, etc...) sent, but the defined scope of the custom dimension in analytics backend
-(hit or product) will determine, at processing time, which hits are associated with the dimension value.
+//To add a Custom Dimension
+//(The dimension is afterwards added to every hit (view, event, error, etc...) sent, but the defined scope of the custom dimension in analytics backend
+//   (hit or product) will determine, at processing time, which hits are associated with the dimension value.)
+window.ga.addCustomDimension(Key, 'Value', success, error)
+//Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking. e.g. `window.ga.addCustomDimension(1, 'Value', success, error)`
 
-To set a UserId:
-* `window.ga.setUserId('my-user-id')`
+//To set a UserId:
+window.ga.setUserId('my-user-id')
 
-To set a specific app version:
-* `window.ga.setAppVersion('1.33.7')`
+//To set a specific app version:
+window.ga.setAppVersion('1.33.7')
 
-To get a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
-for example to get campaign name:
-* `window.ga.getVar('cn', function(result){ console.log(result);})`
+//To get a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
+//for example to get campaign name:
+window.ga.getVar('cn', function(result){ console.log(result);})
 
-To set a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
-for example to set session control:
-* `window.ga.setVar('sc', 'end', function(result){ console.log(result);})`
+//To set a specific variable using this key list https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters:
+//for example to set session control:
+window.ga.setVar('sc', 'end', function(result){ console.log(result);})
 
-To manually dispatch any data (this is not implemented in browser platform):
-* `window.ga.dispatch()`
+//To manually dispatch any data (this is not implemented in browser platform):
+window.ga.dispatch()
 
-To set a anonymize Ip address:
-* `window.ga.setAnonymizeIp(true)`
+//To set a anonymize Ip address:
+window.ga.setAnonymizeIp(true)
 
-To set Opt-out:
-* `window.ga.setOptOut(true)`
+//To set Opt-out:
+window.ga.setOptOut(true)
 
-To enabling Advertising Features in Google Analytics allows you to take advantage of Remarketing, Demographics & Interests reports, and more:
-* `window.ga.setAllowIDFACollection(true)`
+//To enabling Advertising Features in Google Analytics allows you to take advantage of Remarketing, Demographics & Interests reports, and more:
+window.ga.setAllowIDFACollection(true)
 
 To enable verbose logging:
-* `window.ga.debugMode()`
+window.ga.debugMode()
+// set's dry run mode on Android and Windows platform, so that all hits are only echoed back by the google analytics service and no actual hit is getting tracked!
+// **Android quirk**: verbose logging within javascript console is not supported. To see debug responses from analytics execute 
+// `adb shell setprop log.tag.GAv4 DEBUG` and then `adb logcat -v time -s GAv4` to list messages 
+// (see [Android SDK Documentation on deprected Logger class](https://developers.google.com/android/reference/com/google/android/gms/analytics/Logger))
 
-To enable/disable automatic reporting of uncaught exceptions
-* `window.ga.enableUncaughtExceptionReporting(Enable, success, error)` where Enable is boolean
+//To enable/disable automatic reporting of uncaught exceptions
+window.ga.enableUncaughtExceptionReporting(Enable, success, error)// where Enable is boolean
+```
 
 # Example use ionic 2 (Ionic Native)
 ```shell
@@ -162,6 +161,9 @@ import { Platform } from 'ionic-angular';
     });
   }
 ```
+
+**Issue for using trackMetric in Ionic 2**: currently `@ionic-native/google-analytics` defines the typescript signature with `trackMetric(key: string, value?: any)`.
+So be aware to pass the metric index as a string formatted integer and a non empty string as a value, like `window.ga.trackMetric('1', 'Value', success, error)`!
 
 # Installing Without the CLI <a name="nocli"></a>
 
@@ -225,6 +227,9 @@ The following plugin methods are (currently) not supported by the UWP.SDKforGoog
 * `addTransaction()`
 * `addTransactionItem()`
 
-Unexpected behaviour my occur on the following methods:
+Unexpected behaviour may occur on the following methods:
 * `trackView()`: campaign details are currently not supported and therefore not tracked.
+* `trackMetric()`: there is currently a bug in version 1.5.2 of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native),
+that the wrong data specifier `cd` is taken for metrics, whereas `cm` should be the correct specifier.
+So as long as this bug is not fixed, trackMetrics will overwrite previous addCustomDimension with same index!!
 
