@@ -61,10 +61,9 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
     }
   }
 
-  // as google analytics sdk expects value of type string and internally converts it to type number,
-  // this plugin expects a number as value.
-  // all platform implementations expect value of type string,
-  // so value has to be casted to string type before calling the platform plugin.
+  // as value was formerly documented to be of type string
+  // and therefore platform implementations expect value parameter of type string,
+  // we need to cast the value parameter to string - although gathered metrics are infact number types.
   var stringValue = value;
   if (typeof value !== "string") {
     stringValue = String(value);
