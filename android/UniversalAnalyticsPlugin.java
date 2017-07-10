@@ -41,7 +41,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public Boolean trackerStarted = false;
     public Boolean debugModeEnabled = false;
     public HashMap<Integer, String> customDimensions = new HashMap<Integer, String>();
-    public HashMap<Integer, String> customMetrics = new HashMap<Integer, String>();
+    public HashMap<Integer, Float> customMetrics = new HashMap<Integer, Float>();
 
     public Tracker tracker;
 
@@ -180,7 +180,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
     private <T> void addCustomDimensionsAndMetricsToHitBuilder(T builder) {
         //unfortunately the base HitBuilders.HitBuilder class is not public, therefore have to use reflection to use
-        //the common setCustomDimension (int index, String dimension) and setCustomMetrics (int index, String dimension) methods
+        //the common setCustomDimension (int index, String dimension) and setCustomMetrics (int index, Float metric) methods
         try {
             Method builderMethod = builder.getClass().getMethod("setCustomDimension", Integer.TYPE, String.class);
 
@@ -199,11 +199,11 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
 
         try {
-            Method builderMethod = builder.getClass().getMethod("setCustomMetric", Integer.TYPE, String.class);
+            Method builderMethod = builder.getClass().getMethod("setCustomMetric", Integer.TYPE, Float.TYPE);
 
-            for (Entry<Integer, String> entry : customMetrics.entrySet()) {
+            for (Entry<Integer, Float> entry : customMetrics.entrySet()) {
                 Integer key = entry.getKey();
-                String value = entry.getValue();
+                Float value = entry.getValue();
                 try {
                     builderMethod.invoke(builder, (key), value);
                 } catch (IllegalArgumentException e) {
@@ -288,7 +288,15 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             return;
         }
 
-        customMetrics.put(key, value);
+        Float floatValue;
+        try {
+            floatValue = Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            callbackContext.error("Expected string formatted number for value.");
+            return;
+        }
+
+        customMetrics.put(key, floatValue);
         callbackContext.success("custom metric started");
     }
 
