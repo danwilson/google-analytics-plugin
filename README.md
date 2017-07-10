@@ -79,7 +79,7 @@ window.ga.trackEvent('Category', 'Action', 'Label', Value, true)// Label, Value 
 //(trackMetric doesn't actually send a hit, it's behaving more like the addCustomDimension() method.
 // The metric is afterwards added to every hit (view, event, error, etc...) sent, but the defined scope of the custom metric in analytics backend
 //   (hit or product) will determine, at processing time, which hits are associated with the metric value.)
-window.ga.trackMetric(key, Value)// Key and value are numeric type, Value is optional
+window.ga.trackMetric(Key, Value) // Key and value are numeric type
 
 //To track an Exception:
 window.ga.trackException('Description', Fatal)//where Fatal is boolean
@@ -130,7 +130,7 @@ window.ga.debugMode()
 // set's dry run mode on Android and Windows platform, so that all hits are only echoed back by the google analytics service and no actual hit is getting tracked!
 // **Android quirk**: verbose logging within javascript console is not supported. To see debug responses from analytics execute 
 // `adb shell setprop log.tag.GAv4 DEBUG` and then `adb logcat -v time -s GAv4` to list messages 
-// (see [Android SDK Documentation on deprected Logger class](https://developers.google.com/android/reference/com/google/android/gms/analytics/Logger))
+// (see https://developers.google.com/android/reference/com/google/android/gms/analytics/Logger)
 
 //To enable/disable automatic reporting of uncaught exceptions
 window.ga.enableUncaughtExceptionReporting(Enable, success, error)// where Enable is boolean
