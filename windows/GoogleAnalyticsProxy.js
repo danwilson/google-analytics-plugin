@@ -235,13 +235,25 @@ module.exports = {
             fail("Expected positive numeric integer argument");
             return;
         }
-
-        if (args.length < 1 || args[2] === "") {
-            fail("Expected non empty string argument");
+        
+        if (args.length < 1) {
+            fail("Expected second argument");
             return;
+        }        
+        var value = args[1];
+        if (typeof args[1] !== "number") {
+            if (typeof args[1] !== "string") {
+                fail("Expected either numeric or string formatted number argument");
+                return;
+            }
+            value = Number.parseFloat(args[1]);
+            if (isNaN(value)) {
+                fail("Expected either numeric or string formatted number argument");
+                return;
+            }
         }
 
-        _customMetrics[args[0]] = args[1];
+        _customMetrics[args[0]] = value;
         win();
     },
 
@@ -251,7 +263,7 @@ module.exports = {
             return;
         }
 
-        if (args.length < 1 || args[2] === "") {
+        if (args.length < 1 || args[1] === "") {
             fail("Expected non empty string argument");
             return;
         }
