@@ -86,7 +86,7 @@ function addCustomDimensionsAndMetrics(hitBuilder) {
                 hitBuilder = hitBuilder.setCustomDimension(key, _customDimensions[key]);
             }
         }
-        
+
         // add previously added custom metrics
         for (var key in _customMetrics) {
             if (_customMetrics.hasOwnProperty(key)) {
@@ -235,26 +235,28 @@ module.exports = {
             fail("Expected positive numeric integer argument");
             return;
         }
-        
-        if (args.length < 1) {
-            fail("Expected second argument");
-            return;
-        }        
-        var value = args[1];
-        if (typeof args[1] !== "number") {
-            if (typeof args[1] !== "string") {
-                fail("Expected either numeric or string formatted number argument");
-                return;
-            }
-            value = Number.parseFloat(args[1]);
-            if (isNaN(value)) {
-                fail("Expected either numeric or string formatted number argument");
-                return;
-            }
-        }
 
-        _customMetrics[args[0]] = value;
-        win();
+        if (args.length < 1 || args[1] === null || typeof args[1] === "undefined" || args[1] === "") {
+            // unset metric
+            delete _customMetrics[args[0]];
+            win("custom metric stopped");
+        } else {
+            var value = args[1];
+            if (typeof args[1] !== "number") {
+                if (typeof args[1] !== "string") {
+                    fail("Expected either numeric or string formatted number argument");
+                    return;
+                }
+                value = Number.parseFloat(args[1]);
+                if (isNaN(value)) {
+                    fail("Expected either numeric or string formatted number argument");
+                    return;
+                }
+            }
+
+            _customMetrics[args[0]] = value;
+            win("custom metric started");
+        }
     },
 
     addCustomDimension: function (win, fail, args) {
@@ -263,13 +265,14 @@ module.exports = {
             return;
         }
 
-        if (args.length < 1 || args[1] === "") {
-            fail("Expected non empty string argument");
-            return;
+        if (args.length < 1 || args[1] === null || typeof args[1] === "undefined" || args[1] === "") {
+            // unset dimension
+            delete _customDimensions[args[0]];
+            win("custom dimension stopped");
+        } else {
+            _customDimensions[args[0]] = args[1];
+            win("custom dimension started");
         }
-
-        _customDimensions[args[0]] = args[1];
-        win();
     },
 
     addTransaction: function (win, fail, args) {

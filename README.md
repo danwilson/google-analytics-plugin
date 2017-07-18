@@ -79,7 +79,7 @@ window.ga.trackEvent('Category', 'Action', 'Label', Value, true)// Label, Value 
 //(trackMetric doesn't actually send a hit, it's behaving more like the addCustomDimension() method.
 // The metric is afterwards added to every hit (view, event, error, etc...) sent, but the defined scope of the custom metric in analytics backend
 //   (hit or product) will determine, at processing time, which hits are associated with the metric value.)
-window.ga.trackMetric(Key, Value) // Key and value are numeric type
+window.ga.trackMetric(Key, Value) // Key and value are numeric type, Value is optional (omit value to unset metric)
 
 //To track an Exception:
 window.ga.trackException('Description', Fatal)//where Fatal is boolean
@@ -98,6 +98,7 @@ window.ga.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, '
 //   (hit or product) will determine, at processing time, which hits are associated with the dimension value.)
 window.ga.addCustomDimension(Key, 'Value', success, error)
 //Key should be integer index of the dimension i.e. send `1` instead of `dimension1` for the first custom dimension you are tracking. e.g. `window.ga.addCustomDimension(1, 'Value', success, error)`
+//Use empty string as value to unset custom dimension.
 
 //To set a UserId:
 window.ga.setUserId('my-user-id')
