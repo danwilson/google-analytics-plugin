@@ -32,7 +32,7 @@ declare class UniversalAnalyticsPlugin {
 	public debugMode(successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Custom Metric */
-	public trackMetric(key:number, value:number, successCallback?:Function, errorCallback?:Function):void;
+	public trackMetric(key:number, value?:number, successCallback?:Function, errorCallback?:Function):void;
 
 	/** Track a Screen (PageView) */
 	public trackView(screen:String, campaignUrl?:string, newSession?:boolean, successCallback?:Function, errorCallback?:Function):void;
@@ -61,5 +61,11 @@ declare class UniversalAnalyticsPlugin {
 	// Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
 	/** Add a Transaction Item (Ecommerce) */
 	public addTransactionItem(transactionId:String, name:String, sku:String, category:String, price:Number, quantity:Number, currencyCode:String, successCallback?:Function, errorCallback?:Function):void;
+
+	public addImpression(screamName:String, product:Any, successCallback?:Function, errorCallback?:Function):void;
+
+	public productAction(screamName:String, product:Any, successCallback?:Function, errorCallback?:Function):void;
+
+	public addPromotion(action:String, promotion:Any, label?:String, category?:String, successCallback?:Function, errorCallback?:Function):void;
 
 }

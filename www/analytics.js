@@ -51,7 +51,24 @@ UniversalAnalyticsPlugin.prototype.debugMode = function(success, error) {
 };
 
 UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
+  // as key was formerly documented to be of type string, 
+  // we need to at least accept string formatted numbers and pass the converted number
+  var numberKey = key;
+  if (typeof key === "string") {
+    numberKey = Number.parseInt(key);
+    if (isNaN(numberKey)) {
+      throw Error("key must be a valid integer or string formatted integer");
+    }
+  }
+
+  // as value was formerly documented to be of type string
+  // and therefore platform implementations expect value parameter of type string,
+  // we need to cast the value parameter to string - although gathered metrics are infact number types.
+  var stringValue = value || "";
+  if (typeof stringValue !== "string") {
+    stringValue = String(value);
+  }
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [numberKey, stringValue]);
 };
 
 UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaignUrl, newSession, success, error) {
@@ -109,6 +126,11 @@ UniversalAnalyticsPlugin.prototype.trackTiming = function(category, intervalInMi
   cordova.exec(success, error, 'UniversalAnalytics', 'trackTiming', [category, intervalInMilliseconds, name, label]);
 };
 
+/* automatic uncaught exception tracking */
+UniversalAnalyticsPlugin.prototype.enableUncaughtExceptionReporting = function (enable, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'enableUncaughtExceptionReporting', [enable]);
+};
+
 /* Google Analytics e-Commerce Tracking */
 /* https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce */
 UniversalAnalyticsPlugin.prototype.addTransaction = function(transactionId, affiliation, revenue, tax, shipping, currencyCode, success, error) {
@@ -119,9 +141,70 @@ UniversalAnalyticsPlugin.prototype.addTransactionItem = function(transactionId, 
   cordova.exec(success, error, 'UniversalAnalytics', 'addTransactionItem', [transactionId, name ,sku, category, price, quantity, currencyCode]);
 };
 
-/* automatic uncaught exception tracking */
-UniversalAnalyticsPlugin.prototype.enableUncaughtExceptionReporting = function (enable, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'enableUncaughtExceptionReporting', [enable]);
+/**
+Enhanced Ecommerce Tracking
+https://developers.google.com/analytics/devguides/collection/android/v4/enhanced-ecommerce
+
+Enhanced ecommerce enables the measurement of user interactions with products across the user's shopping experience, which include product impressions, product clicks, viewing product details, adding a product to a shopping cart, initiating the checkout process, transactions, and refunds.
+
+Product definition:
+var product = {};
+product.id = "P12345";
+product.name = "Android Warhol T-Shirt";
+product.category = "Apparel/T-Shirts";
+product.brand = "Google";
+product.variant = "Black";
+product.position = 1;
+product.customDimension = [1, "Member"];
+product.customMetric = [1, 12];
+product.price = 10.00;
+product.quantity = 10;
+product.couponCode = '123AEV'
+
+Product Action definitions:
+ACTION_ADD Action to use when a product is added to the cart.
+ACTION_CHECKOUT Action to use for hits with checkout data.
+ACTION_CHECKOUT_OPTION Action to be used for supplemental checkout data that needs to be provided after a checkout hit.
+ACTION_CHECKOUT_OPTIONS This constant was deprecated. Use ACTION_CHECKOUT_OPTION instead.
+ACTION_CLICK Action to use when the user clicks on a set of products.
+ACTION_DETAIL Action to use when the user views detailed descriptions of products.
+ACTION_PURCHASE Action that is used to report all the transaction data to GA.
+ACTION_REFUND Action to use while reporting refunded transactions to GA.
+ACTION_REMOVE Action to use when a product is removed from the cart.
+
+var productAction = {};
+productAction.action = "ACTION_PURCHASE";
+productAction.transactionId = "TT-1234";
+productAction.transactionRevenue = 3.14;
+productAction.transactionCouponCode = "EXTRA100";
+productAction.transactionShipping = 2.03;
+productAction.transactionTax = 1.02;
+productAction.checkoutOptions = "";
+productAction.checkoutStep = 1;
+productAction.transactionAffiliation = "";
+
+Promotion definitions:
+ACTION_CLICK Action to use when the user clicks/taps on a promotion.
+ACTION_VIEW Action to use when the user views a promotion.
+
+var promotion = {};
+promotion.id = "PROMO-ID1234";
+promotion.name = "mypromo";
+promotion.position = "position";
+promotion.creative = "creative";
+*/
+UniversalAnalyticsPlugin.prototype.addImpression = function(screamName, product, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addImpression', [screamName, product]);
 };
+
+UniversalAnalyticsPlugin.prototype.productAction = function(screamName, product, productAction, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screamName, product, productAction]);
+};
+
+UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, label, category, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, label, category]);
+};
+
+//TODO add promotion impresion
 
 module.exports = new UniversalAnalyticsPlugin();
