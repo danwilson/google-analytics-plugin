@@ -569,7 +569,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("impresion action executed");                   
     }
 
-    private void productAction(String screenName, JSONObject productInput, String productActionInput, CallbackContext callbackContext) {
+    private void productAction(String screenName, JSONObject productInput, JSONObject productActionInput, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;
