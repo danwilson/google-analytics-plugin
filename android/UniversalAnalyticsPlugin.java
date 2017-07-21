@@ -4,6 +4,9 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
+import com.google.android.gms.analytics.ecommerce.Promotion;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -577,7 +580,8 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             .setProductAction(productAction);
 
         tracker.setScreenName("transaction");
-        tracker.send(builder.build());          
+        tracker.send(builder.build());     
+
         callbackContext.success("product action executed");      
     }
     
