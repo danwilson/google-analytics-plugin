@@ -129,7 +129,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.productAction(args.getString(0), args.getJSONObject(1), args.getString(2), callbackContext);
             return true;
         } else if (ADD_PROMOTION.equals(action)) {
-            this.addPromotion(args.getString(0), args.getJSONObject(1), callbackContext);
+            this.addPromotion(args.getString(0), args.getJSONObject(1), 
+                                    length > 2 ? args.getString(2) : "", 
+                                    length > 3 ? args.getString(3) : "",callbackContext);
             return true;
         } else if (SET_ALLOW_IDFA_COLLECTION.equals(action)) {
             this.setAllowIDFACollection(args.getBoolean(0), callbackContext);
@@ -410,7 +412,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             // do nothing
         }
         try {
-            product.setPosition(productInput.getString("postition"));
+            product.setPosition(productInput.getInt("postition"));
         } catch (JSONException ex) {
             // do nothing
         }
@@ -450,26 +452,26 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
      *   ACTION_REFUND Action to use while reporting refunded transactions to GA.
      *   ACTION_REMOVE Action to use when a product is removed from the cart.
      */
-    private Product checkProductAction(JSONObject productActionInput) {
+    private ProductAction checkProductAction(JSONObject productActionInput) {
         ProductAction productAction = null;
         try {        
-            if(productActionInput.getString("action").equal("ACTION_ADD")) {
+            if(productActionInput.getString("action").equals("ACTION_ADD")) {
                 productAction = new ProductAction(ProductAction.ACTION_ADD);
-            } else if(productActionInput.getString("action").equal("ACTION_CHECKOUT")) {
+            } else if(productActionInput.getString("action").equals("ACTION_CHECKOUT")) {
                 productAction = new ProductAction(ProductAction.ACTION_CHECKOUT);
-            } else if(productActionInput.getString("action").equal("ACTION_CHECKOUT_OPTION")) {
+            } else if(productActionInput.getString("action").equals("ACTION_CHECKOUT_OPTION")) {
                 productAction = new ProductAction(ProductAction.ACTION_CHECKOUT_OPTION);
-            } else if(productActionInput.getString("action").equal("ACTION_CHECKOUT_OPTIONS")) {
+            } else if(productActionInput.getString("action").equals("ACTION_CHECKOUT_OPTIONS")) {
                 productAction = new ProductAction(ProductAction.ACTION_CHECKOUT_OPTIONS);
-            } else if(productActionInput.getString("action").equal("ACTION_CLICK")) {
+            } else if(productActionInput.getString("action").equals("ACTION_CLICK")) {
                 productAction = new ProductAction(ProductAction.ACTION_CLICK);
-            } else if(productActionInput.getString("action").equal("ACTION_DETAIL")) {
+            } else if(productActionInput.getString("action").equals("ACTION_DETAIL")) {
                 productAction = new ProductAction(ProductAction.ACTION_DETAIL);
-            } else if(productActionInput.getString("action").equal("ACTION_PURCHASE")) {
+            } else if(productActionInput.getString("action").equals("ACTION_PURCHASE")) {
                 productAction = new ProductAction(ProductAction.ACTION_PURCHASE);
-            } else if(productActionInput.getString("action").equal("ACTION_REFUND")) {
+            } else if(productActionInput.getString("action").equals("ACTION_REFUND")) {
                 productAction = new ProductAction(ProductAction.ACTION_REFUND);
-            } else if(productActionInput.getString("action").equal("ACTION_REMOVE")) {
+            } else if(productActionInput.getString("action").equals("ACTION_REMOVE")) {
                 productAction = new ProductAction(ProductAction.ACTION_REMOVE);
             }
         } catch (JSONException ex) {
@@ -524,7 +526,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         promotion.position = "position";
         promotion.creative = "creative";
      */
-    private Product checkPromotion(JSONObject promotionInput) {
+    private Promotion checkPromotion(JSONObject promotionInput) {
         Promotion promotion = new Promotion();
 
         try {        
@@ -599,9 +601,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             .setLabel(label);
         
        
-        if(promotionInput.getString("action").equal("ACTION_CLICK")) {
+        if(promotionInput.getString("action").equals("ACTION_CLICK")) {
             builder.setPromotionAction(Promotion.ACTION_CLICK);
-        } else if(promotionInput.getString("action").equal("ACTION_VIEW")) {
+        } else if(promotionInput.getString("action").equals("ACTION_VIEW")) {
             builder.setPromotionAction(Promotion.ACTION_VIEW);
         } 
 
