@@ -3,12 +3,13 @@
 var _supported = null; // set to null so we can check first time
 var _tracker = null;
 var _customDimensions = {};
+var _customMetrics = {};
 
 function isSupported() {
     // if not checked before, run check
     if (_supported === null) {
         _supported = (GoogleAnalytics && GoogleAnalytics.AnalyticsManager && GoogleAnalytics.AnalyticsManager.current &&
-                      GoogleAnalytics.HitBuilder);
+            GoogleAnalytics.HitBuilder);
     }
     return _supported;
 }
@@ -66,12 +67,8 @@ function uncaughtExceptionHandler(err) {
     try {
         var hit = GoogleAnalytics.HitBuilder.createException(err.message, true);
 
-        // add previously added custom dimensions
-        for (var key in _customDimensions) {
-            if (_customDimensions.hasOwnProperty(key)) {
-                hit = hit.setCustomDimension(key, _customDimensions[key]);
-            }
-        }
+        // add previously added custom dimensions and metrics
+        hit = addCustomDimensionsAndMetrics(hit);
 
         const data = hit.build();
         getTracker().send(data);
@@ -81,9 +78,28 @@ function uncaughtExceptionHandler(err) {
     return true;
 }
 
+function addCustomDimensionsAndMetrics(hitBuilder) {
+    if (hitBuilder) {
+        // add previously added custom dimensions
+        for (var key in _customDimensions) {
+            if (_customDimensions.hasOwnProperty(key)) {
+                hitBuilder = hitBuilder.setCustomDimension(key, _customDimensions[key]);
+            }
+        }
+
+        // add previously added custom metrics
+        for (var key in _customMetrics) {
+            if (_customMetrics.hasOwnProperty(key)) {
+                hitBuilder = hitBuilder.setCustomMetric(key, _customMetrics[key]);
+            }
+        }
+    }
+    return hitBuilder;
+}
+
 module.exports = {
 
-    setOptOut: function(win, fail, args) {
+    setOptOut: function (win, fail, args) {
         if (!args || args.length === 0 || typeof args[0] !== "boolean") {
             fail("Expected boolean argument");
             return;
@@ -93,7 +109,7 @@ module.exports = {
         win();
     },
 
-    enableUncaughtExceptionReporting: function(win, fail, args) {
+    enableUncaughtExceptionReporting: function (win, fail, args) {
         if (!args || args.length === 0 || typeof args[0] !== "boolean") {
             fail("Expected boolean argument");
             return;
@@ -114,23 +130,23 @@ module.exports = {
         win();
     },
 
-    dispatch: function(win, fail, args) {
+    dispatch: function (win, fail, args) {
         getAnalyticsManager().dispatchAsync().done(win, fail);
     },
 
-    debugMode: function(win, fail, args) {
+    debugMode: function (win, fail, args) {
         const ga = getAnalyticsManager();
         ga.isDebug = true;
 
         // hook debug events
         ga.addEventListener("hitfailed", onHitFailed);
         ga.addEventListener("hitsent", onHitSent);
-        ga.addEventListener("hitmailformed", onHitMalformed); 
+        ga.addEventListener("hitmailformed", onHitMalformed);
 
         win();
     },
 
-    startTrackerWithId: function(win, fail, args) {
+    startTrackerWithId: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
@@ -140,7 +156,7 @@ module.exports = {
             fail("Expected numeric integer argument");
             return;
         }
-        
+
         if (isTrackerStarted()) {
             fail("Tracker already started!");
             return;
@@ -158,8 +174,8 @@ module.exports = {
         _tracker = ga.createTracker(args[0]);
         win();
     },
-    
-    setUserId: function(win, fail, args) {
+
+    setUserId: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
@@ -169,7 +185,7 @@ module.exports = {
         win();
     },
 
-    setAnonymizeIp: function(win, fail, args) {
+    setAnonymizeIp: function (win, fail, args) {
         if (!args || args.length === 0 || typeof args[0] !== "boolean") {
             fail("Expected boolean argument");
             return;
@@ -179,12 +195,12 @@ module.exports = {
         win();
     },
 
-    setAllowIDFACollection: function() {
+    setAllowIDFACollection: function () {
         // not supported
         fail("not supported on Windows platform");
     },
 
-    setAppVersion: function(win, fail, args) {
+    setAppVersion: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
@@ -194,90 +210,91 @@ module.exports = {
         win();
     },
 
-    getVar: function(win, fail, args) {
+    getVar: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
         }
-        
+
         const value = getTracker().get(args[0]);
         win(value);
     },
 
-    setVar: function(win, fail, args) {
+    setVar: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
         }
-        
+
         getTracker().set(args[0], args[1]);
         win();
     },
 
-    trackMetric: function(win, fail, args) {
-        if (!args || args.length === 0) {
-            fail("Expected positive numeric integer argument");
-            return;
-        }
-        const key = Number.parseInt(args[0]);
-        if (Number.isNaN(key) || key < 0) {
-            fail("Expected positive numeric integer argument");
-            return;
-        }
-
-        var metric = Number.NaN;
-        if (args.length >= 2) {
-            metric = Number.parseFloat(String(args[1]));
-        }
-        if (Number.isNaN(metric)) {
-            fail("Expected numeric integer argument");
-            return;
-        }
-
-        const data = GoogleAnalytics.HitBuilder.createScreenView().setCustomMetric(key, metric).build();
-        getTracker().send(data);
-        win();
-    },
-
-    addCustomDimension: function(win, fail, args) {
+    trackMetric: function (win, fail, args) {
         if (!args || args.length === 0 || !Number.isInteger(args[0]) || args[0] < 0) {
             fail("Expected positive numeric integer argument");
             return;
         }
 
-        if (args.length < 1 || args[2] === "") {
-            fail("Expected non empty string argument");
+        if (args.length < 1 || args[1] === null || typeof args[1] === "undefined" || args[1] === "") {
+            // unset metric
+            delete _customMetrics[args[0]];
+            win("custom metric stopped");
+        } else {
+            var value = args[1];
+            if (typeof args[1] !== "number") {
+                if (typeof args[1] !== "string") {
+                    fail("Expected either numeric or string formatted number argument");
+                    return;
+                }
+                value = Number.parseFloat(args[1]);
+                if (isNaN(value)) {
+                    fail("Expected either numeric or string formatted number argument");
+                    return;
+                }
+            }
+
+            _customMetrics[args[0]] = value;
+            win("custom metric started");
+        }
+    },
+
+    addCustomDimension: function (win, fail, args) {
+        if (!args || args.length === 0 || !Number.isInteger(args[0]) || args[0] < 0) {
+            fail("Expected positive numeric integer argument");
             return;
         }
 
-        _customDimensions[args[0]] = args[1];
-        win();
+        if (args.length < 1 || args[1] === null || typeof args[1] === "undefined" || args[1] === "") {
+            // unset dimension
+            delete _customDimensions[args[0]];
+            win("custom dimension stopped");
+        } else {
+            _customDimensions[args[0]] = args[1];
+            win("custom dimension started");
+        }
     },
 
-    addTransaction: function(win, fail, args) {
+    addTransaction: function (win, fail, args) {
         // not supported
         fail("not supported on Windows platform");
     },
 
-    addTransactionItem: function(win, fail, args) {
+    addTransactionItem: function (win, fail, args) {
         // not supported
         fail("not supported on Windows platform");
     },
 
-    trackView: function(win, fail, args) {
+    trackView: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
         }
 
         var hit = GoogleAnalytics.HitBuilder.createScreenView(args[0]);
-        
-        // add previously added custom dimensions
-        for (var key in _customDimensions) {
-            if (_customDimensions.hasOwnProperty(key)) {
-                hit = hit.setCustomDimension(key, _customDimensions[key]);
-            }
-        }
+
+        // add previously added custom dimensions and metrics
+        hit = addCustomDimensionsAndMetrics(hit);
 
         if (args.length >= 2 && args[1] !== "" && getAnalyticsManager().isDebug === true) {
             console.warn("Campaign details not supported on Windows platform!");
@@ -292,7 +309,7 @@ module.exports = {
         win();
     },
 
-    trackEvent: function(win, fail, args) {
+    trackEvent: function (win, fail, args) {
         if (!args || args.length < 2 || args[0] === "" || args[1] === "") {
             fail("Expected non empty string argument");
             return;
@@ -305,19 +322,15 @@ module.exports = {
 
         var hit = GoogleAnalytics.HitBuilder.createCustomEvent(args[0], args[1], args[2] || null, args[3] || 0);
 
-        // add previously added custom dimensions
-        for (var key in _customDimensions) {
-            if (_customDimensions.hasOwnProperty(key)) {
-                hit = hit.setCustomDimension(key, _customDimensions[key]);
-            }
-        }
+        // add previously added custom dimensions and metrics
+        hit = addCustomDimensionsAndMetrics(hit);
 
         const data = hit.build();
         getTracker().send(data);
         win();
     },
 
-    trackException: function(win, fail, args) {
+    trackException: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
@@ -326,19 +339,15 @@ module.exports = {
         const fatal = ((args[1] || false) === true);
         var hit = GoogleAnalytics.HitBuilder.createException(args[0], fatal);
 
-        // add previously added custom dimensions
-        for (var key in _customDimensions) {
-            if (_customDimensions.hasOwnProperty(key)) {
-                hit = hit.setCustomDimension(key, _customDimensions[key]);
-            }
-        }
+        // add previously added custom dimensions and metrics
+        hit = addCustomDimensionsAndMetrics(hit);
 
         const data = hit.build();
         getTracker().send(data);
         win();
     },
 
-    trackTiming: function(win, fail, args) {
+    trackTiming: function (win, fail, args) {
         if (!args || args.length === 0 || args[0] === "") {
             fail("Expected non empty string argument");
             return;
@@ -354,20 +363,16 @@ module.exports = {
             return;
         }
 
-        var hit = GoogleAnalytics.HitBuilder.createTiming(args[0], args[2] || null, 
-                        args[1] || 0, args[3] || null);
+        var hit = GoogleAnalytics.HitBuilder.createTiming(args[0], args[2] || null,
+            args[1] || 0, args[3] || null);
 
-        // add previously added custom dimensions
-        for (var key in _customDimensions) {
-            if (_customDimensions.hasOwnProperty(key)) {
-                hit = hit.setCustomDimension(key, _customDimensions[key]);
-            }
-        }
+        // add previously added custom dimensions and metrics
+        hit = addCustomDimensionsAndMetrics(hit);
 
         const data = hit.build();
         getTracker().send(data);
         win();
     }
-    
+
 };
 require("cordova/exec/proxy").add("UniversalAnalytics", module.exports);
