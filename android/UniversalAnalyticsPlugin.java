@@ -9,6 +9,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +27,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
     public static final String ADD_DIMENSION = "addCustomDimension";
     public static final String ADD_TRANSACTION = "addTransaction";
     public static final String ADD_TRANSACTION_ITEM = "addTransactionItem";
+    public static final String ADD_IMPRESION = "addImpression";
+    public static final String PRODUCT_ACTION = "productAction";
+    public static final String ADD_PROMOTION = "addPromotion";
 
     public static final String SET_ALLOW_IDFA_COLLECTION = "setAllowIDFACollection";
     public static final String SET_USER_ID = "setUserId";
@@ -61,8 +65,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_EVENT.equals(action)) {
             int length = args.length();
             if (length > 0) {
-                this.trackEvent(args.getString(0), length > 1 ? args.getString(1) : "",
-                        length > 2 ? args.getString(2) : "", length > 3 ? args.getLong(3) : 0,
+                this.trackEvent(args.getString(0), 
+                        length > 1 ? args.getString(1) : "",
+                        length > 2 ? args.getString(2) : "", 
+                        length > 3 ? args.getLong(3) : 0,
                         length > 4 ? args.getBoolean(4) : false, callbackContext);
             }
             return true;
@@ -74,8 +80,10 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         } else if (TRACK_TIMING.equals(action)) {
             int length = args.length();
             if (length > 0) {
-                this.trackTiming(args.getString(0), length > 1 ? args.getLong(1) : 0,
-                        length > 2 ? args.getString(2) : "", length > 3 ? args.getString(3) : "", callbackContext);
+                this.trackTiming(args.getString(0), 
+                        length > 1 ? args.getLong(1) : 0,
+                        length > 2 ? args.getString(2) : "", 
+                        length > 3 ? args.getString(3) : "", callbackContext);
             }
             return true;
         } else if (TRACK_METRIC.equals(action)) {
@@ -93,18 +101,32 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             int length = args.length();
             if (length > 0) {
                 this.addTransaction(args.getString(0), length > 1 ? args.getString(1) : "",
-                        length > 2 ? args.getDouble(2) : 0, length > 3 ? args.getDouble(3) : 0,
-                        length > 4 ? args.getDouble(4) : 0, length > 5 ? args.getString(5) : null, callbackContext);
+                        length > 2 ? args.getDouble(2) : 0, 
+                        length > 3 ? args.getDouble(3) : 0,
+                        length > 4 ? args.getDouble(4) : 0, 
+                        length > 5 ? args.getString(5) : null, callbackContext);
             }
             return true;
         } else if (ADD_TRANSACTION_ITEM.equals(action)) {
             int length = args.length();
             if (length > 0) {
                 this.addTransactionItem(args.getString(0), length > 1 ? args.getString(1) : "",
-                        length > 2 ? args.getString(2) : "", length > 3 ? args.getString(3) : "",
-                        length > 4 ? args.getDouble(4) : 0, length > 5 ? args.getLong(5) : 0,
+                        length > 2 ? args.getString(2) : "", 
+                        length > 3 ? args.getString(3) : "",
+                        length > 4 ? args.getDouble(4) : 0, 
+                        length > 5 ? args.getLong(5) : 0,
                         length > 6 ? args.getString(6) : null, callbackContext);
             }
+            return true;
+        } else if (ADD_IMPRESION.equals(action)) {
+            this.addImpresion(args.getString(0), args.getJSONObject(1), callbackContext);
+
+            return true;
+        } else if (PRODUCT_ACTION.equals(action)) {
+            this.productAction(args.getString(0), args.getJSONObject(1), args.getString(2), callbackContext);
+            return true;
+        } else if (ADD_PROMOTION.equals(action)) {
+            this.addPromotion(args.getString(0), args.getJSONObject(1), callbackContext);
             return true;
         } else if (SET_ALLOW_IDFA_COLLECTION.equals(action)) {
             this.setAllowIDFACollection(args.getBoolean(0), callbackContext);
@@ -355,6 +377,18 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             callbackContext.error("Expected non-empty ID.");
         }
     }
+
+    private void addImpresion(String screenName, JSONObject product, CallbackContext callbackContext) {
+                
+    }
+
+    private void productAction(String screenName, JSONObject product, string productAction, CallbackContext callbackContext) {
+                
+    }
+    
+    private void addPromotion(String action, JSONObject promotion, CallbackContext callbackContext) {
+                
+    }    
 
     private void setAllowIDFACollection(Boolean enable, CallbackContext callbackContext) {
         if (!trackerStarted) {

@@ -201,7 +201,7 @@ UniversalAnalyticsPlugin.prototype.productAction = function(screamName, product,
 };
 
 UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [promotion, action]);
+  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion]);
 };
 
 //TODO add promotion impresion
