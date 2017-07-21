@@ -378,15 +378,79 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         }
     }
 
-    private void addImpresion(String screenName, JSONObject product, CallbackContext callbackContext) {
-                
+    private Product checkProduct(JSONObject productInput) {
+        Product product = new Product();
+        try {
+            product.setId(productInput.getString("id"));
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setName(productInput.getString("name"));
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setCategory(productInput.getString("category"));
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setBrand(productInput.getString("brand"));
+
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setVariant(productInput.getString("variant"));
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setPosition(productInput.getString("postition"));
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setCustomDimension(productInput.getJSONArray("customDimension").getInt(0), productInput.getJSONArray("customDimension").getString(1));            
+        } catch (JSONException ex) {
+            // do nothing
+        }
+        try {
+            product.setPrice(productInput.getLong("price"));
+        } catch (JSONException ex) {
+            // do nothing
+        }                                                
+        try {
+            product.setQuantity(productInput.getInt("quantity"));
+        } catch (JSONException ex) {
+            // do nothing
+        }       
+        try {
+            product.setCouponCode(productInput.getString("couponCode"));
+        } catch (JSONException ex) {
+            // do nothing
+        }              
+
     }
 
-    private void productAction(String screenName, JSONObject product, string productAction, CallbackContext callbackContext) {
+    private void addImpresion(String screenName, JSONObject productInput, CallbackContext callbackContext) {
+
+        Product product = checkProduct(productInput);
+        HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
+            .addImpression(product, screenName);
+
+        Tracker t = ((AnalyticsSampleApp) getActivity().getApplication()).getTracker(
+            TrackerName.APP_TRACKER);
+        t.setScreenName(screenName);
+        t.send(builder.build());                
+    }
+
+    private void productAction(String screenName, JSONObject productInput, string productAction, CallbackContext callbackContext) {
                 
     }
     
-    private void addPromotion(String action, JSONObject promotion, CallbackContext callbackContext) {
+    private void addPromotion(String action, JSONObject promotionInput, CallbackContext callbackContext) {
                 
     }    
 

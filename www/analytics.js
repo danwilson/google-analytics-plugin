@@ -159,7 +159,7 @@ product.customDimension = [1, "Member"];
 product.customMetric = [1, 12];
 product.price = 10.00;
 product.quantity = 10;
-product.CouponCode = '123AEV'
+product.couponCode = '123AEV'
 
 Product Action definitions:
 ACTION_ADD Action to use when a product is added to the cart.
