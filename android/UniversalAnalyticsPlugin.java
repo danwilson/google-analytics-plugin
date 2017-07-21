@@ -126,7 +126,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
 
             return true;
         } else if (PRODUCT_ACTION.equals(action)) {
-            this.productAction(args.getString(0), args.getJSONObject(1), args.getString(2), callbackContext);
+            this.productAction(args.getString(0), args.getJSONObject(1), args.getJSONObject(2), callbackContext);
             return true;
         } else if (ADD_PROMOTION.equals(action)) {
             int length = args.length();
