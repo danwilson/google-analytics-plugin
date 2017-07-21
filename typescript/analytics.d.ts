@@ -66,6 +66,6 @@ declare class UniversalAnalyticsPlugin {
 
 	public productAction(screamName:String, product:Any, successCallback?:Function, errorCallback?:Function):void;
 
-	public addPromotion(action:String, promotion:Any, successCallback?:Function, errorCallback?:Function):void;
+	public addPromotion(action:String, promotion:Any, label?:String, category?:String, successCallback?:Function, errorCallback?:Function):void;
 
 }

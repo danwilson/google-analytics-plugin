@@ -432,26 +432,178 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             // do nothing
         }              
 
+        return product;
+    }
+
+    /**
+     * Product Action definitions:
+     *   ACTION_ADD Action to use when a product is added to the cart.
+     *   ACTION_CHECKOUT Action to use for hits with checkout data.
+     *   ACTION_CHECKOUT_OPTION Action to be used for supplemental checkout data that needs to be provided after a checkout hit.
+     *   ACTION_CHECKOUT_OPTIONS This constant was deprecated. Use ACTION_CHECKOUT_OPTION instead.
+     *   ACTION_CLICK Action to use when the user clicks on a set of products.
+     *   ACTION_DETAIL Action to use when the user views detailed descriptions of products.
+     *   ACTION_PURCHASE Action that is used to report all the transaction data to GA.
+     *   ACTION_REFUND Action to use while reporting refunded transactions to GA.
+     *   ACTION_REMOVE Action to use when a product is removed from the cart.
+     */
+    private Product checkProductAction(JSONObject productActionInput) {
+        ProductAction productAction = null;
+        try {        
+            if(productActionInput.getString("action").equal("ACTION_ADD")) {
+                productAction = new ProductAction(ProductAction.ACTION_ADD);
+            } else if(productActionInput.getString("action").equal("ACTION_CHECKOUT")) {
+                productAction = new ProductAction(ProductAction.ACTION_CHECKOUT);
+            } else if(productActionInput.getString("action").equal("ACTION_CHECKOUT_OPTION")) {
+                productAction = new ProductAction(ProductAction.ACTION_CHECKOUT_OPTION);
+            } else if(productActionInput.getString("action").equal("ACTION_CHECKOUT_OPTIONS")) {
+                productAction = new ProductAction(ProductAction.ACTION_CHECKOUT_OPTIONS);
+            } else if(productActionInput.getString("action").equal("ACTION_CLICK")) {
+                productAction = new ProductAction(ProductAction.ACTION_CLICK);
+            } else if(productActionInput.getString("action").equal("ACTION_DETAIL")) {
+                productAction = new ProductAction(ProductAction.ACTION_DETAIL);
+            } else if(productActionInput.getString("action").equal("ACTION_PURCHASE")) {
+                productAction = new ProductAction(ProductAction.ACTION_PURCHASE);
+            } else if(productActionInput.getString("action").equal("ACTION_REFUND")) {
+                productAction = new ProductAction(ProductAction.ACTION_REFUND);
+            } else if(productActionInput.getString("action").equal("ACTION_REMOVE")) {
+                productAction = new ProductAction(ProductAction.ACTION_REMOVE);
+            }
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            productAction.setTransactionId(productActionInput.getString("transactionId"));
+        } catch (JSONException ex) {
+            // do nothing
+        }            
+        try {        
+            productAction.setTransactionAffiliation(productActionInput.getString("transactionAffiliation"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            productAction.setTransactionRevenue(productActionInput.getLong("transactionRevenue"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            productAction.setTransactionTax(productActionInput.getLong("transactionTax"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            productAction.setTransactionShipping(productActionInput.getLong("transactionShipping"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            productAction.setTransactionCouponCode(productActionInput.getString("transactionCouponCode"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            productAction.setCheckoutStep(productActionInput.getInt("checkoutStep"));
+        } catch (JSONException ex) {
+            // do nothing
+        }                                                  
+
+        return productAction;
+    }
+    /**
+     * Promotion definitions:
+        ACTION_CLICK Action to use when the user clicks/taps on a promotion.
+        ACTION_VIEW Action to use when the user views a promotion.
+
+        var promotion = {};
+        promotion.id = "PROMO-ID1234";
+        promotion.name = "mypromo";
+        promotion.position = "position";
+        promotion.creative = "creative";
+     */
+    private Product checkPromotion(JSONObject promotionInput) {
+        Promotion promotion = new Promotion();
+
+        try {        
+            promotion.setId(promotionInput.getString("id"));
+        } catch (JSONException ex) {
+            // do nothing
+        }            
+        try {        
+            promotion.setName(promotionInput.getString("name"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            promotion.setPosition(promotionInput.getString("position"));
+        } catch (JSONException ex) {
+            // do nothing
+        }  
+        try {        
+            promotion.setCreative(promotionInput.getString("creative"));
+        } catch (JSONException ex) {
+            // do nothing
+        }                                                  
+
+        return promotion;
     }
 
     private void addImpresion(String screenName, JSONObject productInput, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
 
         Product product = checkProduct(productInput);
         HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
             .addImpression(product, screenName);
 
-        Tracker t = ((AnalyticsSampleApp) getActivity().getApplication()).getTracker(
-            TrackerName.APP_TRACKER);
-        t.setScreenName(screenName);
-        t.send(builder.build());                
+        tracker.setScreenName(screenName);
+        tracker.send(builder.build());   
+        callbackContext.success("impresion action executed");                   
     }
 
-    private void productAction(String screenName, JSONObject productInput, string productAction, CallbackContext callbackContext) {
-                
+    private void productAction(String screenName, JSONObject productInput, JSONObject productActionInput, CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        Product product = checkProduct(productInput);
+        ProductAction productAction = checkProductAction(productActionInput);
+
+        HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
+            .addProduct(product)
+            .setProductAction(productAction);
+
+        tracker.setScreenName("transaction");
+        tracker.send(builder.build());          
+        callbackContext.success("product action executed");      
     }
     
-    private void addPromotion(String action, JSONObject promotionInput, CallbackContext callbackContext) {
-                
+    private void addPromotion(String action, JSONObject promotionInput, String label, String category,  CallbackContext callbackContext) {
+        if (!trackerStarted) {
+            callbackContext.error("Tracker not started");
+            return;
+        }
+
+        Promotion promotion = checkPromotion(promotionInput);
+        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder()
+            .addPromotion(promotion)
+            .setCategory(category)
+            .setAction(action)
+            .setLabel(label);
+        
+       
+        if(promotionInput.getString("action").equal("ACTION_CLICK")) {
+            builder.setPromotionAction(Promotion.ACTION_CLICK);
+        } else if(promotionInput.getString("action").equal("ACTION_VIEW")) {
+            builder.setPromotionAction(Promotion.ACTION_VIEW);
+        } 
+
+        tracker.send(builder.build());        
+
+        callbackContext.success("promotion action executed");      
     }    
 
     private void setAllowIDFACollection(Boolean enable, CallbackContext callbackContext) {

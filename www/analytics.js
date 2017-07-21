@@ -182,6 +182,7 @@ productAction.transactionTax = 1.02;
 productAction.checkoutOptions = "";
 productAction.checkoutStep = 1;
 productAction.transactionAffiliation = "";
+
 Promotion definitions:
 ACTION_CLICK Action to use when the user clicks/taps on a promotion.
 ACTION_VIEW Action to use when the user views a promotion.
@@ -200,8 +201,8 @@ UniversalAnalyticsPlugin.prototype.productAction = function(screamName, product,
   cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screamName, product, productAction]);
 };
 
-UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion]);
+UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, label, category, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, label, category]);
 };
 
 //TODO add promotion impresion
