@@ -87,12 +87,6 @@ window.ga.trackException('Description', Fatal)//where Fatal is boolean
 //To track User Timing (App Speed):
 window.ga.trackTiming('Category', IntervalInMilliseconds, 'Variable', 'Label') // where IntervalInMilliseconds is numeric
 
-//To add a Transaction (Ecommerce) -- Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
-window.ga.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')// where Revenue, Tax, and Shipping are numeric
-
-//To add a Transaction Item (Ecommerce) -- Deprecated on 1.9.0 will be removed on next minor version (1.10.0).
-window.ga.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')// where Price and Quantity are numeric
-
 //To add a Custom Dimension
 //(The dimension is afterwards added to every hit (view, event, error, etc...) sent, but the defined scope of the custom dimension in analytics backend
 //   (hit or product) will determine, at processing time, which hits are associated with the dimension value.)
@@ -135,6 +129,80 @@ window.ga.debugMode()
 
 //To enable/disable automatic reporting of uncaught exceptions
 window.ga.enableUncaughtExceptionReporting(Enable, success, error)// where Enable is boolean
+
+
+/**
+  Enhanced Ecommerce Tracking
+  https://developers.google.com/analytics/devguides/collection/android/v4/enhanced-ecommerce
+
+  Enhanced ecommerce enables the measurement of user interactions with products across the user's shopping experience, which include product impressions, product clicks, viewing product details, adding a product to a shopping cart, initiating the checkout process, transactions, and refunds.
+
+  Product definition:
+  var product = {};
+  product.id = "P12345";
+  product.name = "Android Warhol T-Shirt";
+  product.category = "Apparel/T-Shirts";
+  product.brand = "Google";
+  product.variant = "Black";
+  product.position = 1;
+  product.customDimension = [1, "Member"];
+  product.customMetric = [1, 12];
+  product.price = 10.00;
+  product.quantity = 10;
+  product.couponCode = '123AEV'
+
+  Just to send product impressions
+*/
+window.ga.addImpression(screamName, product)
+
+/**
+  Product Action definitions:
+  ACTION_ADD Action to use when a product is added to the cart.
+  ACTION_CHECKOUT Action to use for hits with checkout data.
+  ACTION_CHECKOUT_OPTION Action to be used for supplemental checkout data that needs to be provided after a checkout hit.
+  ACTION_CHECKOUT_OPTIONS This constant was deprecated. Use ACTION_CHECKOUT_OPTION instead.
+  ACTION_CLICK Action to use when the user clicks on a set of products.
+  ACTION_DETAIL Action to use when the user views detailed descriptions of products.
+  ACTION_PURCHASE Action that is used to report all the transaction data to GA.
+  ACTION_REFUND Action to use while reporting refunded transactions to GA.
+  ACTION_REMOVE Action to use when a product is removed from the cart.
+
+  var productAction = {};
+  productAction.action = "ACTION_PURCHASE";
+  productAction.transactionId = "TT-1234";
+  productAction.transactionRevenue = 3.14;
+  productAction.transactionCouponCode = "EXTRA100";
+  productAction.transactionShipping = 2.03;
+  productAction.transactionTax = 1.02;
+  productAction.checkoutOptions = "";
+  productAction.checkoutStep = 1;
+  productAction.transactionAffiliation = "";
+
+  To send any product action: check GA documentation for more info.
+  Enhanced Ecommerce Tracking
+  https://developers.google.com/analytics/devguides/collection/android/v4/enhanced-ecommerce  
+*/
+window.ga.productAction(screamName, product, productAction)
+
+/**Promotion definitions:
+    action field:
+    "ACTION_CLICK" - Action to use when the user clicks/taps on a promotion.
+    "ACTION_VIEW"  - Action to use when the user views a promotion.
+
+    var promotion = {};
+    promotion.id = "PROMO-ID1234";
+    promotion.name = "mypromo";
+    promotion.position = "position";
+    promotion.creative = "creative"; 
+*/
+window.ga.addPromotion(action, promotion, label, category)
+
+//To add a Transaction (Ecommerce) -- Deprecated on 1.9.0 
+window.ga.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')// where Revenue, Tax, and Shipping are numeric
+
+//To add a Transaction Item (Ecommerce) -- Deprecated on 1.9.0 
+window.ga.addTransactionItem('ID', 'Name', 'SKU', 'Category', Price, Quantity, 'Currency Code')// where Price and Quantity are numeric
+
 ```
 
 # Example use ionic 2 (Ionic Native)
