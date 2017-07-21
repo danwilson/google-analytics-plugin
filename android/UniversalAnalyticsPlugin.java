@@ -129,6 +129,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             this.productAction(args.getString(0), args.getJSONObject(1), args.getString(2), callbackContext);
             return true;
         } else if (ADD_PROMOTION.equals(action)) {
+            int length = args.length();
             this.addPromotion(args.getString(0), args.getJSONObject(1), 
                                     length > 2 ? args.getString(2) : "", 
                                     length > 3 ? args.getString(3) : "",callbackContext);
@@ -568,7 +569,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("impresion action executed");                   
     }
 
-    private void productAction(String screenName, JSONObject productInput, JSONObject productActionInput, CallbackContext callbackContext) {
+    private void productAction(String screenName, JSONObject productInput, String productActionInput, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;
