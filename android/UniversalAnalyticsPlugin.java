@@ -602,9 +602,9 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             .setLabel(label);
         
        
-        if(promotionInput.getString("action").equals("ACTION_CLICK")) {
+        if(action.equals("ACTION_CLICK")) {
             builder.setPromotionAction(Promotion.ACTION_CLICK);
-        } else if(promotionInput.getString("action").equals("ACTION_VIEW")) {
+        } else if(action.equals("ACTION_VIEW")) {
             builder.setPromotionAction(Promotion.ACTION_VIEW);
         } 
 
