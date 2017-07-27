@@ -62,9 +62,9 @@ declare class UniversalAnalyticsPlugin {
 	/** Add a Transaction Item (Ecommerce) */
 	public addTransactionItem(transactionId:string, name:string, sku:string, category:string, price:number, quantity:number, currencyCode:string, successCallback?:Function, errorCallback?:Function):void;
 
-	public addImpression(screamName:string, product:any, successCallback?:Function, errorCallback?:Function):void;
+	public addImpression(screen:string, product:any, successCallback?:Function, errorCallback?:Function):void;
 
-	public productAction(screamName:string, product:any, successCallback?:Function, errorCallback?:Function):void;
+	public productAction(screen:string, product:any, successCallback?:Function, errorCallback?:Function):void;
 
 	public addPromotion(action:string, promotion:any, label?:string, category?:string, successCallback?:Function, errorCallback?:Function):void;
 
