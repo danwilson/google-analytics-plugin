@@ -37,19 +37,21 @@ function getTracker() {
 // extended debug support
 
 function onHitMalformed(args) {
-    console.warn("**hit malformed** \n" + args.httpStatusCode, parseHit(args.hit));
+    console.warn("**Google Analytics hit malformed**\n" + args.httpStatusCode);
+    console.warn("Hit data:\n", parseHit(args.hit));
 }
 
 function onHitFailed(args) {
-    console.error("**hit failed**\n" + args.error.message, parseHit(args.hit));
+    console.error("**Google Analytics hit failed**\n" + args.error.message);
+    console.error("Hit data:\n", parseHit(args.hit));
 }
 
 function onHitSent(args) {
-    console.log("Analytics result: " + args.response, parseHit(args.hit));
+    console.log("**Google Analytics hit succeeded**\n" + args.response);
+    console.log("Hit data:\n", parseHit(args.hit));
 }
 
 function parseHit(hit) {
-    var pair;
     var result = "";
     var iter = hit.data.first();
     while (iter.hasCurrent) {
@@ -281,6 +283,168 @@ module.exports = {
     },
 
     addTransactionItem: function (win, fail, args) {
+        // not supported
+        fail("not supported on Windows platform");
+    },
+
+    productAction: function (win, fail, args) {
+        if (!args || args.length === 0 || args[0] === "") {
+            fail("Expected non empty string argument");
+            return;
+        }
+        if (args.length < 2 || typeof args[1] !== "object") {
+            fail("Expected non object argument");
+            return;
+        }
+        if (args.length < 3 || typeof args[2] !== "object") {
+            fail("Expected non object argument");
+            return;
+        }
+
+        var product = new GoogleAnalytics.Ecommerce.Product();
+        product.id = args[1].id;
+        product.name = args[1].name;
+        if (typeof args[1].position !== "undefined") {
+            product.position = args[1].position;
+        }
+        if (typeof args[1].price !== "undefined") {
+            product.price = args[1].price;
+        }
+        if (typeof args[1].quantity !== "undefined") {
+            product.quantity = args[1].quantity;
+        }
+        if (typeof args[1].variant !== "undefined") {
+            product.variant = args[1].variant;
+        }
+        if (typeof args[1].brand !== "undefined") {
+            product.brand = args[1].brand;
+        }
+        if (typeof args[1].category !== "undefined") {
+            product.category = args[1].category;
+        }
+        if (typeof args[1].couponCode !== "undefined") {
+            product.couponCode = args[1].couponCode;
+        }
+        // RETHINK! (should support multiple dimensions and metrics..)
+        if (typeof args[1].customDimension !== "undefined" && args[1].customDimension.length === 2) {
+            product.customDimensions.insert(args[1].customDimension[0], args[1].customDimension[1]);
+        }
+        if (typeof args[1].customMetric !== "undefined" && args[1].customMetric.length === 2) {
+            product.customMetrics.insert(args[1].customMetric[0], args[1].customMetric[1]);
+        }
+
+        var action = "";
+        switch (args[2].action) {
+            case "ACTION_ADD":
+                action = "Add";
+                break;
+            case "ACTION_CHECKOUT":
+                action = "Checkout";
+                break;
+            case "ACTION_CHECKOUT_OPTION":
+            case "ACTION_CHECKOUT_OPTIONS":
+                action = "CheckoutOption";
+                break;
+            case "ACTION_CLICK":
+                action = "Click";
+                break;
+            case "ACTION_DETAIL":
+                action = "Detail";
+                break;
+            case "ACTION_PURCHASE":
+                action = "Purchase";
+                break;
+            case "ACTION_REFUND":
+                action = "Refund";
+                break;
+            case "ACTION_REMOVE":
+                action = "Remove";
+                break;
+        }
+        var action = new GoogleAnalytics.Ecommerce.ProductAction(action);
+        if (typeof args[2].checkoutOptions !== "undefined") {
+            action.checkoutOptions = args[2].checkoutOptions;
+        }
+        if (typeof args[2].checkoutStep !== "undefined") {
+            action.checkoutStep = args[2].checkoutStep;
+        }
+        if (typeof args[2].transactionAffiliation !== "undefined") {
+            action.transactionAffiliation = args[2].transactionAffiliation;
+        }
+        if (typeof args[2].transactionCouponCode !== "undefined") {
+            action.transactionCouponCode = args[2].transactionCouponCode;
+        }
+        if (typeof args[2].transactionId !== "undefined") {
+            action.transactionId = args[2].transactionId;
+        }
+        if (typeof args[2].transactionRevenue !== "undefined") {
+            action.transactionRevenue = args[2].transactionRevenue;
+        }
+        if (typeof args[2].transactionShipping !== "undefined") {
+            action.transactionShipping = args[2].transactionShipping;
+        }
+        if (typeof args[2].transactionTax !== "undefined") {
+            action.transactionTax = args[2].transactionTax;
+        }
+
+        var hit = GoogleAnalytics.HitBuilder.createScreenView(args[0]).addProduct(product).setProductAction(action);
+
+        const data = hit.build();
+        getTracker().send(data);
+        win();
+    },
+
+    addPromotion: function (win, fail, args) {
+        if (!args || args.length === 0 || args[0] === "") {
+            fail("Expected non empty string argument");
+            return;
+        }
+        if (args.length < 2 || typeof args[1] !== "object") {
+            fail("Expected non object argument");
+            return;
+        }
+        if (args.length < 3 || args[2] === "") {
+            fail("Expected non empty string argument");
+            return;
+        }
+        if (args.length < 4 || args[3] === "") {
+            fail("Expected non empty string argument");
+            return;
+        }
+
+        var hit = GoogleAnalytics.HitBuilder.createCustomEvent(args[3], args[0], args[2] || null, 0);
+
+        var promotion = new GoogleAnalytics.Ecommerce.Promotion();
+        promotion.id = args[1].id;
+        promotion.name = args[1].name;
+        if (typeof args[1].position !== "undefined") {
+            promotion.position = args[1].position;
+        }
+        if (typeof args[1].creative !== "undefined") {
+            promotion.creative = args[1].creative;
+        }
+
+        hit = hit.addPromotion(promotion);
+
+        var action = "";
+        switch (args[0]) {
+            case "ACTION_CLICK":
+                action = "Click";
+                break;
+            case "ACTION_VIEW":
+                action = "View";
+                break;
+        }
+        if (action !== "") {
+            hit = hit.setPromotionAction(action);
+        }
+
+        const data = hit.build();
+        getTracker().send(data);
+        win();
+    },
+
+    addImpression: function (win, fail, args) {
         // not supported
         fail("not supported on Windows platform");
     },
