@@ -193,13 +193,17 @@ promotion.name = "mypromo";
 promotion.position = "position";
 promotion.creative = "creative";
 */
-UniversalAnalyticsPlugin.prototype.addImpression = function(screamName, product, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'addImpression', [screamName, product]);
+
+UniversalAnalyticsPlugin.prototype.addImpression = function(screen, product, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addImpression', [screen, product]);
 };
 
-UniversalAnalyticsPlugin.prototype.productAction = function(screamName, product, productAction, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screamName, product, productAction]);
+UniversalAnalyticsPlugin.prototype.productAction = function(screen, product, productAction, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screen, product, productAction]);
 };
+
+// RETHINK: swap label and category parameter positions?
+// (as an event hit is formed under the hood, category is mandatory while label is optional)
 
 UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, label, category, success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, label, category]);
