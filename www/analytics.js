@@ -193,16 +193,17 @@ promotion.name = "mypromo";
 promotion.position = "position";
 promotion.creative = "creative";
 */
-UniversalAnalyticsPlugin.prototype.addImpression = function(screamName, product, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'addImpression', [screamName, product]);
+
+UniversalAnalyticsPlugin.prototype.addImpression = function(screen, product, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addImpression', [screen, product]);
 };
 
-UniversalAnalyticsPlugin.prototype.productAction = function(screamName, product, productAction, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screamName, product, productAction]);
+UniversalAnalyticsPlugin.prototype.productAction = function(screen, product, productAction, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screen, product, productAction]);
 };
 
-UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, label, category, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, label, category]);
+UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, category, label, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, category, label]);
 };
 
 //TODO add promotion impresion

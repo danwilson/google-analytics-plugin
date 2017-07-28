@@ -153,7 +153,7 @@ window.ga.enableUncaughtExceptionReporting(Enable, success, error)// where Enabl
 
   Just to send product impressions
 */
-window.ga.addImpression(screamName, product)
+window.ga.addImpression(screen, product)
 
 /**
   Product Action definitions:
@@ -182,7 +182,7 @@ window.ga.addImpression(screamName, product)
   Enhanced Ecommerce Tracking
   https://developers.google.com/analytics/devguides/collection/android/v4/enhanced-ecommerce  
 */
-window.ga.productAction(screamName, product, productAction)
+window.ga.productAction(screen, product, productAction)
 
 /**Promotion definitions:
     action field:
@@ -195,7 +195,7 @@ window.ga.productAction(screamName, product, productAction)
     promotion.position = "position";
     promotion.creative = "creative"; 
 */
-window.ga.addPromotion(action, promotion, label, category)
+window.ga.addPromotion(action, promotion, category, label)
 
 //To add a Transaction (Ecommerce) -- Deprecated on 1.9.0 
 window.ga.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')// where Revenue, Tax, and Shipping are numeric
@@ -295,10 +295,17 @@ The following plugin methods are (currently) not supported by the UWP.SDKforGoog
 * `setAllowIDFACollection()`
 * `addTransaction()`
 * `addTransactionItem()`
+* `addImpression()`
 
 Unexpected behaviour may occur on the following methods:
 * `trackView()`: campaign details are currently not supported and therefore not tracked.
 * `trackMetric()`: there is currently a bug in version 1.5.2 of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native),
 that the wrong data specifier `cd` is taken for metrics, whereas `cm` should be the correct specifier.
-So as long as this bug is not fixed, trackMetrics will overwrite previous addCustomDimension with same index!!
+So as long as this bug is not fixed, trackMetrics() will overwrite previous addCustomDimension with same index!!
+* `productAction()`: there is currently a bug in version 1.5.2 of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native),
+that the wrong data specifier `at` is taken for product quantity, whereas `qt` should be the correct specifier.
+So as long as this bug is not fixed, productAction() will possibly not work correctly!!
+
+Pull Requests are already submitted. As long as these are not merged, you can clone the Fork from https://github.com/spacepope/windows-sdk-for-google-analytics and add the corresponding project reference to your UWP project instead of installing the current nuget package..
+
 
