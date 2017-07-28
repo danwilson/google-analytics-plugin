@@ -132,7 +132,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
             int length = args.length();
             this.addPromotion(args.getString(0), args.getJSONObject(1), 
                                     length > 2 ? args.getString(2) : "", 
-                                    length > 3 ? args.getString(3) : "",callbackContext);
+                                    length > 3 ? args.getString(3) : "", callbackContext);
             return true;
         } else if (SET_ALLOW_IDFA_COLLECTION.equals(action)) {
             this.setAllowIDFACollection(args.getBoolean(0), callbackContext);
@@ -588,7 +588,7 @@ public class UniversalAnalyticsPlugin extends CordovaPlugin {
         callbackContext.success("product action executed");      
     }
     
-    private void addPromotion(String action, JSONObject promotionInput, String label, String category,  CallbackContext callbackContext) {
+    private void addPromotion(String action, JSONObject promotionInput, String category, String label, CallbackContext callbackContext) {
         if (!trackerStarted) {
             callbackContext.error("Tracker not started");
             return;

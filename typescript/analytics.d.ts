@@ -1,3 +1,49 @@
+export interface Product {
+	id: string;
+	name: string;
+	category?: string;
+	brand?: string;
+	variant?: string;
+	position?: number;
+	customDimension?: any[];
+	customMetric?: any[];
+	price?: number;
+	quantity?: number;
+	couponCode?: string;
+}
+
+export type ProductActionType = "ACTION_ADD" |
+						 "ACTION_CHECKOUT" |
+						 "ACTION_CHECKOUT_OPTION" |
+						 "ACTION_CHECKOUT_OPTIONS" |
+						 "ACTION_CLICK" |
+						 "ACTION_DETAIL" |
+						 "ACTION_PURCHASE" |
+						 "ACTION_REFUND" |
+						 "ACTION_REMOVE"
+
+export interface ProductAction {
+	action: ProductActionType;
+	transactionId?: string;
+	transactionRevenue?: number;
+	transactionCouponCode?: string;
+	transactionShipping?: number;
+	transactionTax?: number;
+	checkoutOptions?: string;
+	checkoutStep?: number;
+	transactionAffiliation?: string;
+}
+
+export interface Promotion {
+	id: string;
+	name: string;
+	position?: string;
+	creative?: string;
+}
+
+export type PromotionAction = "ACTION_CLICK" |
+					   "ACTION_VIEW"
+
 declare class UniversalAnalyticsPlugin {
 
 	/** In your 'deviceready' handler, call this to set up your Analytics tracker,
@@ -62,10 +108,10 @@ declare class UniversalAnalyticsPlugin {
 	/** Add a Transaction Item (Ecommerce) */
 	public addTransactionItem(transactionId:string, name:string, sku:string, category:string, price:number, quantity:number, currencyCode:string, successCallback?:Function, errorCallback?:Function):void;
 
-	public addImpression(screen:string, product:any, successCallback?:Function, errorCallback?:Function):void;
+	public addImpression(screen:string, product:Product, successCallback?:Function, errorCallback?:Function):void;
 
-	public productAction(screen:string, product:any, successCallback?:Function, errorCallback?:Function):void;
+	public productAction(screen:string, product:Product, productAction: ProductAction, successCallback?:Function, errorCallback?:Function):void;
 
-	public addPromotion(action:string, promotion:any, label?:string, category?:string, successCallback?:Function, errorCallback?:Function):void;
+	public addPromotion(action:PromotionAction, promotion:Promotion, category:string, label?:string, successCallback?:Function, errorCallback?:Function):void;
 
 }

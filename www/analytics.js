@@ -202,11 +202,8 @@ UniversalAnalyticsPlugin.prototype.productAction = function(screen, product, pro
   cordova.exec(success, error, 'UniversalAnalytics', 'productAction', [screen, product, productAction]);
 };
 
-// RETHINK: swap label and category parameter positions?
-// (as an event hit is formed under the hood, category is mandatory while label is optional)
-
-UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, label, category, success, error) {
-  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, label, category]);
+UniversalAnalyticsPlugin.prototype.addPromotion = function(action, promotion, category, label, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'addPromotion', [action, promotion, category, label]);
 };
 
 //TODO add promotion impresion

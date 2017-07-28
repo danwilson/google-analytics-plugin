@@ -407,12 +407,8 @@ module.exports = {
             fail("Expected non empty string argument");
             return;
         }
-        if (args.length < 4 || args[3] === "") {
-            fail("Expected non empty string argument");
-            return;
-        }
 
-        var hit = GoogleAnalytics.HitBuilder.createCustomEvent(args[3], args[0], args[2] || null, 0);
+        var hit = GoogleAnalytics.HitBuilder.createCustomEvent(args[2], args[0], args[3] || null, 0);
 
         var promotion = new GoogleAnalytics.Ecommerce.Promotion();
         promotion.id = args[1].id;

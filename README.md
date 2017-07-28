@@ -195,7 +195,7 @@ window.ga.productAction(screen, product, productAction)
     promotion.position = "position";
     promotion.creative = "creative"; 
 */
-window.ga.addPromotion(action, promotion, label, category)
+window.ga.addPromotion(action, promotion, category, label)
 
 //To add a Transaction (Ecommerce) -- Deprecated on 1.9.0 
 window.ga.addTransaction('ID', 'Affiliation', Revenue, Tax, Shipping, 'Currency Code')// where Revenue, Tax, and Shipping are numeric
