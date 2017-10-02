@@ -99,6 +99,46 @@ function addCustomDimensionsAndMetrics(hitBuilder) {
     return hitBuilder;
 }
 
+function createProduct(p) {
+    if (!p || typeof p !== "object") {
+        return null;
+    }
+
+    var product = new GoogleAnalytics.Ecommerce.Product();
+    product.id = p.id;
+    product.name = p.name;
+    if (typeof p.position !== "undefined") {
+        product.position = p.position;
+    }
+    if (typeof p.price !== "undefined") {
+        product.price = p.price;
+    }
+    if (typeof p.quantity !== "undefined") {
+        product.quantity = p.quantity;
+    }
+    if (typeof p.variant !== "undefined") {
+        product.variant = p.variant;
+    }
+    if (typeof p.brand !== "undefined") {
+        product.brand = p.brand;
+    }
+    if (typeof p.category !== "undefined") {
+        product.category = p.category;
+    }
+    if (typeof p.couponCode !== "undefined") {
+        product.couponCode = p.couponCode;
+    }
+    // RETHINK! (should support multiple dimensions and metrics..)
+    if (typeof p.customDimension !== "undefined" && p.customDimension.length === 2) {
+        product.customDimensions.insert(p.customDimension[0], p.customDimension[1]);
+    }
+    if (typeof p.customMetric !== "undefined" && p.customMetric.length === 2) {
+        product.customMetrics.insert(p.customMetric[0], p.customMetric[1]);
+    }
+
+    return product;
+}
+
 module.exports = {
 
     setOptOut: function (win, fail, args) {
@@ -301,37 +341,7 @@ module.exports = {
             return;
         }
 
-        var product = new GoogleAnalytics.Ecommerce.Product();
-        product.id = args[1].id;
-        product.name = args[1].name;
-        if (typeof args[1].position !== "undefined") {
-            product.position = args[1].position;
-        }
-        if (typeof args[1].price !== "undefined") {
-            product.price = args[1].price;
-        }
-        if (typeof args[1].quantity !== "undefined") {
-            product.quantity = args[1].quantity;
-        }
-        if (typeof args[1].variant !== "undefined") {
-            product.variant = args[1].variant;
-        }
-        if (typeof args[1].brand !== "undefined") {
-            product.brand = args[1].brand;
-        }
-        if (typeof args[1].category !== "undefined") {
-            product.category = args[1].category;
-        }
-        if (typeof args[1].couponCode !== "undefined") {
-            product.couponCode = args[1].couponCode;
-        }
-        // RETHINK! (should support multiple dimensions and metrics..)
-        if (typeof args[1].customDimension !== "undefined" && args[1].customDimension.length === 2) {
-            product.customDimensions.insert(args[1].customDimension[0], args[1].customDimension[1]);
-        }
-        if (typeof args[1].customMetric !== "undefined" && args[1].customMetric.length === 2) {
-            product.customMetrics.insert(args[1].customMetric[0], args[1].customMetric[1]);
-        }
+        var product = createProduct(args[1]);
 
         var action = "";
         switch (args[2].action) {
@@ -441,8 +451,22 @@ module.exports = {
     },
 
     addImpression: function (win, fail, args) {
-        // not supported
-        fail("not supported on Windows platform");
+        if (!args || args.length === 0 || args[0] === "") {
+            fail("Expected non empty string argument");
+            return;
+        }
+        if (args.length < 2 || typeof args[1] !== "object") {
+            fail("Expected non object argument");
+            return;
+        }
+
+        var product = createProduct(args[1]);
+
+        var hit = GoogleAnalytics.HitBuilder.createScreenView(args[0]).addImpression(product, args[0]);
+
+        const data = hit.build();
+        getTracker().send(data);
+        win();
     },
 
     trackView: function (win, fail, args) {

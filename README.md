@@ -291,13 +291,13 @@ The plugin will pick up the new name.
 
 # Windows 10 (UWP)
 
-The following plugin methods are (currently) not supported by the UWP.SDKforGoogleAnalytics.Native package:
+**The following plugin methods are (currently) not supported by the UWP.SDKforGoogleAnalytics.Native package:**
 * `setAllowIDFACollection()`
 * `addTransaction()`
 * `addTransactionItem()`
-* `addImpression()`
+* `addImpression()`: this method is currently not supported in version 1.5.2. of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native).
 
-Unexpected behaviour may occur on the following methods:
+**Unexpected behaviour may occur on the following methods:**
 * `trackView()`: campaign details are currently not supported and therefore not tracked.
 * `trackMetric()`: there is currently a bug in version 1.5.2 of the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native),
 that the wrong data specifier `cd` is taken for metrics, whereas `cm` should be the correct specifier.
@@ -306,6 +306,6 @@ So as long as this bug is not fixed, trackMetrics() will overwrite previous addC
 that the wrong data specifier `at` is taken for product quantity, whereas `qt` should be the correct specifier.
 So as long as this bug is not fixed, productAction() will possibly not work correctly!!
 
-Pull Requests are already submitted. As long as these are not merged, you can clone the Fork from https://github.com/spacepope/windows-sdk-for-google-analytics and add the corresponding project reference to your UWP project instead of installing the current nuget package..
+Pull Requests ([#25](https://github.com/dotnet/windows-sdk-for-google-analytics/pull/25), [#28](https://github.com/dotnet/windows-sdk-for-google-analytics/pull/28) and [#29](https://github.com/dotnet/windows-sdk-for-google-analytics/pull/29)) are already submitted. As long as these are not merged, you can clone the Fork from https://github.com/spacepope/windows-sdk-for-google-analytics and add the corresponding project reference to your UWP project instead of installing the current nuget package..
 
 
