@@ -137,7 +137,7 @@ window.ga.debugMode()
 window.ga.enableUncaughtExceptionReporting(Enable, success, error)// where Enable is boolean
 ```
 
-# Example use ionic 2 (Ionic Native)
+# Example use ionic (Ionic Native)
 ```shell
 npm i --save @ionic-native/google-analytics
 ```
@@ -163,7 +163,7 @@ import { Platform } from 'ionic-angular';
   }
 ```
 
-**Issue for using trackMetric in Ionic 2**: currently `@ionic-native/google-analytics` defines the typescript signature with `trackMetric(key: string, value?: any)`.
+**Issue for using trackMetric in Ionic**: currently `@ionic-native/google-analytics` defines the typescript signature with `trackMetric(key: string, value?: any)`.
 So be aware to pass the metric index as a string formatted integer and a non empty string as a value, like `window.ga.trackMetric('1', 'Value', success, error)`!
 
 # Installing Without the CLI <a name="nocli"></a>
