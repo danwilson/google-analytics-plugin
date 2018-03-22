@@ -51,7 +51,7 @@
   </platform>
 
   <platform name="android">
-    <framework src="com.google.android.gms:play-services-analytics:+" />
+    <framework src="com.google.android.gms:play-services-analytics:11.+" />
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
