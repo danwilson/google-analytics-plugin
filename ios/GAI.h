@@ -1,7 +1,7 @@
 /*!
  @header    GAI.h
  @abstract  Google Analytics iOS SDK Header
- @version   3.14
+ @version   3.17
  @copyright Copyright 2015 Google Inc. All rights reserved.
  */
 
@@ -113,7 +113,7 @@ typedef enum {
 
  @param name The name of this tracker. Must not be `nil` or empty.
 
- @param trackingId The tracking ID to use for this tracker.  It should be of
+ @param trackingID The tracking ID to use for this tracker.  It should be of
  the form `UA-xxxxx-y`.
 
  @return A GAITracker associated with the specified name. The tracker
@@ -138,7 +138,7 @@ typedef enum {
  is not changed by this method. If defaultTracker is not set, it is set to the
  tracker instance returned here.
 
- @param trackingId The tracking ID to use for this tracker.  It should be of
+ @param trackingID The tracking ID to use for this tracker.  It should be of
  the form `UA-xxxxx-y`. The name of the tracker will be the same as trackingID.
 
  @return A GAITracker associated with the specified trackingID. The tracker
