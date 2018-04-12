@@ -14,7 +14,8 @@
     <clobbers target="analytics" />
     <clobbers target="ga" />
   </js-module>
-
+  <preference name="PSA_VERSION" default="11.+"/>
+  
   <platform name="browser">
     <js-module src="browser/UniversalAnalyticsProxy.js" name="UniversalAnalyticsProxy">
       <runs />
@@ -51,7 +52,7 @@
   </platform>
 
   <platform name="android">
-    <framework src="com.google.android.gms:play-services-analytics:11.+" />
+    <framework src="com.google.android.gms:play-services-analytics:$PSA_VERSION" />
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
