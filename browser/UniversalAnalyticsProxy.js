@@ -64,7 +64,7 @@ UniversalAnalyticsProxy.prototype = {
     // Not supported by browser platofrm
   }),
 
-  getVar: function (param, success, error) {
+  getVar: function (success, error, param) {
     this._ga(function(tracker){
       success(tracker.get(param));
     });
