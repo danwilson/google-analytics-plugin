@@ -38,6 +38,14 @@ Windows Phone users have to manually add the [Google Analytics SDK for Windows 8
 
 Windows 10 (UWP) users have to manually add the [Windows SDK for Google Analytics](https://github.com/dotnet/windows-sdk-for-google-analytics) to your solution. To do this, just open your Cordova solution in Visual Studio, and add the [UWP.SDKforGoogleAnalytics.Native package via NuGet](http://nuget.org/packages/UWP.SDKforGoogleAnalytics.Native). This plugin requires v1.5.2 or higher.
 
+# Configuring `play-services` Version
+
+Many other plugins require Google Play Services and/or Firebase libraries. This is a common source of Android build-failures, since the `play-services` library version must be aligned to the same version for **all** plugins. For example, when one plugin imports version `11.0.1` and another one imports `11.2.0`, a gradle build failure will occur. Use the `GMS_VERSION` to align the required play-services version with other plugins.
+
+```
+cordova plugin add cordova-plugin-google-analytics --variable GMS_VERSION=11.0.1
+```
+
 # Release note
 
 v1.0.0 -- api change from ```window.analytics``` to ```window.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
