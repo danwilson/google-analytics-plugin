@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-google-analytics"
-    version="1.8.3">
+    version="1.8.4">
   <engines>
     <engine name="cordova" version=">=3.0.0" />
   </engines>
   <name>Google Universal Analytics Plugin</name>
-  <description>Simple tracking (screens/events) for Google Analytics SDK 3.14 (iOS), SDK 4.0 (Android), Browsers and WP8</description>
+  <description>Simple tracking (screens/events) for Google Analytics SDK 3.17 (iOS), SDK 4.0 (Android), Browsers and WP8</description>
   <author>Daniel C. Wilson</author>
   <license>MIT License</license>
   <js-module src="www/analytics.js" name="UniversalAnalytics">
