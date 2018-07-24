@@ -49,6 +49,8 @@ these wrapper interfaces don't have the new parameters at the time we did the ch
 
 v1.7.11 -- since this version there is back compatibility with the new and old parameters in the method `startTrackerWithId('UA-XXXX-YY', 30)` to avoid loading issues reported.
 
+v1.8.4 -- fix conflicting versions of google play services due to multiple implementations.
+
 v1.9.0 -- since this version the windows platform is supported.
 
 # JavaScript Usage
