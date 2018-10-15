@@ -30,7 +30,6 @@
     <header-file src="ios/UniversalAnalyticsPlugin.h" />
     <source-file src="ios/UniversalAnalyticsPlugin.m" />
     <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
-    <source-file src="ios/libAdIdAccess.a" framework="true" />
     <header-file src="ios/GAIDictionaryBuilder.h" />
     <header-file src="ios/GAIFields.h" />
     <header-file src="ios/GAILogger.h" />
@@ -44,7 +43,6 @@
 
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
-    <framework src="AdSupport.framework" />
     <framework src="libz.dylib" />
     <framework src="libsqlite3.dylib" />
   </platform>
