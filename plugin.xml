@@ -114,10 +114,6 @@
     <config-file target="package.phone.appxmanifest" parent="/Package/Capabilities" versions=">=8.1.0" device-target="phone">
       <Capability Name="internetClientServer" />
     </config-file>
-
-    <info>
-      You need to install Windows SDK for Google Analytics™ (UWP.SDKforGoogleAnalytics.Native) via nuget package manager
-      and set target to either x86 or x64!
-    </info>
+	<lib-file src="UWP.SDKforGoogleAnalytics.Native, Version=1.5.2" />
   </platform>
 </plugin>
