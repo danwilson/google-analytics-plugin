@@ -27,5 +27,6 @@
     "universalanalytics"
   ],
   "author": "Dan Wilson",
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./typescript/analytics.d.ts"
 }
