@@ -51,15 +51,15 @@ cordova plugin add cordova-plugin-google-analytics --variable GMS_VERSION=11.0.1
 v1.0.0 -- api change from ```window.analytics``` to ```window.ga```, 'analytics' is deprecated since 1.0.0 and you should use the new api 'ga',
 because in the next release we are removing the analytics.
 
-v1.7.x -- since this version there are new parameters in some of the old methods like `startTrackerWithId('UA-XXXX-YY', 30)` 
-and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova); 
+v1.7.x -- since this version there are new parameters in some of the old methods like `startTrackerWithId('UA-XXXX-YY', 30)`
+and this is causing errors for those who are using the ionic 2(ionic-native) or ionic 1 (ngCordova);
 these wrapper interfaces don't have the new parameters at the time we did the changes; so please update you ionic framework to the lastest version.
 
 v1.7.11 -- since this version there is back compatibility with the new and old parameters in the method `startTrackerWithId('UA-XXXX-YY', 30)` to avoid loading issues reported.
 
 v1.8.4 -- fix conflicting versions of google play services due to multiple implementations.
 
-v1.9.0 -- since this version the windows platform is supported.
+v1.9.0 -- since this version the windows platform is supported, also use Cocoa pods instead of static Framework for iOS.
 
 # JavaScript Usage
 
@@ -139,8 +139,8 @@ window.ga.setAllowIDFACollection(true)
 To enable verbose logging:
 window.ga.debugMode()
 // set's dry run mode on Android and Windows platform, so that all hits are only echoed back by the google analytics service and no actual hit is getting tracked!
-// **Android quirk**: verbose logging within javascript console is not supported. To see debug responses from analytics execute 
-// `adb shell setprop log.tag.GAv4 DEBUG` and then `adb logcat -v time -s GAv4` to list messages 
+// **Android quirk**: verbose logging within javascript console is not supported. To see debug responses from analytics execute
+// `adb shell setprop log.tag.GAv4 DEBUG` and then `adb logcat -v time -s GAv4` to list messages
 // (see https://developers.google.com/android/reference/com/google/android/gms/analytics/Logger)
 
 //To enable/disable automatic reporting of uncaught exceptions
@@ -158,7 +158,7 @@ import { Platform } from 'ionic-angular';
 ...
 
   constructor(private ga: GoogleAnalytics, private platform: Platform) { }
-  
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.ga.startTrackerWithId('UA-00000000-0')
@@ -168,7 +168,7 @@ import { Platform } from 'ionic-angular';
           this.ga.debugMode();
           this.ga.setAllowIDFACollection(true);
         })
-        .catch(e => console.log('Error starting GoogleAnalytics', e));      
+        .catch(e => console.log('Error starting GoogleAnalytics', e));
     });
   }
 ```
@@ -218,8 +218,8 @@ analyticsService.trackView('Home');
 
 # Browser (PWA)
 
-For browser (PWA), people who want to use the plugin in a website that has already integrated google analytics needs 
-to make sure that they remove the google analytics snippet from the head section of the page and change the global `ga` 
+For browser (PWA), people who want to use the plugin in a website that has already integrated google analytics needs
+to make sure that they remove the google analytics snippet from the head section of the page and change the global `ga`
 object name to something else. The plugin uses `nativeGa` instead. This can be changed by the following code.
 
 ```js
