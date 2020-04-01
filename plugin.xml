@@ -29,24 +29,16 @@
 
     <header-file src="ios/UniversalAnalyticsPlugin.h" />
     <source-file src="ios/UniversalAnalyticsPlugin.m" />
-    <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
-    <source-file src="ios/libAdIdAccess.a" framework="true" />
-    <header-file src="ios/GAIDictionaryBuilder.h" />
-    <header-file src="ios/GAIFields.h" />
-    <header-file src="ios/GAILogger.h" />
-    <header-file src="ios/GAITrackedViewController.h" />
-    <header-file src="ios/GAI.h" />
-    <header-file src="ios/GAITracker.h" />
-    <header-file src="ios/GAIEcommerceFields.h" />
-    <header-file src="ios/GAIEcommerceProduct.h" />
-    <header-file src="ios/GAIEcommerceProductAction.h" />
-    <header-file src="ios/GAIEcommercePromotion.h" />
 
-    <framework src="SystemConfiguration.framework" />
-    <framework src="CoreData.framework" />
-    <framework src="AdSupport.framework" />
-    <framework src="libz.dylib" />
-    <framework src="libsqlite3.dylib" />
+    <podspec>
+      <config>
+        <source url="https://cdn.cocoapods.org/"/>
+      </config>
+      <pods use-frameworks="true">
+        <pod name="GoogleAnalytics" spec="3.17.0"/>
+        <pod name="GoogleIDFASupport" spec="3.14.0" />
+      </pods>
+    </podspec>
   </platform>
 
   <platform name="android">
