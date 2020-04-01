@@ -2,10 +2,9 @@
 //Created by Daniel Wilson 2013-09-19
 
 #import "UniversalAnalyticsPlugin.h"
-#import <Google/Analytics.h>
-//#import "GAI.h"
-//#import "GAIDictionaryBuilder.h"
-//#import "GAIFields.h"
+#import <GoogleAnalytics/GAI.h>
+#import <GoogleAnalytics/GAIFields.h>
+#import <GoogleAnalytics/GAIDictionaryBuilder.h>
 
 @implementation UniversalAnalyticsPlugin
 
@@ -25,7 +24,7 @@
 
         if ([dispatchPeriod isKindOfClass:[NSNumber class]])
             [GAI sharedInstance].dispatchInterval = [dispatchPeriod doubleValue];
-        else 
+        else
             [GAI sharedInstance].dispatchInterval = 30;
 
         [[GAI sharedInstance] trackerWithTrackingId:accountId];
@@ -45,7 +44,7 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
-    
+
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     tracker.allowIDFACollection = [[command argumentAtIndex:0 withDefault:@(NO)] boolValue];
 }
@@ -76,13 +75,13 @@
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             return;
         }
-        
+
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
         NSString* parameter = [command.arguments objectAtIndex:0];
-        NSString* result = [tracker get:parameter];   
+        NSString* result = [tracker get:parameter];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];             
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
 
@@ -191,7 +190,7 @@
     }
 
     _customDimensions[key.stringValue] = value;
-    
+
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -256,7 +255,7 @@
         if ([command.arguments count] > 3)
             value = [command.arguments objectAtIndex:3];
 
-        bool newSession = [[command argumentAtIndex:4 withDefault:@(NO)] boolValue];           
+        bool newSession = [[command argumentAtIndex:4 withDefault:@(NO)] boolValue];
 
         id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
 
@@ -267,9 +266,9 @@
                         action: action //required
                         label: label
                         value: value];
-        if(newSession){ 
+        if(newSession){
             [builder set:@"start" forKey:kGAISessionControl];
-        }                        
+        }
         [tracker send:[builder build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -334,19 +333,19 @@
 
         NSString* deepLinkUrl = [command.arguments objectAtIndex:1];
         GAIDictionaryBuilder* openParams = [[GAIDictionaryBuilder alloc] init];
-    
+
         if (deepLinkUrl && deepLinkUrl != (NSString *)[NSNull null]) {
             [[openParams setCampaignParametersFromUrl:deepLinkUrl] build];
         }
 
         bool newSession = [[command argumentAtIndex:2 withDefault:@(NO)] boolValue];
-        if(newSession){            
+        if(newSession){
             [openParams set:@"start" forKey:kGAISessionControl];
-        }        
+        }
 
         NSDictionary *hitParamsDict = [openParams build];
 
-        [tracker set:kGAIScreenName value:screenName];   
+        [tracker set:kGAIScreenName value:screenName];
         [tracker send:[[[GAIDictionaryBuilder createScreenView] setAll:hitParamsDict] build]];
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
