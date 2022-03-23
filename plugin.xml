@@ -39,6 +39,11 @@
         <pod name="GoogleIDFASupport" spec="3.14.0" />
       </pods>
     </podspec>
+
+    <pods use-frameworks="true">
+      <pod name="GoogleAnalytics" spec="3.17.0"/>
+      <pod name="GoogleIDFASupport" spec="3.14.0" />
+    </pods>
   </platform>
 
   <platform name="android">
