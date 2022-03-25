@@ -35,14 +35,18 @@
         <source url="https://cdn.cocoapods.org/"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="GoogleAnalytics" spec="3.17.0"/>
-        <pod name="GoogleIDFASupport" spec="3.14.0" />
+        <!-- Updated the lastest pod spec version for GoogleAnalytics to support iOS architecture arm64  -->
+        <pod name="GoogleAnalytics" spec="3.20.0"/>
+        <!-- Commented this line, as it needed when we enable IDFA collection. tracker.allowIDFACollection = YES; -->
+        <!-- <pod name="GoogleIDFASupport" spec="3.14.0" /> -->
       </pods>
     </podspec>
 
     <pods use-frameworks="true">
-      <pod name="GoogleAnalytics" spec="3.17.0"/>
-      <pod name="GoogleIDFASupport" spec="3.14.0" />
+      <!-- Updated the lastest pod spec version for GoogleAnalytics to support iOS architecture arm64  -->
+      <pod name="GoogleAnalytics" spec="3.20.0"/>
+      <!-- Commented this line, as it needed when we enable IDFA collection. tracker.allowIDFACollection = YES; -->
+      <!-- <pod name="GoogleIDFASupport" spec="3.14.0" /> -->
     </pods>
   </platform>
 
