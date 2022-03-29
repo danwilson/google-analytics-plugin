@@ -27,7 +27,27 @@
         else
             [GAI sharedInstance].dispatchInterval = 30;
 
-        [[GAI sharedInstance] trackerWithTrackingId:accountId];
+        /* 
+            Updated GA tracker interface object as defult tracker, it will support both single and multiple tracker in iOS.
+            ref: https://developers.google.com/analytics/devguides/collection/ios/v2/advanced#multiple-trackers
+            Sample Code:
+            this.ga.startTrackerWithId('YOUR_TRACKER_ID_1')
+            .then(() => {
+                // Send a screen view to the first property.
+                this.ga.trackView('First Tracker');
+            })
+            .catch(e => console.log('Error starting GoogleAnalytics', e));
+
+            this.ga2.startTrackerWithId('YOUR_TRACKER_ID_2')
+            .then(() => {
+                // Send another screen view to the second property.
+                this.ga2.trackView('Second Tracker');
+            })
+            .catch(e => console.log('Error starting GoogleAnalytics', e));
+        */
+        // [[GAI sharedInstance] trackerWithTrackingId:accountId];
+        id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:accountId];
+        [[GAI sharedInstance] setDefaultTracker: tracker];
 
         _trackerStarted = true;
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
