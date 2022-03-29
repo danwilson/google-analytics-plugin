@@ -175,6 +175,22 @@ import { Platform } from 'ionic-angular';
   }
 ```
 
+**Working with multiple trackers in Ionic mobile app (Android & iOS)**
+```javascript
+    this.ga.startTrackerWithId('YOUR_TRACKER_ID_1')
+      .then(() => {
+          // Send a screen view to the first property.
+          this.ga.trackView('First Tracker');
+      })
+      .catch(e => console.log('Error starting GoogleAnalytics', e));
+    this.ga2.startTrackerWithId('YOUR_TRACKER_ID_2')
+      .then(() => {
+          // Send another screen view to the second property.
+          this.ga2.trackView('Second Tracker');
+      })
+      .catch(e => console.log('Error starting GoogleAnalytics', e));
+```
+
 **Issue for using trackMetric in Ionic**: currently `@ionic-native/google-analytics` defines the typescript signature with `trackMetric(key: string, value?: any)`.
 So be aware to pass the metric index as a string formatted integer and a non empty string as a value, like `window.ga.trackMetric('1', 'Value', success, error)`!
 
