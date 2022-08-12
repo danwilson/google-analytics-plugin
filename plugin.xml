@@ -65,7 +65,7 @@
     </config-file>
     <!-- Add support for devices without Google Play Services installed. -->
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:enabled="true">
+      <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:exported="true" android:enabled="true">
         <intent-filter>
           <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
         </intent-filter>
