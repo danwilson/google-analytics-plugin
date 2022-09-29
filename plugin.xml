@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-  xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-google-analytics" version="1.9.1">
+  xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-google-analytics" version="1.9.2">
   <engines>
     <engine name="cordova" version=">=3.0.0" />
   </engines>
@@ -52,7 +52,7 @@
 
   <platform name="android">
     <framework src="com.google.android.gms:play-services-analytics:$GMS_VERSION" />
-    <preference name="GMS_VERSION" default="11.0.1"/>
+    <preference name="GMS_VERSION" default="18.0.2"/>
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="UniversalAnalytics">
@@ -65,18 +65,12 @@
     </config-file>
     <!-- Add support for devices without Google Play Services installed. -->
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:exported="true" android:enabled="true">
+      <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver" android:enabled="true">
         <intent-filter>
           <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
         </intent-filter>
       </receiver>
       <service android:name="com.google.android.gms.analytics.AnalyticsService" android:enabled="true" android:exported="false"/>
-      <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" android:enabled="true" android:exported="true">
-        <intent-filter>
-          <action android:name="com.android.vending.INSTALL_REFERRER" />
-        </intent-filter>
-      </receiver>
-      <service android:name="com.google.android.gms.analytics.CampaignTrackingService" android:enabled="true" android:exported="false"/>
     </config-file>
     <source-file src="android/UniversalAnalyticsPlugin.java" target-dir="src/com/danielcwilson/plugins/analytics" />
   </platform>
