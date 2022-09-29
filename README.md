@@ -63,6 +63,8 @@ v1.9.0 -- since this version the windows platform is supported, also use Cocoa p
 
 v1.9.1 -- fix use Cocoa pods instead of static Framework for iOS; it will add the dependenciesto the config.xml ```<platform name="ios"> <pod name="GoogleAnalytics" version="3.17.0" /> ....```
 
+v1.9.2 -- remove CampaignTrackingReceiver (deprecated on SDK31+), update analytics dependency to support SDK31+
+
 # JavaScript Usage
 
 **All the following methods accept optional success and error callbacks after all other available parameters.**
