@@ -65,6 +65,8 @@ v1.9.1 -- fix use Cocoa pods instead of static Framework for iOS; it will add th
 
 v1.9.2 -- remove CampaignTrackingReceiver (deprecated on SDK31+), update analytics dependency to support SDK31+
 
+v1.9.3 -- Added exported property on android: android:exported="true"
+
 # JavaScript Usage
 
 **All the following methods accept optional success and error callbacks after all other available parameters.**
